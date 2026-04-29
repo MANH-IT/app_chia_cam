@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Colors - Sophisticated Orange Palette -->
+    <color name="primary">#FF6B35</color>
+    <color name="primary_dark">#E05D2C</color>
+    <color name="primary_light">#FFD8CC</color>
+    <color name="primary_variant">#FF8552</color>
+    
+    <!-- Splash Screen Colors (Mapped to primary) -->
+    <color name="splash_start">#FF6B35</color>
+    <color name="splash_end">#E05D2C</color>
+    <color name="splash_accent">#FFD8CC</color>
+    
+    <!-- Secondary Colors - Teal/Mint -->
+    <color name="secondary">#2EC4B6</color>
+    <color name="secondary_dark">#259B90</color>
+    <color name="secondary_light">#CBF3F0</color>
+    
+    <!-- Neutral Colors - Rich Grays -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#1A1A1A</color>
+    <color name="gray_dark">#2D3436</color>
+    <color name="gray_medium">#636E72</color>
+    <color name="gray_light">#B2BEC3</color>
+    <color name="gray_lighter">#DFE6E9</color>
+    <color name="background_white">#F9FAFB</color>
+    <color name="background_gray">#F2F4F7</color>
+    
+    <!-- Accent & Status -->
+    <color name="success">#27AE60</color>
+    <color name="success_light">#E9F7EF</color>
+    <color name="warning">#F1C40F</color>
+    <color name="warning_dark">#D4AC0D</color>
+    <color name="warning_light">#FCF3CF</color>
+    <color name="error">#E74C3C</color>
+    <color name="error_light">#FDEDEC</color>
+    
+    <!-- Transparent helpers -->
+    <color name="transparent">#00000000</color>
+    <color name="white_transparent_80">#CCFFFFFF</color>
+    <color name="white_transparent_30">#4DFFFFFF</color>
+    <color name="black_transparent_10">#1A000000</color>
+    <color name="black_transparent_20">#33000000</color>
+    <color name="black_transparent_50">#80000000</color>
+    
+    <!-- Legacy & Specific UI -->
+    <color name="bottom_nav_color">#95A5A6</color>
+    <color name="bottom_nav_selected">#FF6B35</color>
+    <color name="red">#E74C3C</color>
+    <color name="green">#27AE60</color>
+    <color name="accent">#FF6B35</color>
+    <color name="gray">#636E72</color>
+    <color name="light_gray">#DFE6E9</color>
+    <color name="notification_unread_bg">#FFF5F0</color>
+</resources>

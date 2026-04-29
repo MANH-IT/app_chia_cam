@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chia Cam</string>
+    
+    <!-- Bill Widget -->
+    <string name="widget_name">Chia Cam - Bill mới nhất</string>
+    <string name="widget_description">Hiển thị giao dịch mới nhất trong nhóm</string>
+    <string name="widget_empty_title">🏠 Chia Cam</string>
+    <string name="widget_empty_content">Chưa có giao dịch nào</string>
+    <string name="widget_empty_amount">0đ</string>
+    <string name="widget_empty_time">Hãy thêm bill đầu tiên</string>
+    <string name="widget_just_now">Vừa xong</string>
+    <string name="widget_minutes_ago">%d phút trước</string>
+    <string name="widget_hours_ago">%d giờ trước</string>
+    <string name="widget_days_ago">%d ngày trước</string>
+    
+    <!-- Onboarding Screen -->
+    <string name="onboarding_skip">Bỏ qua</string>
+    <string name="onboarding_next">Tiếp theo</string>
+    <string name="onboarding_start">Bắt đầu ngay</string>
+    
+    <!-- Slide 1 -->
+    <string name="onboarding_title_1">Chụp là chia</string>
+    <string name="onboarding_desc_1">Chụp ảnh đồ mua / hóa đơn\nxong ngay, không cần gõ</string>
+    <string name="onboarding_icon_1">📸</string>
+    <string name="onboarding_sub_1">Quét thông minh AI</string>
+    
+    <!-- Slide 2 -->
+    <string name="onboarding_title_2">Không cần ghi nhớ</string>
+    <string name="onboarding_desc_2">App tự nhớ ai mua, chia cho ai\nbao nhiêu tiền</string>
+    <string name="onboarding_icon_2">👥</string>
+    <string name="onboarding_sub_2">Quản lý thông minh</string>
+    
+    <!-- Slide 3 -->
+    <string name="onboarding_title_3">Không cãi nhau cuối tháng</string>
+    <string name="onboarding_desc_3">Tự động tính nợ, nhắc khéo\nêm đẹp cả nhà</string>
+    <string name="onboarding_icon_3">💸</string>
+    <string name="onboarding_sub_3">Thanh toán dễ dàng</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Hủy</string>
+    <string name="retry">Thử lại</string>
+    <string name="back">Quay lại</string>
+    <string name="save">Lưu</string>
+    <string name="delete">Xóa</string>
+    <string name="close">Đóng</string>
+    <string name="copy">Sao chép</string>
+    
+    <!-- Login Screen -->
+    <string name="login_title">Đăng nhập</string>
+    <string name="login_welcome">Chào mừng trở lại!</string>
+    <string name="login_subtitle">Đăng nhập để tiếp tục chia sẻ niềm vui</string>
+    <string name="login_username_hint">Số điện thoại / Email</string>
+    <string name="login_password_hint">Mật khẩu</string>
+    <string name="login_button">Đăng nhập</string>
+    <string name="login_button_loading">Đang đăng nhập...</string>
+    <string name="login_forgot_password">Quên mật khẩu?</string>
+    <string name="login_no_account">Chưa có tài khoản? </string>
+    <string name="login_register_now">Đăng ký ngay</string>
+    <string name="login_or">Hoặc đăng nhập với</string>
+    
+    <!-- Register Screen -->
+    <string name="register_title">Tạo tài khoản mới</string>
+    <string name="register_subtitle">Đăng ký để bắt đầu chia sẻ</string>
+    <string name="register_fullname_hint">Họ và tên</string>
+    <string name="register_phone_hint">Số điện thoại</string>
+    <string name="register_email_hint">Email (không bắt buộc)</string>
+    <string name="register_password_hint">Mật khẩu</string>
+    <string name="register_confirm_hint">Xác nhận mật khẩu</string>
+    <string name="register_button">Đăng ký</string>
+    <string name="register_button_loading">Đang xử lý...</string>
+    <string name="register_back_to_login">← Quay lại đăng nhập</string>
+    <string name="register_agree_terms">Bằng cách đăng ký, bạn đồng ý với </string>
+    <string name="register_terms">Điều khoản dịch vụ</string>
+    <string name="register_and"> và </string>
+    <string name="register_privacy">Chính sách bảo mật</string>
+    
+    <!-- Validation Messages -->
+    <string name="error_username_empty">Vui lòng nhập số điện thoại hoặc email</string>
+    <string name="error_username_invalid">Số điện thoại hoặc email không hợp lệ</string>
+    <string name="error_password_empty">Vui lòng nhập mật khẩu</string>
+    <string name="error_password_short">Mật khẩu phải có ít nhất 6 ký tự</string>
+    <string name="error_login_failed">Đăng nhập thất bại</string>
+    <string name="error_invalid_credentials">Sai tài khoản hoặc mật khẩu</string>
+    <string name="error_account_not_found">Tài khoản không tồn tại</string>
+    <string name="error_too_many_attempts">Quá nhiều lần thử, vui lòng thử lại sau</string>
+    <string name="error_network">Không có kết nối mạng</string>
+    <string name="error_server">Lỗi máy chủ, vui lòng thử lại sau</string>
+
+    <!-- Validation Messages - Register -->
+    <string name="error_fullname_empty">Vui lòng nhập họ và tên</string>
+    <string name="error_fullname_short">Họ và tên phải có ít nhất 2 ký tự</string>
+    <string name="error_fullname_invalid">Họ và tên không chứa ký tự đặc biệt</string>
+    <string name="error_phone_empty">Vui lòng nhập số điện thoại</string>
+    <string name="error_phone_invalid">Số điện thoại không hợp lệ (VD: 0912345678)</string>
+    <string name="error_email_invalid">Email không hợp lệ</string>
+    <string name="error_password_weak">Mật khẩu nên có cả chữ và số để bảo mật hơn</string>
+    <string name="error_confirm_empty">Vui lòng xác nhận mật khẩu</string>
+    <string name="error_confirm_mismatch">Mật khẩu xác nhận không khớp</string>
+    <string name="error_phone_exists">Số điện thoại đã được đăng ký</string>
+    <string name="error_register_failed">Đăng ký thất bại</string>
+    
+    <!-- Verify OTP Screen -->
+    <string name="verify_otp_title">Xác thực số điện thoại</string>
+    <string name="verify_otp_subtitle">Nhập mã OTP đã được gửi đến</string>
+    <string name="verify_otp_sent">Đã gửi mã OTP đến %s</string>
+    <string name="verify_otp_resend_prefix">Gửi lại mã sau</string>
+    <string name="verify_otp_resend_seconds">giây</string>
+    <string name="verify_otp_resend_button">Gửi lại mã</string>
+    <string name="verify_otp_verify_button">Xác thực</string>
+    <string name="verify_otp_verifying">Đang xác thực...</string>
+    <string name="verify_otp_back">← Quay lại sửa số điện thoại</string>
+    <string name="verify_otp_error">Mã xác thực không đúng. Vui lòng thử lại.</string>
+    <string name="verify_otp_error_expired">Mã OTP đã hết hạn. Vui lòng gửi lại.</string>
+    <string name="verify_otp_too_many_attempts">Quá nhiều lần thử sai. Vui lòng thử lại sau 5 phút.</string>
+    <string name="verify_otp_resend_limit">Bạn đã gửi lại quá số lần cho phép. Vui lòng thử lại sau 10 phút.</string>
+    <string name="verify_otp_auto_read">Tự động phát hiện mã OTP từ tin nhắn...</string>
+    
+    <!-- Main Screen -->
+    <string name="tab_feed">📸 Feed</string>
+    <string name="tab_notification">🔔 Thông báo</string>
+    <string name="tab_profile">👤 Cá nhân</string>
+    <string name="empty_feed">Chưa có bill nào</string>
+    <string name="empty_feed_hint">Nhấn nút camera để thêm bill đầu tiên</string>
+    <string name="empty_notification">Chưa có thông báo nào</string>
+    <string name="empty_profile">Thông tin cá nhân</string>
+    <string name="logout">Đăng xuất</string>
+    
+    <!-- Bill Item -->
+    <string name="split_household">🏠 Cả nhà</string>
+    <string name="split_friends">👥 Bạn bè</string>
+    <string name="split_couple">💑 Đôi</string>
+    <string name="just_now">Vừa xong</string>
+    <string name="minutes_ago">phút trước</string>
+    <string name="hours_ago">giờ trước</string>
+    <string name="days_ago">ngày trước</string>
+    
+    <!-- Camera Screen -->
+    <string name="camera_permission_required">Cần quyền camera để chụp ảnh</string>
+    <string name="camera_permission_denied">Bạn đã từ chối quyền camera. Không thể chụp ảnh.</string>
+    <string name="camera_error">Không thể khởi tạo camera</string>
+    <string name="camera_take_photo">Chụp ảnh</string>
+    <string name="camera_gallery">Thư viện</string>
+    <string name="camera_switch">Xoay camera</string>
+    <string name="camera_flash">Đèn flash</string>
+    <string name="camera_flash_on">Bật flash</string>
+    <string name="camera_flash_off">Tắt flash</string>
+    <string name="camera_grid_lines">Đường kẻ 3x3</string>
+    
+    <!-- Bill Info Bottom Sheet -->
+    <string name="bill_info_title">Nhập thông tin bill</string>
+    <string name="camera_amount_hint">Số tiền *</string>
+    <string name="camera_product_hint">Tên món (không bắt buộc)</string>
+    <string name="camera_amount_error">Vui lòng nhập số tiền hợp lệ</string>
+    <string name="camera_ocr">Đọc từ hóa đơn</string>
+    <string name="camera_ocr_success">Đã đọc được: %sđ</string>
+    <string name="camera_ocr_failed">Không đọc được số tiền, vui lòng nhập tay</string>
+    <string name="camera_btn_shared">🏠 Mua chung</string>
+    <string name="camera_btn_help">🤝 Mua hộ</string>
+    <string name="camera_btn_alone">🧍 Mua riêng</string>
+    <string name="camera_select_members">Chọn thành viên</string>
+    <string name="camera_submit">Gửi bill</string>
+    <string name="camera_submitting">Đang gửi...</string>
+    <string name="camera_submit_success">Đã thêm bill thành công!</string>
+    <string name="camera_submit_error">Gửi bill thất bại, vui lòng thử lại</string>
+    <string name="camera_offline_saved">Đã lưu bill, sẽ đồng bộ khi có mạng</string>
+    <string name="camera_offline_queue_title">Bill chờ đồng bộ</string>
+    
+    <!-- Add Bill Screen -->
+    <string name="add_bill_title">Thêm giao dịch</string>
+    <string name="add_bill_recapture">Chụp lại</string>
+    <string name="add_bill_product_hint">Tên món / sản phẩm *</string>
+    <string name="add_bill_amount_hint">Số tiền *</string>
+    <string name="add_bill_date_hint">Ngày</string>
+    <string name="add_bill_split_equal">Chia đều</string>
+    <string name="add_bill_split_percent">Chia theo %</string>
+    <string name="add_bill_split_custom">Chia tuỳ chỉnh</string>
+    <string name="add_bill_select_all">Chọn tất cả</string>
+    <string name="add_bill_per_person">💵 Mỗi người trả:</string>
+    <string name="add_bill_note_hint">Ghi chú (tùy chọn)</string>
+    <string name="add_bill_cancel">Hủy</string>
+    <string name="add_bill_save">Lưu</string>
+    <string name="add_bill_saving">Đang lưu...</string>
+    <string name="add_bill_error_product">Vui lòng nhập tên món</string>
+    <string name="add_bill_error_amount">Vui lòng nhập số tiền hợp lệ</string>
+    <string name="add_bill_error_members">Vui lòng chọn ít nhất 1 người được chia</string>
+    <string name="add_bill_error_percent_sum">Tổng phần trăm phải bằng 100%</string>
+    <string name="add_bill_error_custom_sum">Tổng tiền chia không khớp với số tiền bill</string>
+    <string name="add_bill_success">Đã thêm giao dịch thành công</string>
+    <string name="add_bill_error">Không thể thêm giao dịch, vui lòng thử lại</string>
+    <string name="add_bill_offline_saved">Đã lưu giao dịch, sẽ đồng bộ khi có mạng</string>
+    
+    <!-- Edit Bill Screen -->
+    <string name="edit_bill_title">Sửa giao dịch</string>
+    <string name="edit_bill_warning_expired">⚠️ Bill này đã quá 7 ngày, không thể sửa hoặc xóa</string>
+    <string name="edit_bill_warning_no_permission">🔒 Bạn không có quyền sửa bill này</string>
+    <string name="edit_bill_delete_confirm_title">Xóa giao dịch</string>
+    <string name="edit_bill_delete_confirm_message">Bạn có chắc chắn muốn xóa giao dịch này không?\nHành động này không thể hoàn tác và sẽ ảnh hưởng đến công nợ.</string>
+    <string name="edit_bill_delete_confirm_positive">Xóa</string>
+    <string name="edit_bill_delete_success">Đã xóa giao dịch!</string>
+    <string name="edit_bill_delete_error">Không thể xóa giao dịch, vui lòng thử lại</string>
+    <string name="edit_bill_update_success">Đã cập nhật giao dịch!</string>
+    <string name="edit_bill_update_error">Không thể cập nhật giao dịch, vui lòng thử lại</string>
+    <string name="edit_bill_no_changes">Không có thay đổi nào được thực hiện</string>
+    <string name="edit_bill_conflict">Bill đã được sửa bởi người khác. Vui lòng tải lại trang.</string>
+    <string name="edit_bill_history_title">📝 Lịch sử chỉnh sửa</string>
+    <string name="edit_bill_history_empty">Chưa có lịch sử chỉnh sửa</string>
+    
+    <!-- Edit History -->
+    <string name="edit_history_changed_name">đổi tên từ "%s" thành "%s"</string>
+    <string name="edit_history_changed_amount">đổi số tiền từ %s thành %s</string>
+    <string name="edit_history_changed_split_type">đổi cách chia từ "%s" thành "%s"</string>
+    <string name="edit_history_changed_note">đổi ghi chú</string>
+    <string name="edit_history_changed_members">đổi danh sách thành viên được chia</string>
+    <string name="edit_history_no_changes">không có thay đổi</string>
+    <string name="edit_history_edited_by">đã chỉnh sửa</string>
+    
+    <!-- Debt Screen -->
+    <string name="debt_title">Nợ nần</string>
+    <string name="debt_select_group">Chọn nhóm</string>
+    <string name="debt_you_owe">🔴 BẠN ĐANG NỢ</string>
+    <string name="debt_owed_to_you">🟢 NGƯỜI NỢ BẠN</string>
+    <string name="debt_total_owe">Tổng nợ:</string>
+    <string name="debt_total_owed">Tổng được nợ:</string>
+    <string name="debt_reminder_button">📋 Nhắc khéo</string>
+    <string name="debt_optimize_button">🔄 Tối ưu cuối tháng</string>
+    <string name="debt_payment_history">📜 Lịch sử thanh toán</string>
+    <string name="debt_no_debt">🎉 Chúc mừng! Bạn không nợ ai và không ai nợ bạn</string>
+    <string name="debt_no_bills">📭 Nhóm chưa có giao dịch nào</string>
+    <string name="debt_refresh">Kéo để làm mới</string>
+    <string name="debt_owe_reason_prefix">Bạn nợ</string>
+    <string name="debt_owed_reason_prefix">nợ bạn</string>
+    <string name="debt_view_details">Xem chi tiết</string>
+    
+    <!-- Debt Reminder Dialog -->
+    <string name="reminder_title">📋 Nhắc khéo từ Chia Cam</string>
+    <string name="reminder_intro">Chào các bạn,</string>
+    <string name="reminder_body">Mình có chút khoản nợ nhỏ như sau:</string>
+    <string name="reminder_item_format">• %s nợ mình %s (%s)</string>
+    <string name="reminder_owe_item_format">• Mình nợ %s %s (%s)</string>
+    <string name="reminder_outro">\nBạn thanh toán qua Momo/Zalo giúp mình nhé! 🥰</string>
+    <string name="reminder_copy_success">Đã sao chép, bạn có thể gửi qua Zalo/Messenger</string>
+    
+    <!-- Debt Optimize Dialog -->
+    <string name="optimize_title">🔄 Tối ưu cuối tháng</string>
+    <string name="optimize_original_count">Số giao dịch gốc: %d</string>
+    <string name="optimize_optimized_count">Số giao dịch sau tối ưu: %d</string>
+    <string name="optimize_saved_transactions">Tiết kiệm %d giao dịch</string>
+    <string name="optimize_transaction_format">%s chuyển %s cho %s</string>
+    <string name="optimize_copy_success">Đã sao chép danh sách thanh toán</string>
+    
+    <!-- Bill Details Dialog -->
+    <string name="bill_details_title">Chi tiết các bill</string>
+    <string name="bill_details_empty">Không có bill nào liên quan</string>
+    
+    <!-- Split Options Dialog -->
+    <string name="split_options_title">Tùy chọn chia tiền</string>
+    <string name="split_options_equal_desc">Chia đều số tiền cho các thành viên được chọn</string>
+    <string name="split_options_percent_desc">Mỗi người đóng góp một phần trăm</string>
+    <string name="split_options_custom_desc">Nhập số tiền cụ thể cho từng người</string>
+    
+    <!-- Create Group Screen -->
+    <string name="create_group_title">Tạo nhóm mới</string>
+    <string name="create_group_name_hint">Tên nhóm *</string>
+    <string name="create_group_desc_hint">Mô tả (tùy chọn)</string>
+    <string name="create_group_members_title">👥 Thành viên trong nhóm</string>
+    <string name="create_group_member_count">(%d thành viên)</string>
+    <string name="create_group_add_member">+ Thêm thành viên</string>
+    <string name="create_group_settings_title">⚙️ Cài đặt mặc định</string>
+    <string name="create_group_default_split">Mặc định chia đều</string>
+    <string name="create_group_default_split_desc">Bill mới sẽ tự động chia đều cho tất cả thành viên</string>
+    <string name="create_group_member_invite">Thành viên được thêm người</string>
+    <string name="create_group_member_invite_desc">Cho phép thành viên mời người khác vào nhóm</string>
+    <string name="create_group_auto_reminder">Nhắc nợ tự động</string>
+    <string name="create_group_auto_reminder_desc">App tự động nhắc nợ sau 7 ngày</string>
+    <string name="create_group_button">Tạo nhóm</string>
+    <string name="create_group_creating">Đang tạo nhóm...</string>
+    <string name="create_group_error_name">Vui lòng nhập tên nhóm</string>
+    <string name="create_group_error_members">Vui lòng thêm ít nhất 1 thành viên</string>
+    <string name="create_group_error_network">Không có kết nối mạng, nhóm sẽ được lưu và tạo sau</string>
+    <string name="create_group_success">Đã tạo nhóm thành công!</string>
+    <string name="create_group_error">Không thể tạo nhóm, vui lòng thử lại</string>
+    
+    <!-- Add Member Dialog -->
+    <string name="add_member_title">Thêm thành viên</string>
+    <string name="add_member_search_hint">Tìm kiếm theo tên hoặc số điện thoại</string>
+    <string name="add_member_contacts_title">📱 Danh bạ của bạn</string>
+    <string name="add_member_invite_title">✨ Mời qua số điện thoại</string>
+    <string name="add_member_phone_hint">Nhập số điện thoại</string>
+    <string name="add_member_send_invite">Gửi lời mời</string>
+    <string name="add_member_selected_count">Đã chọn %d thành viên</string>
+    <string name="add_member_add_button">Thêm (%d)</string>
+    <string name="add_member_empty">Chưa có liên hệ nào</string>
+    <string name="add_member_contact_permission">Cần quyền truy cập danh bạ</string>
+    <string name="add_member_request_permission">Cấp quyền</string>
+    
+    <string name="add">Thêm</string>
+    <string name="edit">Sửa</string>
+    <string name="leave">Rời nhóm</string>
+    <string name="remove">Xóa</string>
+    <string name="invite">Mời</string>
+    <string name="invited">Đã mời</string>
+    <string name="join">Tham gia</string>
+    <string name="settings">Cài đặt</string>
+    <string name="version">Phiên bản</string>
+    
+    <!-- Optimize Debt Dialog -->
+    <string name="optimize_debt_title">🔄 Gợi ý thanh toán tối ưu</string>
+    <string name="optimize_debt_explanation">Thay vì %d giao dịch, bạn chỉ cần %d giao dịch sau:</string>
+    <string name="optimize_debt_original_count">Giao dịch gốc</string>
+    <string name="optimize_debt_optimized_count">Sau tối ưu</string>
+    <string name="optimize_debt_saved">✨ Tiết kiệm %d giao dịch</string>
+    <string name="optimize_debt_copy">📋 Sao chép nội dung</string>
+    <string name="optimize_debt_copy_success">Đã sao chép gợi ý thanh toán</string>
+    <string name="optimize_debt_no_debt">🎉 Chúc mừng! Không có khoản nợ nào cần tối ưu</string>
+    <string name="optimize_debt_already_optimal">✅ Đã là số giao dịch tối thiểu</string>
+    <string name="optimize_debt_loading">Đang tối ưu hóa...</string>
+    
+    <!-- Copy Text Template -->
+    <string name="optimize_copy_title">🔄 Gợi ý thanh toán tối ưu từ Chia Cam:</string>
+    <string name="optimize_copy_stats">📊 Thống kê:\n• Số giao dịch gốc: %d\n• Số giao dịch sau tối ưu: %d\n• Tiết kiệm: %d giao dịch</string>
+    <string name="optimize_copy_transactions_title">💸 Các giao dịch cần thực hiện:</string>
+    <string name="optimize_copy_transaction_format">• %s chuyển %s cho %s</string>
+    <string name="optimize_copy_footer">\n🍊 Chia Cam - Chụp là chia, chia là cam!</string>
+    
+    <!-- Confirm Delete Dialog -->
+    <string name="confirm_delete_title_bill">Xóa bill?</string>
+    <string name="confirm_delete_title_group">Xóa nhóm?</string>
+    <string name="confirm_delete_title_member">Xóa thành viên?</string>
+    <string name="confirm_delete_title_leave">Rời nhóm?</string>
+    <string name="confirm_delete_title_logout">Đăng xuất?</string>
+    
+    <string name="confirm_delete_message_bill">Bill \"%s\" sẽ bị xóa vĩnh viễn khỏi tất cả thành viên.\n\nCông nợ sẽ được cập nhật lại.</string>
+    <string name="confirm_delete_message_group">Nhóm \"%s\" sẽ bị xóa vĩnh viễn.\n\nTất cả bill, nợ và dữ liệu sẽ mất. Không thể hoàn tác!</string>
+    <string name="confirm_delete_message_member">Thành viên \"%s\" sẽ bị xóa khỏi nhóm.\n\nCông nợ sẽ được cập nhật lại.</string>
+    <string name="confirm_delete_message_leave">Bạn sẽ rời khỏi nhóm \"%s\".\n\nBạn có thể được mời lại sau.</string>
+    <string name="confirm_delete_message_logout">Bạn sẽ đăng xuất khỏi tài khoản.\n\nDữ liệu vẫn được lưu trên máy chủ.</string>
+    
+    <string name="confirm_delete_cancel">Hủy</string>
+    <string name="confirm_delete_confirm">Xóa</string>
+    <string name="confirm_delete_leave_confirm">Rời nhóm</string>
+    <string name="confirm_delete_logout_confirm">Đăng xuất</string>
+    
+    <!-- Confirm Delete Advanced (for group deletion) -->
+    <string name="confirm_delete_group_extra_confirm">Gõ \"XÓA\" để xác nhận xóa nhóm</string>
+    <string name="confirm_delete_group_extra_error">Vui lòng gõ \"XÓA\" để xác nhận</string>
+    <string name="confirm_delete_warning_impact">⚠️ Hành động này ảnh hưởng đến %d thành viên</string>
+    
+    <!-- Bill Detail Dialog -->
+    <string name="bill_detail_split_title">💰 Chia tiền</string>
+    <string name="bill_detail_reaction_title">😊 Cảm xúc</string>
+    <string name="bill_detail_history_title">📝 Lịch sử chỉnh sửa</string>
+    <string name="bill_detail_note_title">📝 Ghi chú</string>
+    <string name="bill_detail_edit">Sửa</string>
+    <string name="bill_detail_delete">Xóa</string>
+    <string name="bill_detail_no_reaction">Chưa có reaction nào</string>
+    <string name="bill_detail_no_note">Không có ghi chú</string>
+    <string name="bill_detail_expired_warning">⚠️ Bill đã quá 7 ngày, không thể sửa hoặc xóa</string>
+    <string name="bill_detail_loading">Đang tải chi tiết...</string>
+    <string name="bill_detail_error">Không thể tải chi tiết bill</string>
+    <string name="bill_detail_delete_confirm_title">Xóa bill</string>
+    <string name="bill_detail_delete_confirm_message">Bạn có chắc chắn muốn xóa bill này?\nHành động này không thể hoàn tác.</string>
+    
+    <!-- Profile Tab -->
+    <string name="profile_edit">Sửa hồ sơ</string>
+    <string name="profile_stats_total_spent">💰 Tổng chi</string>
+    <string name="profile_stats_group_count">👥 Số nhóm</string>
+    <string name="profile_stats_bill_count">📋 Số bill</string>
+    <string name="profile_my_groups">📁 Các nhóm của bạn</string>
+    <string name="profile_no_groups">Chưa tham gia nhóm nào</string>
+    <string name="profile_create_group">+ Tạo nhóm mới</string>
+    <string name="profile_settings">⚙️ Cài đặt</string>
+    <string name="profile_notification_settings">🔔 Cài đặt thông báo</string>
+    <string name="profile_data_storage">💾 Dữ liệu &amp; Lưu trữ</string>
+    <string name="profile_help">❓ Trợ giúp</string>
+    <string name="profile_invite_friends">📢 Giới thiệu bạn bè</string>
+    <string name="profile_rate_app">⭐ Đánh giá app</string>
+    <string name="profile_logout">🚪 Đăng xuất</string>
+    <string name="profile_version">Phiên bản %s</string>
+    <string name="profile_total_spent">%s</string>
+    <string name="profile_group_count">%d nhóm</string>
+    <string name="profile_bill_count">%d bill</string>
+    
+    <!-- Edit Profile -->
+    <string name="edit_profile_title">Sửa hồ sơ</string>
+    <string name="edit_profile_name_hint">Họ và tên</string>
+    <string name="edit_profile_phone_hint">Số điện thoại</string>
+    <string name="edit_profile_email_hint">Email</string>
+    <string name="edit_profile_save_success">Đã cập nhật hồ sơ</string>
+    
+    <!-- Settings -->
+    <string name="settings_title">Cài đặt</string>
+    <string name="settings_language">Ngôn ngữ</string>
+    <string name="settings_theme">Chủ đề</string>
+    <string name="settings_notification">Thông báo</string>
+    <string name="settings_privacy">Quyền riêng tư</string>
+    
+    <!-- Logout Dialog -->
+    <string name="logout_title">Đăng xuất</string>
+    <string name="logout_message">Bạn có chắc chắn muốn đăng xuất khỏi tài khoản?</string>
+    <string name="logout_confirm">Đăng xuất</string>
+    
+    <!-- Reaction Picker Dialog -->
+    <string name="reaction_picker_title">Chọn cảm xúc</string>
+    <string name="reaction_remove">🗑️ Xóa reaction</string>
+    <string name="reaction_happy">Vui vẻ</string>
+    <string name="reaction_sad">Buồn</string>
+    <string name="reaction_like">Thích</string>
+    <string name="reaction_love">Yêu thích</string>
+    <string name="reaction_laugh">Cười lăn</string>
+    <string name="reaction_shock">Sốc</string>
+    <string name="reaction_crazy">Choáng</string>
+    <string name="reaction_adore">Yêu</string>
+    <string name="reaction_admire">Mê</string>
+    <string name="reaction_snack">Ăn vặt</string>
+    <string name="reaction_drink">Nhậu</string>
+    <string name="reaction_celebrate">Ăn mừng</string>
+    <string name="reaction_dead">Chết cười</string>
+    <string name="reaction_cool">Ngầu</string>
+    <string name="reaction_pity">Thương</string>
+    <string name="reaction_angry">Bực</string>
+    
+    <!-- Reaction Items -->
+    <string-array name="reaction_emojis">
+        <item>😂</item><item>😭</item><item>👍</item><item>❤️</item>
+        <item>🥰</item><item>😍</item><item>😱</item><item>🤯</item>
+        <item>🍿</item><item>🍺</item><item>🎉</item><item>💀</item>
+        <item>🤣</item><item>😎</item><item>🥺</item><item>😤</item>
+    </string-array>
+    
+    <string-array name="reaction_names">
+        <item>@string/reaction_happy</item>
+        <item>@string/reaction_sad</item>
+        <item>@string/reaction_like</item>
+        <item>@string/reaction_love</item>
+        <item>@string/reaction_adore</item>
+        <item>@string/reaction_admire</item>
+        <item>@string/reaction_shock</item>
+        <item>@string/reaction_crazy</item>
+        <item>@string/reaction_snack</item>
+        <item>@string/reaction_drink</item>
+        <item>@string/reaction_celebrate</item>
+        <item>@string/reaction_dead</item>
+        <item>@string/reaction_laugh</item>
+        <item>@string/reaction_cool</item>
+        <item>@string/reaction_pity</item>
+        <item>@string/reaction_angry</item>
+    </string-array>
+    
+    <!-- Notification Tab -->
+    <string name="notification_tab_all">Tất cả</string>
+    <string name="notification_tab_unread">Chưa đọc</string>
+    <string name="notification_tab_read">Đã đọc</string>
+    <string name="notification_empty_all">📭 Chưa có thông báo nào</string>
+    <string name="notification_empty_unread">✅ Không có thông báo chưa đọc</string>
+    <string name="notification_empty_read">📖 Chưa có thông báo nào được đánh dấu đã đọc</string>
+    <string name="notification_deleted">Đã xóa thông báo</string>
+    <string name="notification_refresh">Kéo để làm mới</string>
+    
+    <!-- Notification Types -->
+    <string name="notification_type_new_bill">🆕 Bill mới</string>
+    <string name="notification_type_reaction">👍 Reaction</string>
+    <string name="notification_type_mention">@ Mention</string>
+    <string name="notification_type_debt">💰 Nhắc nợ</string>
+    <string name="notification_type_member">👥 Thành viên mới</string>
+    <string name="notification_type_invitation">📨 Lời mời nhóm</string>
+    
+    <!-- Notification Content Templates -->
+    <string name="notification_new_bill_content">%s đã thêm bill %s %.0fđ trong nhóm %s</string>
+    <string name="notification_reaction_content">%s đã thả %s vào bill %s của bạn</string>
+    <string name="notification_mention_content">%s đã nhắc đến bạn trong bill %s</string>
+    <string name="notification_debt_content">Bill %s đã %d ngày chưa thanh toán. Hãy nhắc bạn bè!</string>
+    <string name="notification_member_content">%s đã tham gia nhóm %s</string>
+    <string name="notification_invitation_content">%s đã mời bạn tham gia nhóm %s</string>
+    
+    <!-- Join Group Screen -->
+    <string name="join_group_title">Lời mời tham gia nhóm</string>
+    <string name="join_group_invited_by">đã mời bạn tham gia nhóm</string>
+    <string name="join_group_member_count">%d thành viên</string>
+    <string name="join_group_description_title">📝 Giới thiệu nhóm</string>
+    <string name="join_group_btn_cancel">Hủy</string>
+    <string name="join_group_btn_join">Tham gia nhóm</string>
+    <string name="join_group_loading">Đang tải thông tin nhóm...</string>
+    <string name="join_group_joining">Đang tham gia...</string>
+    <string name="join_group_success">Đã tham gia nhóm %s!</string>
+    <string name="join_group_invalid">Link mời không hợp lệ</string>
+    <string name="join_group_not_found">Không tìm thấy nhóm</string>
+    <string name="join_group_expired">Link mời đã hết hạn (7 ngày)</string>
+    <string name="join_group_already_member">Bạn đã là thành viên của nhóm này</string>
+    <string name="join_group_full">Nhóm đã đạt số lượng thành viên tối đa (20 người)</string>
+    <string name="join_group_network_error">Không thể tải thông tin, vui lòng kiểm tra kết nối</string>
+    <string name="join_group_retry">Thử lại</string>
+    <string name="join_group_login_required">Vui lòng đăng nhập để tham gia nhóm</string>
+    
+    <!-- Invite Members Screen -->
+    <string name="invite_title">Mời thành viên</string>
+    <string name="invite_link_title">🔗 Mời qua link</string>
+    <string name="invite_copy_link">Sao chép</string>
+    <string name="invite_copy_success">Đã sao chép link mời</string>
+    <string name="invite_share_via">Chia sẻ link qua:</string>
+    <string name="invite_contacts_title">📱 Mời từ danh bạ</string>
+    <string name="invite_sync_contacts">📞 Đồng bộ danh bạ</string>
+    <string name="invite_syncing">Đang đồng bộ...</string>
+    <string name="invite_phone_title">✏️ Nhập số điện thoại</string>
+    <string name="invite_phone_hint">Số điện thoại</string>
+    <string name="invite_button">Mời</string>
+    <string name="invite_no_contacts">Chưa có bạn bè nào trên Chia Cam.\nHãy mời bạn bè tham gia!</string>
+    <string name="invite_contact_exists">Đã là thành viên</string>
+    <string name="invite_app_not_installed">Vui lòng cài đặt ứng dụng để chia sẻ</string>
+    <string name="invite_sms_failed">Không thể gửi SMS, vui lòng thử lại</string>
+    <string name="invite_phone_empty">Vui lòng nhập số điện thoại</string>
+    <string name="invite_phone_invalid">Số điện thoại không hợp lệ</string>
+    <string name="invite_send_success">Đã gửi lời mời đến %s</string>
+    
+    <!-- Invite Message -->
+    <string name="invite_message_title">🍊 Mời tham gia nhóm "Chia Cam"</string>
+    <string name="invite_message_template">🍊 %s đã mời bạn tham gia nhóm \"%s\" trên Chia Cam.\n\n📱 Ứng dụng quản lý chi tiêu nhóm - Chụp ảnh là xong, không cần nhập số!\n\n🔗 Nhấn vào link để tham gia:\n%s\n\nHoặc nhập mã: %s</string>
+    <string name="invite_message_body">Mời bạn tham gia nhóm "%s" trên Chia Cam để cùng quản lý chi tiêu.\n\nMã nhóm: %s\n\nTải app tại: https://chia.cam/download</string>
+    
+    <!-- Permission Dialogs -->
+    <string name="permission_contacts_title">Cần quyền truy cập danh bạ</string>
+    <string name="permission_contacts_message">Để mời bạn bè từ danh bạ, vui lòng cấp quyền truy cập danh bạ trong cài đặt.</string>
+    <string name="permission_settings">Cài đặt</string>
+    
+    <!-- Group Avatar -->
+    <string name="change_avatar">Chọn ảnh nhóm</string>
+    <string name="camera">Chụp ảnh mới</string>
+    <string name="gallery">Chọn từ thư viện</string>
+    <string name="remove_avatar">Xóa ảnh</string>
+    
+    <!-- Group Detail Screen -->
+    <string name="group_detail_title">Chi tiết nhóm</string>
+    <string name="group_detail_members">thành viên</string>
+    <string name="group_detail_invite_code">Mã: %s</string>
+    <string name="group_detail_copy_code">Sao chép mã mời</string>
+    <string name="group_detail_copy_success">Đã sao chép mã mời</string>
+    <string name="group_detail_total_spent">💰 Tổng chi</string>
+    <string name="group_detail_bill_count">📋 Số bill</string>
+    <string name="group_detail_avg_per_person">👥 Trung bình</string>
+    <string name="group_detail_member_list">👥 Danh sách thành viên</string>
+    <string name="group_detail_settings">⚙️ Cài đặt nhóm</string>
+    <string name="group_detail_edit_name">✏️ Sửa tên nhóm</string>
+    <string name="group_detail_edit_avatar">🖼️ Sửa ảnh nhóm</string>
+    <string name="group_detail_transfer_admin">👑 Chuyển quyền admin</string>
+    <string name="group_detail_delete_group">🗑️ Xóa nhóm</string>
+    <string name="group_detail_invite_button">+ Mời thành viên</string>
+    
+    <!-- Balance Strings -->
+    <string name="group_detail_balance_owe">🔴 Đang nợ %s</string>
+    <string name="group_detail_balance_owed">🟢 Được nợ %s</string>
+    <string name="group_detail_balance_zero">⚪ Cân bằng</string>
+    
+    <!-- Dialog Titles -->
+    <string name="transfer_admin_title">Chuyển quyền admin</string>
+    <string name="transfer_admin_message">Bạn có chắc muốn chuyển quyền admin cho %s?\nSau khi chuyển, bạn sẽ trở thành thành viên thường.</string>
+    <string name="transfer_admin_success">Đã chuyển admin cho %s</string>
+    
+    <string name="remove_member_title">Xóa thành viên</string>
+    <string name="remove_member_message">Bạn có chắc muốn xóa %s khỏi nhóm?\nNgười này sẽ không thể xem các giao dịch trong nhóm.</string>
+    <string name="remove_member_success">Đã xóa %s khỏi nhóm</string>
+    
+    <string name="leave_group_title">Rời nhóm</string>
+    <string name="leave_group_message">Bạn có chắc muốn rời khỏi nhóm "%s"?\nBạn sẽ không thể xem các giao dịch trong nhóm.</string>
+    <string name="leave_group_success">Đã rời nhóm</string>
+    
+    <string name="delete_group_title">Xóa nhóm</string>
+    <string name="delete_group_message">Bạn có chắc chắn muốn xóa nhóm "%s"?\n\nHành động này sẽ xóa tất cả bill, nợ và dữ liệu của nhóm. Không thể hoàn tác!</string>
+    <string name="delete_group_confirm">XÓA NHÓM</string>
+    <string name="delete_group_success">Đã xóa nhóm</string>
+    
+    <string name="edit_group_name_title">Sửa tên nhóm</string>
+    <string name="edit_group_name_hint">Nhập tên nhóm mới</string>
+    <string name="edit_group_name_success">Đã cập nhật tên nhóm</string>
+    
+    <!-- Member Menu -->
+    <string name="menu_transfer_admin">Chuyển quyền admin</string>
+    <string name="menu_remove_member">Xóa khỏi nhóm</string>
+    <string name="menu_leave_group">Rời nhóm</string>
+    
+    <!-- Forgot Password Dialog -->
+    <string name="forgot_password_title">Quên mật khẩu</string>
+    <string name="forgot_password_message">Nhập email của bạn để nhận hướng dẫn đặt lại mật khẩu</string>
+    <string name="forgot_password_email_hint">Địa chỉ email</string>
+    <string name="forgot_password_send">Gửi hướng dẫn</string>
+    <string name="forgot_password_success">Đã gửi email hướng dẫn đặt lại mật khẩu</string>
+    <string name="forgot_password_email_not_found">Email không tồn tại trong hệ thống</string>
+</resources>

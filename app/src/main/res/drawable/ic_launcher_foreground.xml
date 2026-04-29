@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Đặt logo PNG của bạn vào giữa, thu nhỏ một chút để không bị cắt bởi các hình dạng icon khác nhau -->
+    <item
+        android:drawable="@drawable/logo_chiacam"
+        android:width="72dp"
+        android:height="72dp"
+        android:gravity="center" />
+</layer-list>

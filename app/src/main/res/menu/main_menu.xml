@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- Toolbar menu simplified: Only settings or group switch if needed -->
+    <item
+        android:id="@+id/action_settings"
+        android:title="Cài đặt"
+        app:showAsAction="never" />
+</menu>

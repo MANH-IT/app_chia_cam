@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/white"
+    android:windowSoftInputMode="adjustResize">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:paddingTop="32dp"
+        android:paddingBottom="40dp">
+
+        <!-- Logo -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:cardCornerRadius="40dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@color/white"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_chiacam"
+                android:contentDescription="@string/app_name" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/verify_otp_title"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/gray_dark"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/verify_otp_subtitle"
+            android:textSize="13sp"
+            android:textColor="@color/gray_medium"
+            android:layout_marginTop="4dp" />
+
+        <!-- Phone Number Display -->
+        <TextView
+            android:id="@+id/tv_phone_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="098*****12"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+        <!-- OTP Input Container -->
+        <LinearLayout
+            android:id="@+id/otp_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+
+            <include layout="@layout/view_otp_input" />
+
+        </LinearLayout>
+
+        <!-- Auto Read SMS Indicator -->
+        <TextView
+            android:id="@+id/tv_auto_read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/verify_otp_auto_read"
+            android:textSize="11sp"
+            android:textColor="@color/gray_medium"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            android:alpha="0.6" />
+
+        <!-- Timer and Resend Section -->
+        <LinearLayout
+            android:id="@+id/ll_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Timer Circle -->
+            <LinearLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_timer_circle"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_timer_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⏱️"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <!-- Timer Text -->
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/verify_otp_resend_prefix"
+                android:textSize="13sp"
+                android:textColor="@color/gray_medium"
+                android:layout_marginStart="12sp" />
+
+            <TextView
+                android:id="@+id/tv_timer_seconds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="60"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary"
+                android:layout_marginStart="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/verify_otp_resend_seconds"
+                android:textSize="13sp"
+                android:textColor="@color/gray_medium" />
+
+        </LinearLayout>
+
+        <!-- Resend Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_resend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/verify_otp_resend_button"
+            android:textSize="14sp"
+            android:textColor="@color/primary"
+            app:backgroundTint="@android:color/transparent"
+            android:elevation="0dp"
+            app:cornerRadius="20dp"
+            android:visibility="gone" />
+
+        <!-- Verify Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_verify"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/verify_otp_verify_button"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            app:cornerRadius="28dp"
+            app:backgroundTint="@color/primary"
+            android:stateListAnimator="@anim/button_scale"
+            android:elevation="4dp"
+            android:enabled="false"
+            android:alpha="0.5" />
+
+        <!-- Back to Register -->
+        <TextView
+            android:id="@+id/tv_back_to_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/verify_otp_back"
+            android:textColor="@color/gray_medium"
+            android:textSize="14sp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp" />
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    
+    <!-- Base application theme -->
+    <style name="Theme.ChiaCam" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        
+        <!-- Status bar color - white with dark icons -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        
+        <!-- Background -->
+        <item name="android:windowBackground">@color/background_white</item>
+        
+        <!-- Typography -->
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <!-- Splash Screen theme -->
+    <style name="Theme.ChiaCam.Splash" parent="Theme.ChiaCam">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/bg_splash_gradient</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+    </style>
+    
+    <!-- Onboarding Screen theme -->
+    <style name="Theme.ChiaCam.Onboarding" parent="Theme.ChiaCam">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@drawable/bg_onboarding_gradient</item>
+    </style>
+
+    <style name="Theme.ChiaCam.NoActionBar" parent="Theme.ChiaCam">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    
+    <!-- Bottom Nav Active Indicator - Fixed for MaterialComponents -->
+    <style name="BottomNavIndicator" parent="Widget.Design.BottomNavigationView">
+        <item name="backgroundTint">@color/primary_light</item>
+    </style>
+    
+</resources>

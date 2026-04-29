@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="12dp"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Checkbox -->
+    <CheckBox
+        android:id="@+id/cb_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/primary" />
+
+    <!-- Avatar -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:src="@drawable/ic_profile"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/gray_light" />
+
+    <!-- Name and Role -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên thành viên"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/gray_dark" />
+
+        <TextView
+            android:id="@+id/tv_role"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thành viên"
+            android:textSize="11sp"
+            android:textColor="@color/gray_medium" />
+
+    </LinearLayout>
+
+    <!-- Amount Display (for equal split) -->
+    <TextView
+        android:id="@+id/tv_amount_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="8.750đ"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/success"
+        android:visibility="gone" />
+
+    <!-- Custom Amount/Percent Input -->
+    <FrameLayout
+        android:id="@+id/fl_custom_input"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/et_custom_amount"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_custom_amount"
+            android:gravity="end"
+            android:paddingHorizontal="12dp"
+            android:inputType="number"
+            android:textSize="14sp"
+            android:textColor="@color/gray_dark"
+            android:hint="0" />
+
+        <TextView
+            android:id="@+id/tv_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="12dp"
+            android:text="đ"
+            android:textSize="12sp"
+            android:textColor="@color/gray_medium" />
+
+    </FrameLayout>
+
+</LinearLayout>

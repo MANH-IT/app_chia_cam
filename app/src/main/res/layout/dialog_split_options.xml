@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/split_options_title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/gray_dark"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tv_split_equal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_bill_split_equal"
+        android:textSize="16sp"
+        android:textColor="@color/gray_dark"
+        android:padding="12dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/split_options_equal_desc"
+        android:textSize="12sp"
+        android:textColor="@color/gray_medium"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="12dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_light" />
+
+    <TextView
+        android:id="@+id/tv_split_percent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_bill_split_percent"
+        android:textSize="16sp"
+        android:textColor="@color/gray_dark"
+        android:padding="12dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/split_options_percent_desc"
+        android:textSize="12sp"
+        android:textColor="@color/gray_medium"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="12dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_light" />
+
+    <TextView
+        android:id="@+id/tv_split_custom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_bill_split_custom"
+        android:textSize="16sp"
+        android:textColor="@color/gray_dark"
+        android:padding="12dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/split_options_custom_desc"
+        android:textSize="12sp"
+        android:textColor="@color/gray_medium"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="12dp" />
+
+</LinearLayout>
