@@ -1,66 +1,104 @@
 # Chia Cam 🍊 - Ứng dụng Chia Hóa Đơn Thông Minh
 
-**Chia Cam** là một ứng dụng di động mạnh mẽ và tiện lợi được thiết kế để giúp bạn và bạn bè dễ dàng quản lý, chia sẻ chi phí và hóa đơn trong các cuộc vui, bữa ăn hay chuyến du lịch. Tên gọi "Chia Cam" mang ý nghĩa vừa là "chia cam" (chia sẻ ngọt bùi), vừa là "chia bill" một cách công bằng và minh bạch.
+[![Android](https://img.shields.io/badge/Platform-Android-brightgreen.svg)](https://developer.android.com)
+[![Java](https://img.shields.io/badge/Language-Java-orange.svg)](https://www.java.com)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![OCR](https://img.shields.io/badge/OCR-Google_ML_Kit-red.svg)](https://developers.google.com/ml-kit)
+
+**Chia Cam** là giải pháp toàn diện giúp bạn và nhóm bạn quản lý chi tiêu chung một cách minh bạch, nhanh chóng và hiện đại. Không còn nỗi lo cộng trừ thủ công hay nhầm lẫn số tiền, hãy để **Chia Cam** lo liệu mọi thứ!
 
 ---
 
-## 🚀 Tính Năng Chính
+## 📸 Giao diện ứng dụng
 
-*   **📸 Quét Hóa Đơn Bằng OCR:** Sử dụng Google ML Kit để nhận diện văn bản và tự động trích xuất số tiền từ ảnh chụp hóa đơn, tiết kiệm thời gian nhập liệu thủ công.
-*   **⚖️ Kiểu Chia Linh Hoạt:** hỗ trợ nhiều phương thức chia tiền khác nhau:
-    *   **Chia đều:** Chia đều số tiền cho tất cả thành viên được chọn.
-    *   **Chia theo phần trăm:** Tùy chỉnh tỷ lệ đóng góp của mỗi người.
-    *   **Chia theo số tiền tùy chỉnh:** Nhập chính xác số tiền mỗi người cần trả.
-*   **👥 Quản Lý Nhóm:** Tạo và quản lý các nhóm bạn bè, đồng nghiệp hoặc gia đình để dễ dàng theo dõi chi tiêu chung.
-*   **📊 Tối Ưu Hóa Công Nợ:** Thuật toán thông minh giúp đơn giản hóa các giao dịch giữa các thành viên (ví dụ: A nợ B, B nợ C -> A trả trực tiếp cho C).
-*   **📱 Hoạt Động Ngoại Tuyến:** Sử dụng Room Database để lưu trữ dữ liệu cục bộ, giúp bạn tạo hóa đơn ngay cả khi không có kết nối internet.
-*   **🔔 Thông Báo & Tương Tác:** Cập nhật tức thời các hóa đơn mới và phản hồi (reaction) từ bạn bè qua hệ thống thông báo sinh động.
+![Mockup Giao diện Chính](docs/mockup_main.png)
+*Giao diện dashboard hiện đại với tông màu cam chủ đạo.*
 
 ---
 
-## 🛠️ Công Nghệ Sử Dụng
+## 🚀 Tính Năng Nổi Bật
 
-*   **Ngôn ngữ:** Java
-*   **Cơ sở dữ liệu:** Room Database (SQLite)
-*   **Xử lý ảnh & OCR:** Google ML Kit Text Recognition
-*   **Tải ảnh:** Glide
-*   **Giao diện:** Material Components, CoordinatorLayout, ViewPager2
-*   **Quản lý luồng:** AsyncTask (legacy) & ThreadPool
-
----
-
-## 📂 Cấu Trúc Dự Án
-
-*   `activities/`: Các màn hình chính của ứng dụng (Camera, Add Bill, Debt calculation, v.v.).
-*   `adapters/`: Quản lý hiển thị dữ liệu cho các danh sách (RecyclerView).
-*   `database/`: Cấu hình Room DB, Entities và DAOs.
-*   `models/`: Định nghĩa các đối tượng dữ liệu (Bill, Member, Transaction, v.v.).
-*   `utils/`: Các tiện ích hỗ trợ (Xử lý ảnh, OCR, Định dạng tiền tệ, Tính toán công nợ).
-*   `fragments/`: Các thành phần giao diện nhỏ hơn (Feed, Profile, Notifications).
+*   **⚡ Nhận diện thông minh (OCR):** Tự động bóc tách số tiền từ hóa đơn chỉ bằng một cú chạm.
+*   **⚖️ Chia tiền đa phương thức:** 
+    *   **Equal Split:** Chia đều cho tất cả.
+    *   **Percentage Split:** Chia theo tỷ trọng phần trăm.
+    *   **Custom Split:** Chia theo số tiền cụ thể của từng người.
+*   **🧩 Tối ưu hóa dòng tiền:** Thuật toán tự động giảm thiểu số lượng giao dịch cần thực hiện để trả hết nợ trong nhóm.
+*   **📡 Đồng bộ hóa (Sắp có):** Kết nối dữ liệu thời gian thực giữa các thiết bị thành viên qua Cloud.
+*   **🌙 Chế độ tối (Dark Mode):** Giao diện thân thiện, bảo vệ mắt và tiết kiệm pin.
 
 ---
 
-## ⚙️ Cài Đặt
+## 🏗️ Kiến Trúc Hệ Thống
 
-1.  Clone repository này về máy:
-    ```bash
-    git clone https://github.com/MANH-IT/app_chia_cam.git
-    ```
-2.  Mở dự án bằng **Android Studio** (phiên bản Ladybug hoặc mới hơn).
-3.  Đồng bộ Gradle và Build dự án.
-4.  Chạy trên máy ảo hoặc thiết bị Android thật (đề nghị API 24 trở lên).
-
----
-
-## 🤝 Đóng Góp
-
-Mọi đóng góp nhằm cải thiện ứng dụng đều được hoan nghênh. Bạn có thể mở một Issue hoặc gửi Pull Request nếu có ý tưởng mới hoặc phát hiện lỗi.
+```mermaid
+graph TD
+    A[Camera/Gallery] -->|Image| B[OcrUtils]
+    B -->|Extracted Amount| C[AddBillActivity]
+    C -->|Bill Data| D[Room Database]
+    D -->|Persistent Storage| E[Local Device]
+    C -->|Sync| F[Firebase/API - Roadmap]
+    D -->|Query| G[DebtOptimizer]
+    G -->|Simplified Debts| H[DebtActivity/Dashboard]
+```
 
 ---
 
-## 📄 Giấy Phép
+## 🛠️ Stack Công Nghệ
 
-Dự án này được phát triển cho mục đích học tập và quản lý chi tiêu cá nhân.
+| Thành phần | Công nghệ sử dụng |
+| :--- | :--- |
+| **Language** | Java 11+ |
+| **Core UI** | Material Design Components, RecyclerView, CoordinatorLayout |
+| **Architecture** | MVVM Pattern |
+| **Local DB** | Room Persistence Library |
+| **Imaging** | CameraX, Glide, BitmapUtils |
+| **Intelligence** | Google ML Kit (Text Recognition) |
+| **Background** | WorkManager, ThreadPoolExecutor |
 
 ---
-*Phát triển bởi đội ngũ Chia Cam Team.*
+
+## 📂 Cấu Trúc Thư Mục
+
+```bash
+com.chupchia/
+├── activities/    # Điều phối giao diện và tương tác người dùng
+├── adapters/      # Cầu nối dữ liệu cho danh sách (RecyclerView)
+├── database/      # Quản lý lưu trữ cục bộ (SQLite/Room)
+├── dialogs/       # Các hộp thoại tương tác nhanh
+├── fragments/     # Thành phần UI tái sử dụng
+├── models/        # Định nghĩa cấu trúc dữ liệu
+├── repositories/  # Lớp trừu tượng quản lý dữ liệu
+└── utils/         # Các tiện ích cốt lõi (OCR, Định dạng, Tối ưu)
+```
+
+---
+
+## 🗺️ Lộ Trình Phát Triển (Roadmap)
+
+- [x] Hoàn thiện giao diện Material Design 3.
+- [x] Tích hợp OCR nhận diện hóa đơn cơ bản.
+- [x] Thuật toán tối ưu hóa công nợ.
+- [ ] Tích hợp Firebase Auth và Cloud Firestore để đồng bộ nhóm.
+- [ ] Hỗ trợ đa tiền tệ (VND, USD, KRW...).
+- [ ] Xuất báo cáo chi tiêu hàng tháng (PDF/Excel).
+- [ ] Tính năng quét QR chuyển khoản nhanh qua Napas247.
+
+---
+
+## ⚙️ Cài đặt & Sử dụng
+
+1.  Mở dự án trong **Android Studio Ladybug**.
+2.  Đảm bảo đã cài đặt Android SDK API 34.
+3.  Kết nối thiết bị thật (ưu tiên) hoặc máy ảo.
+4.  Nhấn `Run` để trải nghiệm.
+
+---
+
+## 👤 Tác giả
+
+*   **Phan Đình Mạnh** - *Lead Developer* - [GitHub Profile](https://github.com/MANH-IT)
+
+---
+
+© 2026 Chia Cam Project. Phát triển với ❤️ dành cho cộng đồng.
