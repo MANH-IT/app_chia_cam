@@ -11,7 +11,7 @@
 
 ## 📸 Giao diện ứng dụng
 
-![Mockup Giao diện Chính](docs/mockup_main.png)
+![Mockup Giao diện Chính](docs/giaodien.jpg)
 *Giao diện dashboard hiện đại với tông màu cam chủ đạo.*
 
 ---
