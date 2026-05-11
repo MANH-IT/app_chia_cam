@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -83,18 +83,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.tvContent.setText(notification.getContent());
         holder.tvTime.setText(DateTimeUtils.getTimeAgo(notification.getTimestamp()));
 
-        // Set unread indicator and background
+        // Đặt chỉ báo chưa đọc và nền
         if (!notification.isRead()) {
             holder.viewUnread.setVisibility(View.VISIBLE);
             holder.cardNotification.setCardBackgroundColor(
-                ContextCompat.getColor(context, R.color.warning_light)); // Using existing color or similar
+                ContextCompat.getColor(context, R.color.warning_light)); // Dùng màu có sẵn hoặc tương tự
         } else {
             holder.viewUnread.setVisibility(View.GONE);
             holder.cardNotification.setCardBackgroundColor(
                 ContextCompat.getColor(context, R.color.white));
         }
 
-        // Click listener
+        // Sự kiện nhấp
         holder.itemView.setOnClickListener(v -> {
             if (clickListener != null) {
                 clickListener.onNotificationClick(notification, position);

@@ -1,4 +1,4 @@
-package com.chupchia.utils;
+﻿package com.chupchia.utils;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -8,28 +8,28 @@ public class CurrencyUtils {
     private static final NumberFormat VND_FORMAT = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
 
     /**
-     * Format currency to VND format (e.g., 35,000đ)
+     * Định dạng tiền tệ theo VND (ví dụ: 35.000đ)
      */
     public static String formatVND(long amount) {
         return VND_FORMAT.format(amount) + "đ";
     }
 
     /**
-     * Format currency without currency symbol
+     * Định dạng tiền tệ không có ký hiệu tiền tệ
      */
     public static String formatNumber(long amount) {
         return VND_FORMAT.format(amount);
     }
 
     /**
-     * Format with "đ" suffix
+     * Định dạng với hậu tố "đ"
      */
     public static String format(long amount) {
         return formatVND(amount);
     }
 
     /**
-     * Parse formatted string to long value
+     * Phân tích chuỗi đã định dạng thành giá trị long
      */
     public static long parseVND(String formatted) {
         if (formatted == null || formatted.isEmpty()) return 0;
@@ -43,7 +43,7 @@ public class CurrencyUtils {
     }
 
     /**
-     * Format amount for display with per person info
+     * Định dạng số tiền để hiển thị với thông tin mỗi người
      */
     public static String formatPerPersonAmount(long totalAmount, int memberCount) {
         if (memberCount == 0) return formatVND(0);

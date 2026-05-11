@@ -15,7 +15,7 @@ public class PermissionUtils {
     private static final int STORAGE_PERMISSION_REQUEST_CODE = 101;
     
     /**
-     * Check if camera permission is granted
+     * Kiểm tra quyền camera đã được cấp chưa
      */
     public static boolean hasCameraPermission(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
@@ -23,7 +23,7 @@ public class PermissionUtils {
     }
     
     /**
-     * Check if storage permission is granted (Images only for Camera/Gallery)
+     * Kiểm tra quyền lưu trữ đã được cấp chưa (Đọc ảnh cho Camera/Thư viện)
      */
     public static boolean hasStoragePermission(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -36,14 +36,14 @@ public class PermissionUtils {
     }
     
     /**
-     * Request camera permission
+     * Yêu cầu quyền camera
      */
     public static void requestCameraPermission(Activity activity) {
         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
     }
     
     /**
-     * Request storage permission (modern way)
+     * Yêu cầu quyền lưu trữ (cách hiện đại)
      */
     public static void requestStoragePermission(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -51,12 +51,12 @@ public class PermissionUtils {
                 new String[]{Manifest.permission.READ_MEDIA_IMAGES}, 
                 STORAGE_PERMISSION_REQUEST_CODE);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Android 10, 11, 12 only need READ_EXTERNAL_STORAGE for gallery
+            // Android 10, 11, 12 chỉ cần READ_EXTERNAL_STORAGE cho thư viện
             ActivityCompat.requestPermissions(activity, 
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 
                 STORAGE_PERMISSION_REQUEST_CODE);
         } else {
-            // Android 9 and below need both
+            // Android 9 và thấp hơn cần cả hai quyền
             ActivityCompat.requestPermissions(activity, 
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 
                 STORAGE_PERMISSION_REQUEST_CODE);
@@ -64,7 +64,7 @@ public class PermissionUtils {
     }
     
     /**
-     * Check if contact permission is granted
+     * Kiểm tra quyền danh bạ đã được cấp chưa
      */
     public static boolean hasContactPermission(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS)
@@ -72,23 +72,23 @@ public class PermissionUtils {
     }
 
     /**
-     * Request contact permission
+     * Yêu cầu quyền danh bạ
      */
     public static void requestContactPermission(Activity activity) {
         ActivityCompat.requestPermissions(activity, 
                 new String[]{Manifest.permission.READ_CONTACTS}, 
-                102); // 102 matches CreateGroupActivity code
+                102); // 102 khớp với mã trong CreateGroupActivity
     }
 
     /**
-     * Check if all required permissions for Camera are granted
+     * Kiểm tra tất cả quyền cần thiết cho Camera đã được cấp chưa
      */
     public static boolean hasAllPermissions(Context context) {
         return hasCameraPermission(context);
     }
 
     /**
-     * Get all required permissions as String array based on SDK version
+     * Lấy tất cả quyền cần thiết dưới dạng mảng String theo phiên bản SDK
      */
     public static String[] getRequiredPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -111,7 +111,7 @@ public class PermissionUtils {
     }
 
     /**
-     * Show a dialog guiding the user to settings to enable permissions
+     * Hiển thị hộp thoại hướng dẫn người dùng vào cài đặt để bật quyền
      */
     public static void openAppSettings(Activity activity) {
         android.content.Intent intent = new android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);

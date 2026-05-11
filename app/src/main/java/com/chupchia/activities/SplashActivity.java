@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -60,7 +60,7 @@ public class SplashActivity extends AppCompatActivity {
     }
     
     /**
-     * Khởi tạo views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         containerMain = findViewById(R.id.container_main);
@@ -77,24 +77,24 @@ public class SplashActivity extends AppCompatActivity {
      * Chạy tất cả animations cùng lúc
      */
     private void startAnimations() {
-        // Fade in cho container chính
+        // Hiệu ứng mờ dần vào cho container chính
         ObjectAnimator fadeIn = ObjectAnimator.ofFloat(containerMain, "alpha", 0f, 1f);
         fadeIn.setDuration(FADE_IN_DURATION);
         fadeIn.setInterpolator(new AccelerateDecelerateInterpolator());
         
-        // Scale animation cho logo
+        // Hiệu ứng phóng to cho logo
         PropertyValuesHolder scaleX = PropertyValuesHolder.ofFloat("scaleX", 0.7f, 1f);
         PropertyValuesHolder scaleY = PropertyValuesHolder.ofFloat("scaleY", 0.7f, 1f);
         ObjectAnimator scaleLogo = ObjectAnimator.ofPropertyValuesHolder(ivLogo, scaleX, scaleY);
         scaleLogo.setDuration(SCALE_DURATION);
         scaleLogo.setInterpolator(new BounceInterpolator());
         
-        // Rotation nhẹ cho logo
+        // Hiệu ứng xoay nhẹ cho logo
         ObjectAnimator rotation = ObjectAnimator.ofFloat(ivLogo, "rotation", 0f, 360f);
         rotation.setDuration(SCALE_DURATION * 2);
         rotation.setInterpolator(new AccelerateDecelerateInterpolator());
         
-        // Animation cho các circle floating
+        // Hiệu ứng cho các vòng tròn nổi
         startCircleAnimation(circle1, 0);
         startCircleAnimation(circle2, 500);
         startCircleAnimation(circle3, 1000);
@@ -106,7 +106,7 @@ public class SplashActivity extends AppCompatActivity {
     }
     
     /**
-     * Animation cho circle floating
+     * Hiệu ứng cho vòng tròn nổi
      */
     private void startCircleAnimation(View circle, long delay) {
         circle.setAlpha(0f);
@@ -135,7 +135,7 @@ public class SplashActivity extends AppCompatActivity {
     }
     
     /**
-     * Typing animation cho slogan
+     * Hiệu ứng gõ chữ cho slogan
      */
     private void startTypingAnimation() {
         handler.post(new Runnable() {
@@ -207,7 +207,7 @@ public class SplashActivity extends AppCompatActivity {
     private void checkTokenWithServer(String token) {
         showLoading(true);
         
-        // Mock: giả lập delay và coi token là hợp lệ
+        // Giả lập: trì hoãn và coi token là hợp lệ
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -307,7 +307,7 @@ public class SplashActivity extends AppCompatActivity {
     
     @Override
     public void onBackPressed() {
-        // Do nothing
+        // Không làm gì
     }
     
     @Override

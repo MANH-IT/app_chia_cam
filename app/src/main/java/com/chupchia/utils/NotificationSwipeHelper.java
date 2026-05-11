@@ -1,4 +1,4 @@
-package com.chupchia.utils;
+﻿package com.chupchia.utils;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -59,12 +59,12 @@ public class NotificationSwipeHelper extends ItemTouchHelper.SimpleCallback {
         View itemView = viewHolder.itemView;
         float alpha = Math.abs(dX) / itemView.getWidth();
         
-        // Draw red background
+        // Vẽ nền đỏ
         paint.setAlpha((int) (255 * alpha));
         c.drawRect(itemView.getLeft(), itemView.getTop(),
                    itemView.getLeft() + dX, itemView.getBottom(), paint);
 
-        // Draw delete icon
+        // Vẽ biểu tượng xóa
         if (deleteIcon != null) {
             int iconHeight = deleteIcon.getIntrinsicHeight();
             int iconWidth = deleteIcon.getIntrinsicWidth();

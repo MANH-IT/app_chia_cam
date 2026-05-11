@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -42,14 +42,14 @@ import java.util.concurrent.TimeUnit;
 
 public class VerifyOtpActivity extends AppCompatActivity {
 
-    // ===== CONSTANTS =====
+    // ===== HẰNG SỐ =====
     private static final int OTP_LENGTH = 6;
-    private static final int TIMER_DURATION = 60000; // 60 seconds
+    private static final int TIMER_DURATION = 60000; // 60 giây
     private static final int MAX_VERIFY_ATTEMPTS = 5;
     private static final int MAX_RESEND_COUNT = 3;
-    private static final long RESEND_LOCKOUT_DURATION = 10 * 60 * 1000; // 10 minutes
+    private static final long RESEND_LOCKOUT_DURATION = 10 * 60 * 1000; // 10 phút
     
-    // ===== VIEWS =====
+    // ===== GIAO DIỆN =====
     private View ivLogo;
     private TextView tvTitle;
     private TextView tvSubtitle;
@@ -64,7 +64,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     private TextView tvBackToRegister;
     private LinearLayout llTimer;
     
-    // ===== VARIABLES =====
+    // ===== BIẾN =====
     private String phoneNumber;
     private String fullname;
     private String email;
@@ -104,7 +104,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
         password = getIntent().getStringExtra("password");
         
         if (phoneNumber == null) {
-            // Try to get from SharedPreferences
+            // Thử lấy từ SharedPreferences
             phoneNumber = SharedPrefManager.getSharedPreferences().getString("temp_phone", null);
             fullname = SharedPrefManager.getSharedPreferences().getString("temp_fullname", null);
             email = SharedPrefManager.getSharedPreferences().getString("temp_email", null);
@@ -113,7 +113,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Khởi tạo views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         ivLogo = findViewById(R.id.iv_logo);
@@ -129,18 +129,18 @@ public class VerifyOtpActivity extends AppCompatActivity {
         tvBackToRegister = findViewById(R.id.tv_back_to_register);
         llTimer = findViewById(R.id.ll_timer);
         
-        // Format phone number display (mask middle digits)
+        // Định dạng hiển thị số điện thoại (ẩn các chữ số giữa)
         String maskedPhone = maskPhoneNumber(phoneNumber);
         tvPhoneDisplay.setText(maskedPhone);
         
-        // Setup progress dialog
+        // Cấu hình hộp thoại tiến trình
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.verify_otp_verifying));
         progressDialog.setCancelable(false);
     }
     
     /**
-     * Mask phone number (e.g., 0987654321 -> 098*****21)
+     * Ẩn số điện thoại (ví dụ: 0987654321 -> 098*****21)
      */
     private String maskPhoneNumber(String phone) {
         if (phone == null || phone.length() < 10) return phone;
@@ -150,7 +150,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup 6 OTP input fields
+     * Cấu hình 6 ô nhập OTP
      */
     private void setupOtpFields() {
         int[] otpIds = {
@@ -163,7 +163,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
             setupOtpField(i);
         }
         
-        // Setup paste functionality on first field
+        // Cấu hình chức năng dán cho ô đầu tiên
         otpFields[0].setOnLongClickListener(v -> {
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             if (clipboard.hasPrimaryClip()) {
@@ -179,10 +179,10 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup individual OTP field
+     * Cấu hình từng ô OTP riêng lẻ
      */
     private void setupOtpField(final int index) {
-        // Text change listener to auto move to next field
+        // Lắng nghe thay đổi văn bản để tự động chuyển sang ô tiếp theo
         otpFields[index].addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -199,7 +199,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
         
-        // Key listener to handle backspace
+        // Lắng nghe phím để xử lý nút xóa
         otpFields[index].setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_DEL && 
                 event.getAction() == KeyEvent.ACTION_DOWN &&
@@ -214,26 +214,26 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Fill all OTP fields with pasted code
+     * Điền tất cả ô OTP với mã đã dán
      */
     private void fillOtpFields(String otp) {
         for (int i = 0; i < OTP_LENGTH && i < otp.length(); i++) {
             otpFields[i].setText(String.valueOf(otp.charAt(i)));
         }
-        // Focus on next empty field
+        // Lấy nét vào ô trống tiếp theo
         for (int i = 0; i < OTP_LENGTH; i++) {
             if (otpFields[i].getText().toString().isEmpty()) {
                 otpFields[i].requestFocus();
                 return;
             }
         }
-        // All fields filled, hide keyboard
+        // Tất cả ô đã điền, ẩn bàn phím
         hideKeyboard();
         autoVerifyOtp();
     }
     
     /**
-     * Check if all OTP fields are filled
+     * Kiểm tra tất cả ô OTP đã được điền chưa
      */
     private void checkOtpComplete() {
         boolean isComplete = true;
@@ -252,13 +252,13 @@ public class VerifyOtpActivity extends AppCompatActivity {
         btnVerify.setAlpha(isComplete ? 1f : 0.5f);
         
         if (isComplete && !isVerifying) {
-            // Auto verify when all fields are filled
+            // Tự động xác minh khi tất cả ô đã điền
             new Handler(Looper.getMainLooper()).postDelayed(this::autoVerifyOtp, 300);
         }
     }
     
     /**
-     * Auto verify OTP
+     * Tự động xác minh OTP
      */
     private void autoVerifyOtp() {
         if (isVerifying) return;
@@ -275,7 +275,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Verify OTP with server
+     * Xác minh OTP với máy chủ
      */
     private void verifyOtp(String enteredOtp) {
         if (isVerifying) return;
@@ -283,19 +283,19 @@ public class VerifyOtpActivity extends AppCompatActivity {
         
         showLoading(true);
         
-        // TODO: Call actual OTP verification API
+        // TODO: Gọi API xác minh OTP thực tế
         simulateVerifyOtp(enteredOtp);
     }
     
     /**
-     * Simulate OTP verification (replace with actual API)
+     * Giả lập xác minh OTP (thay thế bằng API thực tế)
      */
     private void simulateVerifyOtp(String enteredOtp) {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             showLoading(false);
             
-            // For demo, any 6-digit number is valid
-            // In production, verify with server
+            // Cho demo, bất kỳ số 6 chữ số nào đều hợp lệ
+            // Trong sản xuất, xác minh với máy chủ
             if (enteredOtp.length() == 6 && enteredOtp.matches("\\d+")) {
                 createAccount();
             } else {
@@ -310,24 +310,25 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Create user account after OTP verification
+     * Tạo tài khoản sau khi xác minh OTP
      */
     private void createAccount() {
         SharedPrefManager prefManager = SharedPrefManager.getInstance(this);
         
-        // Generate user ID
+        // Tạo mã người dùng
         String userId = "user_" + System.currentTimeMillis();
         String token = "token_" + System.currentTimeMillis() + "_" + userId;
         
-        // Save user data
+        // Lưu dữ liệu người dùng
         prefManager.setLoggedIn(true);
         prefManager.setAuthToken(token);
         prefManager.setUserId(userId);
         prefManager.setUserName(fullname);
+        prefManager.setUserPhone(phoneNumber); // Lưu số điện thoại đăng ký
         prefManager.setUserEmail(email != null ? email : "");
-        prefManager.setTokenExpiry(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000); // 7 days
+        prefManager.setTokenExpiry(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000); // 7 ngày
         
-        // Clear temp data
+        // Xóa dữ liệu tạm
         SharedPrefManager.getSharedPreferences().edit()
             .remove("temp_fullname")
             .remove("temp_phone")
@@ -335,21 +336,21 @@ public class VerifyOtpActivity extends AppCompatActivity {
             .remove("temp_password")
             .apply();
         
-        // Navigate to Main
+        // Điều hướng đến màn hình chính
         navigateToMain();
     }
     
     /**
-     * Show OTP error
+     * Hiển thị lỗi OTP
      */
     private void showOtpError() {
         isVerifying = false;
         
-        // Highlight all OTP fields in red
+        // Tô đỏ tất cả ô OTP
         for (EditText field : otpFields) {
             field.setBackgroundResource(R.drawable.bg_otp_box_error);
             
-            // Shake animation
+            // Hiệu ứng rung
             ObjectAnimator shakeX = ObjectAnimator.ofFloat(field, "translationX", 0f, 10f, -10f, 5f, -5f, 0f);
             shakeX.setDuration(400);
             shakeX.start();
@@ -357,7 +358,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
         
         Toast.makeText(this, R.string.verify_otp_error, Toast.LENGTH_SHORT).show();
         
-        // Clear fields after error
+        // Xóa các ô sau khi lỗi
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             for (EditText field : otpFields) {
                 field.setText("");
@@ -368,7 +369,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Show max attempts error
+     * Hiển thị lỗi vượt quá số lần thử
      */
     private void showMaxAttemptsError() {
         new AlertDialog.Builder(this)
@@ -382,25 +383,25 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Send OTP via SMS
+     * Gửi OTP qua SMS
      */
     private void sendOtp() {
-        // Show auto-read indicator
+        // Hiển thị chỉ báo tự động đọc
         tvAutoRead.setVisibility(View.VISIBLE);
         
-        // TODO: Call API to send OTP
+        // TODO: Gọi API gửi OTP
         String message = String.format(getString(R.string.verify_otp_sent), maskPhoneNumber(phoneNumber));
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         
-        // For demo, generate fake OTP
+        // Cho demo, tạo OTP giả
         expectedOtp = String.format("%06d", new Random().nextInt(999999));
         
-        // Auto-fill OTP for demo (remove in production)
+        // Tự động điền OTP cho demo (xóa trong sản xuất)
         // fillOtpFields(expectedOtp);
     }
     
     /**
-     * Start countdown timer for resend
+     * Bắt đầu bộ đếm ngược cho gửi lại
      */
     private void startTimer() {
         if (countDownTimer != null) {
@@ -427,7 +428,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Resend OTP
+     * Gửi lại OTP
      */
     private void resendOtp() {
         if (System.currentTimeMillis() < resendLockoutEndTime) {
@@ -448,19 +449,19 @@ public class VerifyOtpActivity extends AppCompatActivity {
         resendCount++;
         saveResendState();
         
-        // Clear OTP fields
+        // Xóa các ô OTP
         for (EditText field : otpFields) {
             field.setText("");
         }
         otpFields[0].requestFocus();
         
-        // Send new OTP
+        // Gửi OTP mới
         sendOtp();
         startTimer();
     }
     
     /**
-     * Save resend state to SharedPreferences
+     * Lưu trạng thái gửi lại vào SharedPreferences
      */
     private void saveResendState() {
         SharedPrefManager.getSharedPreferences().edit()
@@ -470,7 +471,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Load resend state from SharedPreferences
+     * Tải trạng thái gửi lại từ SharedPreferences
      */
     private void loadResendState() {
         resendCount = SharedPrefManager.getSharedPreferences().getInt("otp_resend_count", 0);
@@ -483,20 +484,20 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Start SMS retriever for auto-read OTP
+     * Khởi động SMS retriever để tự động đọc OTP
      */
     private void startSmsRetriever() {
         SmsRetrieverClient client = SmsRetriever.getClient(this);
         client.startSmsRetriever()
             .addOnSuccessListener(aVoid -> {
-                // Successfully started
+                // Khởi động thành công
             })
             .addOnFailureListener(e -> {
-                // Failed to start
+                // Khởi động thất bại
                 tvAutoRead.setVisibility(View.GONE);
             });
         
-        // Register broadcast receiver
+        // Đăng ký bộ thu phát sóng
         smsBroadcastReceiver = new SmsBroadcastReceiver();
         smsBroadcastReceiver.setOTPReceivedListener(new SmsBroadcastReceiver.OTPReceivedListener() {
             @Override
@@ -516,12 +517,12 @@ public class VerifyOtpActivity extends AppCompatActivity {
             }
         });
         
-        // Register receiver (use LocalBroadcastManager or register system broadcast)
-        // For simplicity, we'll skip the full implementation here
+        // Đăng ký receiver (dùng LocalBroadcastManager hoặc đăng ký broadcast hệ thống)
+        // Để đơn giản, chúng ta sẽ bỏ qua việc triển khai đầy đủ ở đây
     }
     
     /**
-     * Animation khi mở màn hình
+     * Hiệu ứng khi mở màn hình
      */
     private void startEnterAnimation() {
         ivLogo.setAlpha(0f);
@@ -569,7 +570,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup button listeners
+     * Cấu hình sự kiện nút bấm
      */
     private void setupListeners() {
         btnVerify.setOnClickListener(v -> {
@@ -585,7 +586,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Show/hide loading
+     * Hiển thị/ẩn loading
      */
     private void showLoading(boolean show) {
         if (show) {
@@ -601,7 +602,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Hide keyboard
+     * Ẩn bàn phím
      */
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -612,7 +613,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Navigate to Main
+     * Điều hướng đến màn hình chính
      */
     private void navigateToMain() {
         Intent intent = new Intent(VerifyOtpActivity.this, MainActivity.class);
@@ -623,7 +624,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Navigate back to Register
+     * Điều hướng về màn hình đăng ký
      */
     private void navigateToRegister() {
         Intent intent = new Intent(VerifyOtpActivity.this, RegisterActivity.class);
@@ -633,7 +634,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     }
     
     /**
-     * Handle back press
+     * Xử lý nút quay lại
      */
     @Override
     public void onBackPressed() {
@@ -646,6 +647,6 @@ public class VerifyOtpActivity extends AppCompatActivity {
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
-        // Unregister receiver if registered
+        // Hủy đăng ký receiver nếu đã đăng ký
     }
 }

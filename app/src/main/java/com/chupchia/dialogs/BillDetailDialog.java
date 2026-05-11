@@ -1,4 +1,4 @@
-package com.chupchia.dialogs;
+﻿package com.chupchia.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -41,7 +41,7 @@ public class BillDetailDialog extends BottomSheetDialog {
     private String groupAdminId;
     private OnBillActionListener listener;
     
-    // Views
+    // Giao diện
     private PhotoView ivFullImage;
     private ImageView ivClose;
     private TextView tvProductName;
@@ -59,7 +59,7 @@ public class BillDetailDialog extends BottomSheetDialog {
     private MaterialButton btnEdit;
     private MaterialButton btnDelete;
     
-    // Adapters
+    // Adapter
     private SplitDetailAdapter splitAdapter;
     private ReactionUserAdapter reactionAdapter;
     private EditHistoryAdapter editHistoryAdapter;
@@ -137,7 +137,7 @@ public class BillDetailDialog extends BottomSheetDialog {
     private void loadBillData() {
         if (bill == null) return;
         
-        // Load image with pinch to zoom
+        // Tải ảnh với chức năng phóng to bằng vuốt
         if (bill.getImageUrl() != null && !bill.getImageUrl().isEmpty()) {
             Glide.with(context)
                     .load(bill.getImageUrl())
@@ -151,7 +151,7 @@ public class BillDetailDialog extends BottomSheetDialog {
         String actorTime = bill.getActorName() + " mua • " + DateTimeUtils.formatDateTime(bill.getTimestamp());
         tvActorTime.setText(actorTime);
         
-        // Set note
+        // Đặt ghi chú
         if (!TextUtils.isEmpty(bill.getNote())) {
             tvNoteTitle.setVisibility(View.VISIBLE);
             tvNote.setVisibility(View.VISIBLE);
@@ -163,38 +163,49 @@ public class BillDetailDialog extends BottomSheetDialog {
     }
     
     private void setupSplitList() {
-        // Create demo split data or from bill if available
+        // Tạo dữ liệu chia từ thông tin hóa đơn thật
         List<SplitData> splits = new ArrayList<>();
         int count = Math.max(1, bill.getSplitCount());
         long perPersonAmount = bill.getAmount() / count;
         
-        splits.add(new SplitData("user_1", "Mạnh Nguyễn", null, perPersonAmount));
-        splits.add(new SplitData("user_2", "Lan Vũ", null, perPersonAmount));
-        splits.add(new SplitData("user_3", "Bình Trần", null, perPersonAmount));
+        // Thêm người tạo hóa đơn làm thành viên chia đầu tiên
+        String creatorName = bill.getActorName() != null ? bill.getActorName() : "Người tạo";
+        splits.add(new SplitData(bill.getCreatorId(), creatorName, null, perPersonAmount));
+        
+        // Thêm các thành viên chia còn lại
+        for (int i = 1; i < count; i++) {
+            splits.add(new SplitData("member_" + i, "Thành viên " + i, null, perPersonAmount));
+        }
         
         splitAdapter.setSplits(splits);
     }
     
     private void setupReactionList() {
-        // Build reaction groups
-        Map<String, List<String>> reactionMap = new HashMap<>();
+        // Xây dựng nhóm cảm xúc từ dữ liệu hóa đơn thật
+        Map<String, Integer> reactions = bill.getReactions();
         
-        // Demo data
-        List<String> happyUsers = new ArrayList<>();
-        happyUsers.add("Mạnh Nguyễn");
-        happyUsers.add("Lan Vũ");
-        reactionMap.put("😂", happyUsers);
-        
-        List<ReactionGroup> reactionGroups = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : reactionMap.entrySet()) {
-            ReactionGroup group = new ReactionGroup(entry.getKey());
-            for (String userName : entry.getValue()) {
-                group.addUser(new ReactionGroup.ReactionUser("", userName, null));
-            }
-            reactionGroups.add(group);
+        if (reactions == null || reactions.isEmpty()) {
+            tvNoReaction.setVisibility(View.VISIBLE);
+            rvReactions.setVisibility(View.GONE);
+            return;
         }
         
-        if (!reactionGroups.isEmpty()) {
+        List<ReactionGroup> reactionGroups = new ArrayList<>();
+        boolean hasAnyReaction = false;
+        
+        for (Map.Entry<String, Integer> entry : reactions.entrySet()) {
+            int count = entry.getValue();
+            if (count > 0) {
+                hasAnyReaction = true;
+                ReactionGroup group = new ReactionGroup(entry.getKey());
+                for (int i = 0; i < count; i++) {
+                    group.addUser(new ReactionGroup.ReactionUser("", "Người dùng", null));
+                }
+                reactionGroups.add(group);
+            }
+        }
+        
+        if (hasAnyReaction) {
             tvNoReaction.setVisibility(View.GONE);
             rvReactions.setVisibility(View.VISIBLE);
             reactionAdapter.setReactionGroups(reactionGroups);
@@ -246,7 +257,7 @@ public class BillDetailDialog extends BottomSheetDialog {
         boolean isCreator = currentUserId != null && currentUserId.equals(bill.getCreatorId());
         boolean isAdmin = currentUserId != null && currentUserId.equals(groupAdminId);
         
-        // Check if bill is expired (older than 7 days)
+        // Kiểm tra hóa đơn hết hạn (cũ hơn 7 ngày)
         long daysDiff = (System.currentTimeMillis() - bill.getTimestamp()) / (24 * 60 * 60 * 1000);
         boolean isExpired = daysDiff > 7;
         

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Colors (Keep consistent or slightly adjust for dark mode) -->
+    <color name="primary">#FF7E4D</color> <!-- Slightly lighter for better contrast on dark -->
+    <color name="primary_dark">#E05D2C</color>
+    <color name="primary_light">#4DFF7E4D</color> <!-- Transparent orange -->
+    
+    <!-- Semantic Colors (Dark Mode Overrides) -->
+    <color name="color_surface">#1A1A1A</color>
+    <color name="color_on_surface">#F2F4F7</color>
+    <color name="color_background">#121212</color>
+    <color name="color_card_background">#262626</color>
+    <color name="color_divider">#333333</color>
+    <color name="color_text_primary">#F2F4F7</color>
+    <color name="color_text_secondary">#B2BEC3</color>
+    <color name="color_text_on_primary">#FFFFFF</color>
+    
+    <!-- Override Base Colors -->
+    <color name="white">#1A1A1A</color> <!-- Caution: this might affect layouts using @color/white explicitly -->
+    <color name="black">#FFFFFF</color>
+    <color name="gray_dark">#F2F4F7</color>
+    <color name="gray_medium">#B2BEC3</color>
+    <color name="gray_light">#4D4D4D</color>
+    <color name="background_white">#121212</color>
+    <color name="background_gray">#121212</color>
+</resources>

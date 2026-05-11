@@ -1,4 +1,4 @@
-package com.chupchia.widget;
+﻿package com.chupchia.widget;
 
 import android.app.Service;
 import android.content.Intent;
@@ -16,7 +16,7 @@ public class BillWidgetService extends Service {
     
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // Update widget immediately when service starts
+        // Cập nhật widget ngay khi dịch vụ khởi động
         BillWidgetProvider.updateAllWidgets(this);
         return START_NOT_STICKY;
     }

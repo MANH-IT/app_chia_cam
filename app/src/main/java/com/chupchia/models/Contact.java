@@ -1,4 +1,4 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
 
 import java.io.Serializable;
 
@@ -7,9 +7,9 @@ public class Contact implements Serializable {
     private String name;
     private String phoneNumber;
     private String avatarUri;
-    private boolean isExisting; // Already using Chia Cam
-    private boolean isInvited; // Already invited
-    private boolean isMember; // Already member of this group
+    private boolean isExisting; // Đã dùng Chia Cam
+    private boolean isInvited; // Đã được mời
+    private boolean isMember; // Đã là thành viên nhóm này
     
     public Contact() {}
     
@@ -31,7 +31,7 @@ public class Contact implements Serializable {
         this.isMember = false;
     }
     
-    // Getters and Setters
+    // Getter và Setter
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     

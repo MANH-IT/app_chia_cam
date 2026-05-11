@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -102,7 +102,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Initialize views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
@@ -134,7 +134,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Setup toolbar
+     * Cấu hình thanh công cụ
      */
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -146,21 +146,21 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Load bill data from intent
+     * Tải dữ liệu hóa đơn từ intent
      */
     private void loadBillData() {
         originalBill = (Bill) getIntent().getSerializableExtra("bill");
         if (originalBill == null) {
-            // For demo, create a dummy bill
-            originalBill = new Bill("1", "", "Cơm trưa văn phòng", 175000, 
-                "Mạnh Nguyễn", "1", "1", "1", "group1", 5, "equal", 
-                System.currentTimeMillis() - (2 * 24 * 60 * 60 * 1000), "Ăn trưa cùng team");
+            // Không nên xảy ra trong ứng dụng thực, đóng nếu không có dữ liệu
+            Toast.makeText(this, "Không tìm thấy dữ liệu giao dịch", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
         
-        // Create a copy for editing
+        // Tạo bản sao để chỉnh sửa
         currentBill = originalBill.clone();
         
-        // Load image
+        // Tải ảnh
         if (currentBill.getImageUrl() != null && !currentBill.getImageUrl().isEmpty()) {
             Glide.with(this)
                 .load(currentBill.getImageUrl())
@@ -170,13 +170,13 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
             ivImagePreview.setImageResource(R.drawable.ic_placeholder);
         }
         
-        // Load text fields
+        // Tải các trường văn bản
         etProductName.setText(currentBill.getProductName());
         totalAmount = currentBill.getAmount();
         etAmount.setText(CurrencyUtils.formatNumber(totalAmount));
         etNote.setText(currentBill.getNote());
         
-        // Load date
+        // Tải ngày
         selectedDate.setTimeInMillis(currentBill.getTimestamp());
         etDate.setText(DateTimeUtils.formatDate(selectedDate.getTime()));
         
@@ -185,24 +185,24 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Load members (demo data)
+     * Tải thành viên (dữ liệu demo)
      */
     private void loadMembers() {
-        // TODO: Load actual members from group
-        members.add(new Member("1", "Mạnh Nguyễn", "", "admin"));
-        members.add(new Member("2", "Lan Trần", "", "member"));
-        members.add(new Member("3", "Huy Phạm", "", "member"));
-        members.add(new Member("4", "Linh Lê", "", "member"));
-        members.add(new Member("5", "Hoa Ngô", "", "member"));
+        members.clear();
         
-        // Set selected members based on bill data (demo: all selected)
-        for (Member member : members) {
-            member.setSelected(true);
+        // Tải người dùng hiện tại
+        SharedPrefManager pref = SharedPrefManager.getInstance(this);
+        members.add(new Member(pref.getUserId(), pref.getUserName(), "", "Chủ chi"));
+        
+        // Tải danh bạ nếu được phép
+        if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS) 
+                == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            members.addAll(com.chupchia.utils.ContactUtils.getPhoneContacts(this));
         }
     }
     
     /**
-     * Setup amount formatting
+     * Cấu hình định dạng số tiền
      */
     private void setupAmountFormatting() {
         etAmount.addTextChangedListener(new TextWatcher() {
@@ -242,7 +242,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Setup date picker
+     * Cấu hình chọn ngày
      */
     private void setupDatePicker() {
         etDate.setOnClickListener(v -> {
@@ -261,7 +261,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Setup split type buttons
+     * Cấu hình các nút kiểu chia
      */
     private void setupSplitTypeButtons() {
         btnSplitEqual.setOnClickListener(v -> {
@@ -276,18 +276,18 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Select split type
+     * Chọn kiểu chia
      */
     private void selectSplitType(String type) {
         currentSplitType = type;
         currentBill.setSplitType(type);
         
-        // Reset button styles
+        // Đặt lại kiểu nút
         btnSplitEqual.setBackgroundTintList(getColorStateList(R.color.gray_light));
         btnSplitPercent.setBackgroundTintList(getColorStateList(R.color.gray_light));
         btnSplitCustom.setBackgroundTintList(getColorStateList(R.color.gray_light));
         
-        // Highlight selected
+        // Làm nổi bật lựa chọn
         switch (type) {
             case "equal":
                 btnSplitEqual.setBackgroundTintList(getColorStateList(R.color.primary_light));
@@ -308,7 +308,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Setup member adapter
+     * Cấu hình adapter thành viên
      */
     private void setupMemberAdapter() {
         memberAdapter = new MemberSplitAdapter(members);
@@ -332,7 +332,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Update select all checkbox
+     * Cập nhật checkbox chọn tất cả
      */
     private void updateSelectAllCheckbox() {
         boolean allSelected = true;
@@ -346,7 +346,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Update split preview
+     * Cập nhật xem trước chia tiền
      */
     private void updateSplitPreview() {
         List<Member> selectedMembers = memberAdapter.getSelectedMembers();
@@ -387,13 +387,13 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Check permissions for editing/deleting
+     * Kiểm tra quyền chỉnh sửa/xóa
      */
     private void checkPermissions() {
         String billCreatorId = currentBill.getCreatorId();
         String groupAdminId = currentBill.getGroupAdminId();
         
-        // Check if bill is expired (older than 7 days)
+        // Kiểm tra hóa đơn hết hạn (cũ hơn 7 ngày)
         long daysDiff = (System.currentTimeMillis() - currentBill.getTimestamp()) / (24 * 60 * 60 * 1000);
         isBillExpired = daysDiff > 7;
         
@@ -413,7 +413,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Apply permission restrictions to UI
+     * Áp dụng giới hạn quyền lên giao diện
      */
     private void applyPermissionRestrictions() {
         if (isBillExpired) {
@@ -433,7 +433,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Disable editing for all fields
+     * Vô hiệu hóa chỉnh sửa cho tất cả trường
      */
     private void disableEditing() {
         btnSave.setEnabled(false);
@@ -450,7 +450,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Load edit history
+     * Tải lịch sử chỉnh sửa
      */
     private void loadEditHistory() {
         List<EditHistory> historyList = currentBill.getEditHistory();
@@ -465,7 +465,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Setup button listeners
+     * Cấu hình sự kiện nút bấm
      */
     private void setupListeners() {
         cbSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -481,13 +481,13 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
         btnDelete.setOnClickListener(v -> showDeleteConfirmationDialog());
         
         btnRecapture.setOnClickListener(v -> {
-            // Retake photo logic
+            // Logic chụp lại ảnh
             Toast.makeText(this, "Chức năng đang phát triển", Toast.LENGTH_SHORT).show();
         });
     }
     
     /**
-     * Save bill changes
+     * Lưu thay đổi hóa đơn
      */
     private void saveBill() {
         if (isSaving || !canEdit) return;
@@ -511,7 +511,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
             return;
         }
         
-        // Validate percent sum
+        // Xác thực tổng phần trăm
         if (currentSplitType.equals("percent")) {
             int totalPercent = memberAdapter.getTotalPercent();
             if (totalPercent != 100) {
@@ -520,7 +520,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
             }
         }
         
-        // Validate custom sum
+        // Xác thực tổng tùy chỉnh
         if (currentSplitType.equals("custom")) {
             long totalCustom = memberAdapter.getTotalCustomAmount();
             if (totalCustom != totalAmount) {
@@ -530,14 +530,14 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
             }
         }
         
-        // Update currentBill temporary object to check changes
+        // Cập nhật đối tượng tạm thời currentBill để kiểm tra thay đổi
         currentBill.setProductName(productName);
         currentBill.setAmount(totalAmount);
         currentBill.setNote(etNote.getText().toString().trim());
         currentBill.setTimestamp(selectedDate.getTimeInMillis());
         currentBill.setSplitType(currentSplitType);
         
-        // Check if there are actual changes
+        // Kiểm tra có thay đổi thực sự không
         String changesSummary = getChangesSummary();
         if (changesSummary.equals(getString(R.string.edit_history_no_changes))) {
             Toast.makeText(this, R.string.edit_bill_no_changes, Toast.LENGTH_SHORT).show();
@@ -550,7 +550,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
         progressDialog.setMessage("Đang cập nhật giao dịch...");
         progressDialog.show();
         
-        // Create edit history entry
+        // Tạo mục lịch sử chỉnh sửa
         EditHistory editEntry = new EditHistory(
             currentUserId,
             SharedPrefManager.getInstance(this).getUserName(),
@@ -560,12 +560,12 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
         
         currentBill.addEditHistory(editEntry);
         
-        // Simulate API call
+        // Giả lập cuộc gọi API
         simulateUpdateBill();
     }
     
     /**
-     * Get summary of changes for edit history
+     * Lấy tóm tắt thay đổi cho lịch sử chỉnh sửa
      */
     private String getChangesSummary() {
         StringBuilder changes = new StringBuilder();
@@ -601,7 +601,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Simulate update bill API call
+     * Giả lập gọi API cập nhật hóa đơn
      */
     private void simulateUpdateBill() {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -618,7 +618,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Show delete confirmation dialog
+     * Hiển thị hộp thoại xác nhận xóa
      */
     private void showDeleteConfirmationDialog() {
         ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
@@ -627,7 +627,7 @@ public class EditBillActivity extends AppCompatActivity implements ConfirmDelete
     }
     
     /**
-     * Handle delete confirmation
+     * Xử lý xác nhận xóa
      */
     @Override
     public void onConfirm() {

@@ -1,4 +1,4 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class DebtPerson implements Serializable {
         this.relatedBills = new ArrayList<>();
     }
     
-    // Getters and Setters
+    // Getter và Setter
     public String getId() {
         return id;
     }

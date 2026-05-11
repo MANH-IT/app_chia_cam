@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -66,7 +66,7 @@ public class GroupMemberAdapter extends RecyclerView.Adapter<GroupMemberAdapter.
 
         holder.tvName.setText(member.getName());
 
-        // Show role badge
+        // Hiển thị huy hiệu vai trò
         if (member.isAdmin()) {
             holder.tvRole.setVisibility(View.VISIBLE);
             holder.tvRole.setText("Admin");
@@ -76,7 +76,7 @@ public class GroupMemberAdapter extends RecyclerView.Adapter<GroupMemberAdapter.
             holder.tvRole.setVisibility(View.GONE);
         }
 
-        // Set balance display
+        // Đặt hiển thị số dư
         int balance = member.getBalance();
         if (balance > 0) {
             holder.tvBalance.setText(String.format(context.getString(R.string.group_detail_balance_owed),
@@ -91,7 +91,7 @@ public class GroupMemberAdapter extends RecyclerView.Adapter<GroupMemberAdapter.
             holder.tvBalance.setTextColor(ContextCompat.getColor(context, R.color.gray_medium));
         }
 
-        // Load avatar
+        // Tải ảnh đại diện
         if (member.getAvatarUrl() != null && !member.getAvatarUrl().isEmpty()) {
             Glide.with(context)
                     .load(member.getAvatarUrl())
@@ -101,7 +101,7 @@ public class GroupMemberAdapter extends RecyclerView.Adapter<GroupMemberAdapter.
             holder.ivAvatar.setImageResource(R.drawable.ic_profile);
         }
 
-        // Setup menu button
+        // Cấu hình nút menu
         if (isAdmin && !isCurrentUser) {
             holder.ivMenu.setVisibility(View.VISIBLE);
             holder.ivMenu.setOnClickListener(v -> showAdminMemberMenu(member, v));
@@ -114,7 +114,7 @@ public class GroupMemberAdapter extends RecyclerView.Adapter<GroupMemberAdapter.
     }
 
     /**
-     * Show admin menu for other members
+     * Hiển thị menu quản trị cho thành viên khác
      */
     private void showAdminMemberMenu(Member member, View anchor) {
         PopupMenu popupMenu = new PopupMenu(context, anchor);
@@ -137,7 +137,7 @@ public class GroupMemberAdapter extends RecyclerView.Adapter<GroupMemberAdapter.
     }
 
     /**
-     * Show self menu for current user
+     * Hiển thị menu cho người dùng hiện tại
      */
     private void showSelfMemberMenu(View anchor) {
         PopupMenu popupMenu = new PopupMenu(context, anchor);

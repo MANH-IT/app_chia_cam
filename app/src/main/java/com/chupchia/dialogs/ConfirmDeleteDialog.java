@@ -1,4 +1,4 @@
-package com.chupchia.dialogs;
+﻿package com.chupchia.dialogs;
 
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
@@ -22,7 +22,7 @@ import com.chupchia.R;
 
 public class ConfirmDeleteDialog extends DialogFragment {
 
-    // Delete types
+    // Loại xóa
     public enum DeleteType {
         BILL,
         GROUP,
@@ -38,7 +38,7 @@ public class ConfirmDeleteDialog extends DialogFragment {
     
     private OnDeleteConfirmListener listener;
     
-    // Views
+    // Giao diện
     private ImageView ivWarning;
     private TextView tvTitle;
     private TextView tvMessage;
@@ -107,7 +107,7 @@ public class ConfirmDeleteDialog extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        // Shake animation for warning icon
+        // Hiệu ứng rung cho biểu tượng cảnh báo
         Animation shake = AnimationUtils.loadAnimation(requireContext(), R.anim.shake);
         ivWarning.startAnimation(shake);
     }
@@ -138,13 +138,13 @@ public class ConfirmDeleteDialog extends DialogFragment {
                 tvMessage.setText(String.format(getString(R.string.confirm_delete_message_group), targetName != null ? targetName : ""));
                 confirmButtonText = getString(R.string.confirm_delete_confirm);
                 
-                // Show affected members warning
+                // Hiển thị cảnh báo thành viên bị ảnh hưởng
                 if (affectedMemberCount > 0) {
                     tvWarningImpact.setVisibility(View.VISIBLE);
                     tvWarningImpact.setText(String.format(getString(R.string.confirm_delete_warning_impact), affectedMemberCount));
                 }
                 
-                // Show extra confirm for group deletion
+                // Hiển thị xác nhận bổ sung cho xóa nhóm
                 if (requireExtraConfirm) {
                     llExtraConfirm.setVisibility(View.VISIBLE);
                 }
@@ -180,11 +180,11 @@ public class ConfirmDeleteDialog extends DialogFragment {
         btnCancel.setOnClickListener(v -> dismiss());
         
         btnDelete.setOnClickListener(v -> {
-            // Check extra confirmation for group deletion
+            // Kiểm tra xác nhận bổ sung cho xóa nhóm
             if (deleteType == DeleteType.GROUP && requireExtraConfirm) {
                 String confirmText = etConfirm.getText().toString().trim();
                 if (!"XÓA".equals(confirmText)) {
-                    // Shake error animation
+                    // Hiệu ứng rung lỗi
                     etConfirm.requestFocus();
                     etConfirm.setError(getString(R.string.confirm_delete_group_extra_error));
                     
@@ -195,7 +195,7 @@ public class ConfirmDeleteDialog extends DialogFragment {
                 }
             }
             
-            // Animate button press
+            // Hiệu ứng nhấn nút
             btnDelete.animate()
                 .scaleX(0.95f)
                 .scaleY(0.95f)
@@ -211,7 +211,7 @@ public class ConfirmDeleteDialog extends DialogFragment {
     }
     
     /**
-     * Helper method to show dialog with FragmentActivity
+     * Phương thức hỗ trợ hiển thị hộp thoại với FragmentActivity
      */
     public void show(FragmentActivity activity) {
         show(activity.getSupportFragmentManager(), "ConfirmDeleteDialog");

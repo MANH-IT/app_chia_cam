@@ -1,4 +1,4 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
 
 import java.io.Serializable;
 
@@ -34,7 +34,7 @@ public class Transaction implements Serializable {
         this.amount = amount;
     }
     
-    // Getters and Setters
+    // Getter và Setter
     public String getFromUserId() {
         return fromUserId;
     }

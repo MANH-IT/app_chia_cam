@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Brand Colors - Sophisticated Orange Palette -->
+    <!-- Màu sắc thương hiệu - Bảng màu Cam hiện đại -->
     <color name="primary">#FF6B35</color>
     <color name="primary_dark">#E05D2C</color>
     <color name="primary_light">#FFD8CC</color>
     <color name="primary_variant">#FF8552</color>
     
-    <!-- Splash Screen Colors (Mapped to primary) -->
+    <!-- Màu màn hình Splash (Ánh xạ từ màu chính) -->
     <color name="splash_start">#FF6B35</color>
     <color name="splash_end">#E05D2C</color>
     <color name="splash_accent">#FFD8CC</color>
     
-    <!-- Secondary Colors - Teal/Mint -->
+    <!-- Màu phụ - Xanh mòng két/Bạc hà -->
     <color name="secondary">#2EC4B6</color>
     <color name="secondary_dark">#259B90</color>
     <color name="secondary_light">#CBF3F0</color>
     
-    <!-- Neutral Colors - Rich Grays -->
+    <!-- Màu trung tính - Các tông Xám -->
     <color name="white">#FFFFFF</color>
     <color name="black">#1A1A1A</color>
     <color name="gray_dark">#2D3436</color>
@@ -26,7 +26,7 @@
     <color name="background_white">#F9FAFB</color>
     <color name="background_gray">#F2F4F7</color>
     
-    <!-- Accent & Status -->
+    <!-- Màu nhấn & Trạng thái -->
     <color name="success">#27AE60</color>
     <color name="success_light">#E9F7EF</color>
     <color name="warning">#F1C40F</color>
@@ -35,7 +35,7 @@
     <color name="error">#E74C3C</color>
     <color name="error_light">#FDEDEC</color>
     
-    <!-- Transparent helpers -->
+    <!-- Màu bổ trợ độ trong suốt -->
     <color name="transparent">#00000000</color>
     <color name="white_transparent_80">#CCFFFFFF</color>
     <color name="white_transparent_30">#4DFFFFFF</color>
@@ -43,7 +43,7 @@
     <color name="black_transparent_20">#33000000</color>
     <color name="black_transparent_50">#80000000</color>
     
-    <!-- Legacy & Specific UI -->
+    <!-- Màu cũ & Giao diện cụ thể -->
     <color name="bottom_nav_color">#95A5A6</color>
     <color name="bottom_nav_selected">#FF6B35</color>
     <color name="red">#E74C3C</color>
@@ -52,4 +52,14 @@
     <color name="gray">#636E72</color>
     <color name="light_gray">#DFE6E9</color>
     <color name="notification_unread_bg">#FFF5F0</color>
+
+    <!-- Màu ngữ nghĩa (Để hỗ trợ Chế độ tối) -->
+    <color name="color_surface">#FFFFFF</color>
+    <color name="color_on_surface">#2D3436</color>
+    <color name="color_background">#F2F4F7</color>
+    <color name="color_card_background">#FFFFFF</color>
+    <color name="color_divider">#DFE6E9</color>
+    <color name="color_text_primary">#2D3436</color>
+    <color name="color_text_secondary">#636E72</color>
+    <color name="color_text_on_primary">#FFFFFF</color>
 </resources>

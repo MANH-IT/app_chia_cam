@@ -41,7 +41,7 @@ import java.util.List;
 
 public class AddBillActivity extends AppCompatActivity {
 
-    // ===== VIEWS =====
+    // ===== GIAO DIỆN =====
     private Toolbar toolbar;
     private ImageView ivImagePreview;
     private MaterialButton btnRecapture;
@@ -59,7 +59,7 @@ public class AddBillActivity extends AppCompatActivity {
     private MaterialButton btnCancel;
     private MaterialButton btnSave;
     
-    // ===== VARIABLES =====
+    // ===== BIẾN =====
     private Uri imageUri;
     private String groupId;
     private List<Member> members = new ArrayList<>();
@@ -86,7 +86,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Initialize views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
@@ -108,7 +108,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup toolbar with back button
+     * Cấu hình thanh công cụ với nút quay lại
      */
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -120,7 +120,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Load data from intent (image from camera)
+     * Tải dữ liệu từ intent (ảnh từ camera)
      */
     private void loadIntentData() {
         Intent intent = getIntent();
@@ -149,29 +149,44 @@ public class AddBillActivity extends AppCompatActivity {
             etProductName.setText(productNameText);
         }
         
-        // Set default date to today
+        // Đặt ngày mặc định là hôm nay
         etDate.setText(DateTimeUtils.formatDate(selectedDate.getTime()));
     }
     
-    /**
-     * Load group members (demo data)
-     */
     private void loadGroupMembers() {
-        // Clear demo data
         members.clear();
         
-        // TODO: Load actual members from database or API based on groupId
-        // If no groupId, we might be adding a personal bill or needing to select a group first
+        // Luôn thêm người dùng hiện tại
+        SharedPrefManager pref = SharedPrefManager.getInstance(this);
+        members.add(new Member(pref.getUserId(), pref.getUserName(), null, "Chủ chi"));
         
-        if (groupId == null || groupId.isEmpty()) {
-            // Personal bill or placeholder
-            SharedPrefManager pref = SharedPrefManager.getInstance(this);
-            members.add(new Member(pref.getUserId(), pref.getUserName(), pref.getUserAvatar(), "admin"));
+        // Nếu có quyền danh bạ, tải danh bạ thật
+        if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS) 
+                == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            
+            new Thread(() -> {
+                List<com.chupchia.models.Member> contacts = com.chupchia.utils.ContactUtils.getPhoneContacts(this);
+                runOnUiThread(() -> {
+                    if (!contacts.isEmpty()) {
+                        members.addAll(contacts);
+                    }
+                    updateMemberAdapter();
+                });
+            }).start();
+        } else {
+            updateMemberAdapter();
+        }
+    }
+
+    private void updateMemberAdapter() {
+        if (memberAdapter != null) {
+            memberAdapter.notifyDataSetChanged();
+            updateSelectAllCheckbox();
         }
     }
     
     /**
-     * Setup amount formatting with TextWatcher
+     * Cấu hình định dạng số tiền với TextWatcher
      */
     private void setupAmountFormatting() {
         etAmount.addTextChangedListener(new TextWatcher() {
@@ -208,7 +223,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup date picker dialog
+     * Cấu hình hộp thoại chọn ngày
      */
     private void setupDatePicker() {
         etDate.setOnClickListener(v -> {
@@ -225,7 +240,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup split type buttons
+     * Cấu hình các nút kiểu chia
      */
     private void setupSplitTypeButtons() {
         btnSplitEqual.setOnClickListener(v -> selectSplitType("equal"));
@@ -234,17 +249,17 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Select split type
+     * Chọn kiểu chia
      */
     private void selectSplitType(String type) {
         currentSplitType = type;
         
-        // Reset button styles
+        // Đặt lại kiểu nút
         btnSplitEqual.setBackgroundTintList(getColorStateList(R.color.gray_light));
         btnSplitPercent.setBackgroundTintList(getColorStateList(R.color.gray_light));
         btnSplitCustom.setBackgroundTintList(getColorStateList(R.color.gray_light));
         
-        // Highlight selected
+        // Làm nổi bật lựa chọn
         switch (type) {
             case "equal":
                 btnSplitEqual.setBackgroundTintList(getColorStateList(R.color.primary_light));
@@ -262,7 +277,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup member adapter
+     * Cấu hình adapter thành viên
      */
     private void setupMemberAdapter() {
         memberAdapter = new MemberSplitAdapter(members);
@@ -284,7 +299,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup other listeners
+     * Cấu hình các sự kiện khác
      */
     private void setupListeners() {
         cbSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -292,7 +307,7 @@ public class AddBillActivity extends AppCompatActivity {
         });
         
         btnRecapture.setOnClickListener(v -> {
-            // TODO: Open camera again
+            // TODO: Mở lại camera
             finish();
         });
         
@@ -302,7 +317,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Update select all checkbox state
+     * Cập nhật trạng thái checkbox chọn tất cả
      */
     private void updateSelectAllCheckbox() {
         boolean allSelected = true;
@@ -316,7 +331,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Update split preview
+     * Cập nhật xem trước chia tiền
      */
     private void updateSplitPreview() {
         List<Member> selectedMembers = memberAdapter.getSelectedMembers();
@@ -357,7 +372,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Calculate weighted average for percent split
+     * Tính trung bình có trọng số cho chia theo phần trăm
      */
     private long calculateWeightedAverage(List<Member> selectedMembers) {
         if (totalAmount <= 0 || selectedMembers.isEmpty()) return 0;
@@ -371,7 +386,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Validate and save bill
+     * Xác thực và lưu hóa đơn
      */
     private void saveBill() {
         if (isSaving) return;
@@ -395,7 +410,7 @@ public class AddBillActivity extends AppCompatActivity {
             return;
         }
         
-        // Validate percent sum
+        // Xác thực tổng phần trăm
         if (currentSplitType.equals("percent")) {
             int totalPercent = memberAdapter.getTotalPercent();
             if (totalPercent != 100) {
@@ -404,7 +419,7 @@ public class AddBillActivity extends AppCompatActivity {
             }
         }
         
-        // Validate custom sum
+        // Xác thực tổng tùy chỉnh
         if (currentSplitType.equals("custom")) {
             long totalCustom = memberAdapter.getTotalCustomAmount();
             if (totalCustom != totalAmount) {
@@ -418,7 +433,7 @@ public class AddBillActivity extends AppCompatActivity {
         btnSave.setText(R.string.add_bill_saving);
         btnSave.setEnabled(false);
         
-        // TODO: Check network connectivity
+        // TODO: Kiểm tra kết nối mạng
         boolean isNetworkAvailable = true;
         
         if (isNetworkAvailable) {
@@ -429,7 +444,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Save bill to server
+     * Lưu hóa đơn lên server
      */
     private void saveBillToServer(String productName, List<Member> selectedMembers) {
         // Tạo object Bill thật từ dữ liệu đã nhập
@@ -465,7 +480,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Save bill offline
+     * Lưu hóa đơn ngoại tuyến
      */
     private void saveBillOffline(String productName, List<Member> selectedMembers) {
         List<String> memberIds = new ArrayList<>();
@@ -492,7 +507,7 @@ public class AddBillActivity extends AppCompatActivity {
     }
     
     /**
-     * Show error dialog
+     * Hiển thị hộp thoại lỗi
      */
     private void showErrorDialog(String message) {
         new AlertDialog.Builder(this)

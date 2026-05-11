@@ -1,22 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Vertical lines -->
-    <item>
+    <!-- Vertical line 1 (33%) -->
+    <item android:left="0dp" android:right="0dp">
         <shape>
-            <stroke
-                android:width="1dp"
-                android:color="#40FFFFFF" />
-            <solid android:color="@android:color/transparent" />
+            <size android:width="1dp" />
+            <solid android:color="#00000000" />
+            <stroke android:width="1dp" android:color="#40FFFFFF" />
         </shape>
     </item>
     
-    <!-- Horizontal lines -->
+    <!-- We need a better way to draw lines at 33% and 66%. 
+         Using a custom View in layout is easier, but since we are in drawable: -->
+    <!-- Vertical 1 -->
+    <item android:left="0dp" android:right="214dp"> <!-- Example for 1/3 of screen, but doesn't work well for all screen sizes -->
+        <shape><solid android:color="#00000000"/></shape>
+    </item>
+
+    <!-- Actually, the best way to do a grid in Android XML drawable is limited. 
+         I will use a simpler approach: a border and two lines if possible, 
+         but since standard drawable XML doesn't support percentage offsets well,
+         I will use a shape with a dash or just stick to a semi-transparent border for now 
+         if I can't do a perfect grid. 
+         
+         Wait, I can use <inset> to position lines. -->
+    
+    <!-- Vertical line 1 -->
     <item>
-        <shape>
-            <stroke
-                android:width="1dp"
-                android:color="#40FFFFFF" />
-            <solid android:color="@android:color/transparent" />
-        </shape>
+        <rotate
+            android:fromDegrees="90"
+            android:pivotX="33.3%"
+            android:pivotY="50%"
+            android:toDegrees="90">
+            <shape>
+                <size android:width="1dp" android:height="1000dp"/>
+                <solid android:color="#40FFFFFF"/>
+            </shape>
+        </rotate>
+    </item>
+
+    <!-- Vertical line 2 -->
+    <item>
+        <rotate
+            android:fromDegrees="90"
+            android:pivotX="66.6%"
+            android:pivotY="50%"
+            android:toDegrees="90">
+            <shape>
+                <size android:width="1dp" android:height="1000dp"/>
+                <solid android:color="#40FFFFFF"/>
+            </shape>
+        </rotate>
+    </item>
+
+    <!-- Horizontal line 1 -->
+    <item>
+        <rotate
+            android:fromDegrees="0"
+            android:pivotX="50%"
+            android:pivotY="33.3%"
+            android:toDegrees="0">
+            <shape>
+                <size android:width="1000dp" android:height="1dp"/>
+                <solid android:color="#40FFFFFF"/>
+            </shape>
+        </rotate>
+    </item>
+
+    <!-- Horizontal line 2 -->
+    <item>
+        <rotate
+            android:fromDegrees="0"
+            android:pivotX="50%"
+            android:pivotY="66.6%"
+            android:toDegrees="0">
+            <shape>
+                <size android:width="1000dp" android:height="1dp"/>
+                <solid android:color="#40FFFFFF"/>
+            </shape>
+        </rotate>
     </item>
 </layer-list>

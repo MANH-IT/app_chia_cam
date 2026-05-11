@@ -62,7 +62,7 @@ public class BillWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_bill_widget);
 
-        // Get latest bill from SharedPreferences
+        // Lấy hóa đơn mới nhất từ SharedPreferences
         Bill latestBill = getLatestBill(context);
 
         if (latestBill != null) {
@@ -71,7 +71,7 @@ public class BillWidgetProvider extends AppWidgetProvider {
             showEmptyState(context, views);
         }
 
-        // Set click listener to open app
+        // Gán sự kiện nhấp để mở ứng dụng
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
@@ -83,21 +83,21 @@ public class BillWidgetProvider extends AppWidgetProvider {
 
     private static void updateWidgetContent(Context context, AppWidgetManager appWidgetManager,
                                             int appWidgetId, RemoteViews views, Bill bill) {
-        // Group name (Bill doesn't have groupName, use groupId or default)
+        // Tên nhóm (Bill không có groupName, dùng groupId hoặc giá trị mặc định)
         String groupDisplay = bill.getGroupId() != null ? "🏠 Nhóm" : "🏠 Chia Cam";
         views.setTextViewText(R.id.tv_group_name, groupDisplay);
 
-        // Content
+        // Nội dung
         String actorName = bill.getActorName() != null ? bill.getActorName() : "Thành viên";
         views.setTextViewText(R.id.tv_content, actorName + " vừa mua " + bill.getProductName());
 
-        // Amount
+        // Số tiền
         views.setTextViewText(R.id.tv_amount, formatCurrency(bill.getAmount()));
 
-        // Time
+        // Thời gian
         views.setTextViewText(R.id.tv_time, getTimeAgo(bill.getTimestamp()));
 
-        // Load image with Glide for RemoteViews
+        // Tải ảnh bằng Glide cho RemoteViews
         if (bill.getImageUrl() != null && !bill.getImageUrl().isEmpty()) {
             try {
                 Glide.with(context.getApplicationContext())

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -51,9 +52,31 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.BillViewHolder
         this.bills = new ArrayList<>();
     }
     
-    public void setBills(List<Bill> bills) {
-        this.bills = bills;
-        notifyDataSetChanged();
+    public void setBills(List<Bill> newBills) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return bills.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newBills.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return bills.get(oldItemPosition).getId().equals(newBills.get(newItemPosition).getId());
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                return bills.get(oldItemPosition).equals(newBills.get(newItemPosition));
+            }
+        });
+        
+        this.bills = new ArrayList<>(newBills);
+        diffResult.dispatchUpdatesTo(this);
     }
     
     public void addBill(Bill bill) {
@@ -87,7 +110,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.BillViewHolder
     public void onBindViewHolder(@NonNull BillViewHolder holder, int position) {
         Bill bill = bills.get(position);
         
-        // Load image with Glide
+        // Tải ảnh bằng Glide
         Glide.with(context)
             .load(bill.getImageUrl())
             .placeholder(R.drawable.ic_placeholder)
@@ -95,19 +118,19 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.BillViewHolder
             .transform(new CenterCrop(), new RoundedCorners(16))
             .into(holder.ivProductImage);
         
-        // Set basic info
+        // Đặt thông tin cơ bản
         holder.tvProductName.setText(bill.getProductName());
         holder.tvAmount.setText(bill.getFormattedAmount());
         holder.tvActor.setText(bill.getActorName() + " • chia " + bill.getSplitCount() + " người");
         holder.tvTimeBadge.setText(getTimeAgo(bill.getTimestamp()));
         
-        // Set split type badge
+        // Đặt huy hiệu kiểu chia
         setSplitTypeBadge(holder.tvSplitType, bill.getSplitType());
         
-        // Set reactions
+        // Đặt biểu tượng cảm xúc
         updateReactionCounts(holder, bill);
         
-        // Click listeners
+        // Sự kiện nhấp
         holder.cardBill.setOnClickListener(v -> {
             if (listener != null) listener.onBillClick(bill);
         });
@@ -120,7 +143,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.BillViewHolder
             if (listener != null) listener.onImageClick(bill);
         });
         
-        // Reaction click listeners with animation
+        // Sự kiện nhấp biểu tượng cảm xúc với hiệu ứng
         holder.llReaction1.setOnClickListener(v -> {
             animateReaction(holder.llReaction1);
             if (reactionListener != null) {
@@ -151,7 +174,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.BillViewHolder
     }
     
     /**
-     * Update reaction counts display
+     * Cập nhật hiển thị số lượng cảm xúc
      */
     private void updateReactionCounts(BillViewHolder holder, Bill bill) {
         holder.tvReaction1Count.setText(String.valueOf(bill.getReactionCount("😂")));
@@ -161,28 +184,36 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.BillViewHolder
     }
     
     /**
-     * Set split type badge text
+     * Đặt văn bản huy hiệu kiểu chia
      */
     private void setSplitTypeBadge(TextView badge, String splitType) {
-        if (splitType == null) splitType = "household";
+        if (splitType == null) splitType = "shared";
         switch (splitType) {
-            case "household":
-                badge.setText(context.getString(R.string.split_household));
+            case "shared":
+                badge.setText(R.string.camera_btn_shared);
+                badge.setBackgroundTintList(android.content.res.ColorStateList.valueOf(context.getColor(R.color.primary_light)));
+                badge.setTextColor(context.getColor(R.color.primary));
                 break;
-            case "friends":
-                badge.setText(context.getString(R.string.split_friends));
+            case "help":
+                badge.setText(R.string.camera_btn_help);
+                badge.setBackgroundTintList(android.content.res.ColorStateList.valueOf(context.getColor(R.color.secondary_light)));
+                badge.setTextColor(context.getColor(R.color.secondary));
                 break;
-            case "couple":
-                badge.setText(context.getString(R.string.split_couple));
+            case "alone":
+                badge.setText(R.string.camera_btn_alone);
+                badge.setBackgroundTintList(android.content.res.ColorStateList.valueOf(context.getColor(R.color.gray_light)));
+                badge.setTextColor(context.getColor(R.color.gray_dark));
                 break;
             default:
-                badge.setText(context.getString(R.string.split_household));
+                badge.setText(R.string.camera_btn_shared);
+                badge.setBackgroundTintList(android.content.res.ColorStateList.valueOf(context.getColor(R.color.primary_light)));
+                badge.setTextColor(context.getColor(R.color.primary));
                 break;
         }
     }
     
     /**
-     * Get time ago string
+     * Lấy chuỗi thời gian trước đây
      */
     private String getTimeAgo(long timestamp) {
         long diff = System.currentTimeMillis() - timestamp;
@@ -201,7 +232,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.BillViewHolder
     }
     
     /**
-     * Animate reaction button when clicked
+     * Hiệu ứng nút cảm xúc khi nhấp
      */
     private void animateReaction(View view) {
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.4f, 1f);

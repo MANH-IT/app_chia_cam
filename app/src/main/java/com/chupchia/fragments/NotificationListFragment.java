@@ -1,4 +1,4 @@
-package com.chupchia.fragments;
+﻿package com.chupchia.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chupchia.R;
 import com.chupchia.adapters.NotificationAdapter;
+import com.chupchia.database.AppDatabase;
 import com.chupchia.models.Notification;
 import com.chupchia.utils.NotificationSwipeHelper;
 
@@ -78,7 +79,7 @@ public class NotificationListFragment extends Fragment {
         llEmpty = view.findViewById(R.id.ll_empty);
         tvEmptyMessage = view.findViewById(R.id.tv_empty_message);
         
-        // Set empty message based on tab
+        // Đặt thông báo trống dựa trên tab
         switch (tabPosition) {
             case 0:
                 tvEmptyMessage.setText(R.string.notification_empty_all);
@@ -101,7 +102,7 @@ public class NotificationListFragment extends Fragment {
         rvNotifications.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvNotifications.setAdapter(adapter);
         
-        // Setup swipe to delete
+        // Cấu hình vuốt để xóa
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
             new NotificationSwipeHelper(requireContext(), adapter, (notification, position) -> {
                 deleteNotification(notification, position);
@@ -113,24 +114,23 @@ public class NotificationListFragment extends Fragment {
         swipeRefresh.setColorSchemeResources(R.color.primary);
         swipeRefresh.setOnRefreshListener(() -> {
             loadNotifications();
-            swipeRefresh.setRefreshing(false);
         });
     }
     
     private void loadNotifications() {
         new Thread(() -> {
-            com.chupchia.database.NotificationDao dao = com.chupchia.database.AppDatabase.getInstance(getContext()).notificationDao();
+            AppDatabase db = AppDatabase.getInstance(getContext());
             List<Notification> list;
             
             switch (tabPosition) {
-                case 1: // Unread
-                    list = dao.getUnread();
+                case 1: // Chưa đọc
+                    list = db.notificationDao().getUnread();
                     break;
-                case 2: // Read
-                    list = dao.getRead();
+                case 2: // Đã đọc
+                    list = db.notificationDao().getRead();
                     break;
-                default: // All
-                    list = dao.getAll();
+                default: // Tất cả
+                    list = db.notificationDao().getAll();
                     break;
             }
             
@@ -155,17 +155,27 @@ public class NotificationListFragment extends Fragment {
     }
     
     private void onNotificationClick(Notification notification, int position) {
-        // Mark as read if not already
+        // Đánh dấu đã đọc nếu chưa và lưu vào Room DB
         if (!notification.isRead()) {
             notification.setRead(true);
             adapter.notifyItemChanged(position);
+            
+            // Lưu trạng thái đã đọc vào Room DB
+            new Thread(() -> {
+                AppDatabase.getInstance(requireContext()).notificationDao().update(notification);
+            }).start();
         }
         
-        // Navigate based on notification type
+        // Điều hướng dựa trên loại thông báo
         Toast.makeText(requireContext(), "Mở: " + notification.getTitle(), Toast.LENGTH_SHORT).show();
     }
     
     private void deleteNotification(Notification notification, int position) {
+        // Xóa từ Room DB
+        new Thread(() -> {
+            AppDatabase.getInstance(requireContext()).notificationDao().delete(notification);
+        }).start();
+        
         adapter.removeNotification(position);
         Toast.makeText(requireContext(), R.string.notification_deleted, Toast.LENGTH_SHORT).show();
         updateEmptyState();

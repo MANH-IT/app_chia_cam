@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/background_gray"
+            android:background="@color/color_background"
             android:paddingBottom="24dp">
 
             <!-- Header Card -->
@@ -23,6 +23,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/color_card_background"
                 android:layout_margin="16dp">
 
                 <LinearLayout
@@ -73,7 +74,7 @@
                         android:text="Người dùng"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textColor="@color/gray_dark"
+                        android:textColor="@color/color_text_primary"
                         android:layout_marginTop="12dp" />
 
                     <!-- User Contact -->
@@ -83,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:text="0912345678"
                         android:textSize="14sp"
-                        android:textColor="@color/gray_medium"
+                        android:textColor="@color/color_text_secondary"
                         android:layout_marginTop="4dp" />
 
                     <!-- Edit Profile Button -->
@@ -110,6 +111,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/color_card_background"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="8dp">
 
@@ -236,7 +238,7 @@
                 android:text="@string/profile_my_groups"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/gray_dark"
+                android:textColor="@color/color_text_primary"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp" />
@@ -247,6 +249,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/color_card_background"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="8dp">
 
@@ -304,7 +307,7 @@
                 android:text="⚙️ Cài đặt &amp; Hỗ trợ"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/gray_dark"
+                android:textColor="@color/color_text_primary"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp" />
@@ -315,6 +318,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/color_card_background"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="8dp">
 
@@ -339,7 +343,7 @@
                             android:layout_weight="1"
                             android:text="@string/profile_settings"
                             android:textSize="14sp"
-                            android:textColor="@color/gray_dark" />
+                            android:textColor="@color/color_text_primary" />
 
                         <ImageView
                             android:layout_width="20dp"
@@ -370,7 +374,7 @@
                             android:layout_weight="1"
                             android:text="@string/profile_notification_settings"
                             android:textSize="14sp"
-                            android:textColor="@color/gray_dark" />
+                            android:textColor="@color/color_text_primary" />
 
                         <ImageView
                             android:layout_width="20dp"
@@ -401,7 +405,7 @@
                             android:layout_weight="1"
                             android:text="@string/profile_invite_friends"
                             android:textSize="14sp"
-                            android:textColor="@color/gray_dark" />
+                            android:textColor="@color/color_text_primary" />
 
                         <ImageView
                             android:layout_width="20dp"

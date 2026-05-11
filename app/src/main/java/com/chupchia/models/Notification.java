@@ -1,4 +1,4 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Entity(tableName = "notifications")
 public class Notification implements Serializable {
     
-    // Notification types
+    // Loại thông báo
     public static final String TYPE_NEW_BILL = "new_bill";
     public static final String TYPE_REACTION = "reaction";
     public static final String TYPE_MENTION = "mention";
@@ -25,7 +25,7 @@ public class Notification implements Serializable {
     private String type;
     private String title;
     private String content;
-    private String targetId;      // Bill ID, Group ID, etc.
+    private String targetId;      // Mã hóa đơn, Mã nhóm, v.v.
     private String groupId;
     private String groupName;
     private String actorId;
@@ -53,7 +53,7 @@ public class Notification implements Serializable {
         this.isRead = isRead;
     }
     
-    // Getters and Setters
+    // Getter và Setter
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     
@@ -90,7 +90,7 @@ public class Notification implements Serializable {
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     
-    // Helper methods
+    // Phương thức hỗ trợ
     public String getIcon() {
         switch (type) {
             case TYPE_NEW_BILL: return "🆕";

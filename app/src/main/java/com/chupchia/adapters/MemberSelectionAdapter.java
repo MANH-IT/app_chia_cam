@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +19,7 @@ import java.util.List;
 public class MemberSelectionAdapter extends RecyclerView.Adapter<MemberSelectionAdapter.MemberViewHolder> {
     
     private List<Member> members;
+    private List<Member> membersFull; // Copy for filtering
     private String selectionMode = "multiple"; // "multiple" or "single"
     private OnMemberSelectedListener listener;
     
@@ -27,7 +28,23 @@ public class MemberSelectionAdapter extends RecyclerView.Adapter<MemberSelection
     }
     
     public MemberSelectionAdapter(List<Member> members) {
-        this.members = new ArrayList<>(members);
+        this.members = members;
+        this.membersFull = new ArrayList<>(members);
+    }
+    
+    public void filter(String text) {
+        members.clear();
+        if (text.isEmpty()) {
+            members.addAll(membersFull);
+        } else {
+            text = text.toLowerCase();
+            for (Member item : membersFull) {
+                if (item.getName().toLowerCase().contains(text)) {
+                    members.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
     
     public void setSelectionMode(String mode) {
@@ -64,7 +81,7 @@ public class MemberSelectionAdapter extends RecyclerView.Adapter<MemberSelection
         holder.tvName.setText(member.getName());
         holder.tvRole.setText(member.getRole());
         
-        // Remove previous listeners to avoid recursion or wrong updates
+        // Xóa listener trước đó để tránh đệ quy hoặc cập nhật sai
         holder.cbMember.setOnCheckedChangeListener(null);
         holder.rbMember.setOnCheckedChangeListener(null);
 
@@ -84,7 +101,7 @@ public class MemberSelectionAdapter extends RecyclerView.Adapter<MemberSelection
             holder.rbMember.setChecked(member.isSelected());
             holder.rbMember.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
-                    // Clear all selections
+                    // Xóa tất cả lựa chọn
                     for (Member m : members) {
                         m.setSelected(false);
                     }

@@ -1,4 +1,4 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
 
 import java.io.Serializable;
 
@@ -28,7 +28,7 @@ public class SplitData implements Serializable {
         this.isPaid = false;
     }
     
-    // Getters and Setters
+    // Getter và Setter
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
     

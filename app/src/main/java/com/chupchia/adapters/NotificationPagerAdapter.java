@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,6 +21,6 @@ public class NotificationPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3; // All, Unread, Read
+        return 3; // Tất cả, Chưa đọc, Đã đọc
     }
 }

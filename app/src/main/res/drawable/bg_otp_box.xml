@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Normal state -->
+    <!-- Trạng thái bình thường -->
     <item android:state_focused="false" android:state_selected="false">
         <shape android:shape="rectangle">
             <solid android:color="@color/white" />
@@ -11,7 +11,7 @@
         </shape>
     </item>
     
-    <!-- Focused state -->
+    <!-- Trạng thái tiêu điểm (focus) -->
     <item android:state_focused="true">
         <shape android:shape="rectangle">
             <solid android:color="@color/white" />
@@ -22,7 +22,7 @@
         </shape>
     </item>
     
-    <!-- Error state -->
+    <!-- Trạng thái lỗi -->
     <item>
         <shape android:shape="rectangle">
             <solid android:color="@color/white" />

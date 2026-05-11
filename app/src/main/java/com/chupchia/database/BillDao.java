@@ -19,6 +19,12 @@ public interface BillDao {
     @Query("SELECT * FROM bills WHERE groupId = :groupId ORDER BY timestamp DESC")
     List<Bill> getBillsByGroup(String groupId);
 
+    @Query("SELECT * FROM bills WHERE id = :billId LIMIT 1")
+    Bill getBillById(String billId);
+
+    @Query("SELECT * FROM bills WHERE creatorId = :userId ORDER BY timestamp DESC")
+    List<Bill> getBillsByCreator(String userId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertBill(Bill bill);
 
@@ -36,4 +42,7 @@ public interface BillDao {
 
     @Query("SELECT COUNT(*) FROM bills")
     int getBillCount();
+
+    @Query("SELECT COUNT(*) FROM bills WHERE groupId = :groupId")
+    int getBillCountByGroup(String groupId);
 }

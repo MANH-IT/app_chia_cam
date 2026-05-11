@@ -1,10 +1,16 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity(tableName = "groups")
 public class Group implements Serializable {
+    @PrimaryKey
+    @androidx.annotation.NonNull
     private String id;
     private String name;
     private String description;
@@ -22,6 +28,7 @@ public class Group implements Serializable {
         this.createdAt = System.currentTimeMillis();
     }
     
+    @Ignore
     public Group(String id, String name, String description, String avatarUrl, 
                  String adminId, String adminName, String inviteCode) {
         this.id = id;
@@ -36,7 +43,7 @@ public class Group implements Serializable {
         this.createdAt = System.currentTimeMillis();
     }
     
-    // Getters and Setters
+    // Getter và Setter
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     

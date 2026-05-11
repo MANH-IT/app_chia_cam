@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -67,7 +67,7 @@ public class JoinGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Initialize views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
@@ -89,7 +89,7 @@ public class JoinGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup toolbar
+     * Cấu hình thanh công cụ
      */
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -101,15 +101,15 @@ public class JoinGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Parse deep link to get invite code
+     * Phân tích deep link để lấy mã mời
      */
     private void parseDeepLink() {
         Intent intent = getIntent();
         Uri data = intent.getData();
         
         if (data != null) {
-            // URL format: https://chia.cam/join/ABC123
-            // Or chiacam://join/ABC123
+            // Định dạng URL: https://chia.cam/join/ABC123
+            // Hoặc chiacam://join/ABC123
             String host = data.getHost();
             List<String> pathSegments = data.getPathSegments();
             
@@ -119,25 +119,25 @@ public class JoinGroupActivity extends AppCompatActivity {
                 }
             }
             
-            // Get from query parameter
+            // Lấy từ tham số truy vấn
             if (inviteCode == null) {
                 inviteCode = data.getQueryParameter("code");
             }
         }
         
-        // Get from extras
+        // Lấy từ extras
         if (inviteCode == null) {
             inviteCode = getIntent().getStringExtra("invite_code");
         }
         
-        // For testing - demo code
+        // Để thử nghiệm - mã demo
         if (inviteCode == null) {
             inviteCode = "ABC123";
         }
     }
     
     /**
-     * Load group information from server using invite code
+     * Tải thông tin nhóm từ máy chủ bằng mã mời
      */
     private void loadGroupInfo() {
         if (isLoading) return;
@@ -145,12 +145,12 @@ public class JoinGroupActivity extends AppCompatActivity {
         isLoading = true;
         showLoading(true);
         
-        // TODO: Call API to get group info by invite code
+        // TODO: Gọi API để lấy thông tin nhóm bằng mã mời
         simulateLoadGroupInfo();
     }
     
     /**
-     * Simulate API call to load group info
+     * Giả lập cuộc gọi API để tải thông tin nhóm
      */
     private void simulateLoadGroupInfo() {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -162,7 +162,7 @@ public class JoinGroupActivity extends AppCompatActivity {
             groupInfo.setName("Nhà mình");
             groupInfo.setAvatarUrl(null);
             groupInfo.setDescription("Nhóm chi tiêu gia đình - cùng nhau quản lý chi phí ăn uống, sinh hoạt hàng ngày. Mọi người cùng nhau chia sẻ và theo dõi chi tiêu một cách minh bạch và dễ dàng.");
-            // Add dummy members for count
+            // Thêm thành viên giả để đếm
             for (int i = 0; i < 4; i++) {
                 groupInfo.addMember(new Member());
             }
@@ -178,7 +178,7 @@ public class JoinGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Update UI with group info
+     * Cập nhật giao diện người dùng với thông tin nhóm
      */
     private void updateUI() {
         if (groupInfo == null) return;
@@ -216,7 +216,7 @@ public class JoinGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup button listeners
+     * Cấu hình sự kiện nút bấm
      */
     private void setupListeners() {
         btnCancel.setOnClickListener(v -> cancelAndGoBack());
@@ -225,16 +225,16 @@ public class JoinGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Join group
+     * Tham gia nhóm
      */
     private void joinGroup() {
         if (isJoining) return;
         
-        // Check if user is logged in
+        // Kiểm tra người dùng đã đăng nhập chưa
         SharedPrefManager prefManager = SharedPrefManager.getInstance(this);
         
         if (!prefManager.isLoggedIn()) {
-            // Save pending invite for after login
+            // Lưu lời mời đang chờ để xử lý sau đăng nhập
             prefManager.setPendingInviteCode(inviteCode);
             
             Toast.makeText(this, R.string.join_group_login_required, Toast.LENGTH_LONG).show();
@@ -251,12 +251,12 @@ public class JoinGroupActivity extends AppCompatActivity {
         btnJoin.setEnabled(false);
         btnJoin.setText(R.string.join_group_joining);
         
-        // TODO: Call API to join group
+        // TODO: Gọi API để tham gia nhóm
         simulateJoinGroup();
     }
     
     /**
-     * Simulate API call to join group
+     * Giả lập cuộc gọi API để tham gia nhóm
      */
     private void simulateJoinGroup() {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -267,10 +267,10 @@ public class JoinGroupActivity extends AppCompatActivity {
             
             Toast.makeText(this, String.format(getString(R.string.join_group_success), groupInfo.getName()), Toast.LENGTH_LONG).show();
             
-            // Save current group
+            // Lưu nhóm hiện tại
             SharedPrefManager.getInstance(this).setCurrentGroupId(groupInfo.getId());
             
-            // Navigate to MainActivity
+            // Chuyển đến MainActivity
             Intent intent = new Intent(JoinGroupActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.putExtra("selected_group_id", groupInfo.getId());
@@ -280,7 +280,7 @@ public class JoinGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Show/hide loading indicator
+     * Hiện/ẩn chỉ báo đang tải
      */
     private void showLoading(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -291,7 +291,7 @@ public class JoinGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Cancel and go back
+     * Hủy và quay lại
      */
     private void cancelAndGoBack() {
         if (isTaskRoot()) {

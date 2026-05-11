@@ -33,4 +33,10 @@ public interface NotificationDao {
 
     @Query("DELETE FROM notifications")
     void deleteAll();
+
+    @Query("SELECT COUNT(*) FROM notifications WHERE isRead = 0")
+    int getUnreadCount();
+
+    @Query("UPDATE notifications SET isRead = 1")
+    void markAllAsRead();
 }

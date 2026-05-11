@@ -1,4 +1,4 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ public class EditHistory implements Serializable {
     private long timestamp;
     private String changes;
     
-    // Default constructor for Firebase/Gson
+    // Hàm khởi tạo mặc định cho Firebase/Gson
     public EditHistory() {}
     
     public EditHistory(String userId, String userName, long timestamp, String changes) {
@@ -18,7 +18,7 @@ public class EditHistory implements Serializable {
         this.changes = changes;
     }
     
-    // Getters and Setters
+    // Getter và Setter
     public String getUserId() {
         return userId;
     }

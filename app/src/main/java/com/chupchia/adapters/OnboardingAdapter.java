@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +39,7 @@ public class OnboardingAdapter extends RecyclerView.Adapter<OnboardingAdapter.On
         holder.tvDescription.setText(slide.getDescription());
         holder.tvSubDescription.setText(slide.getSubDescription());
         
-        // Animation for items
+        // Hiệu ứng cho mục
         if (lastPosition < position) {
             animateSlideUp(holder.itemView);
         }

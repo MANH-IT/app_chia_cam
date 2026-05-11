@@ -42,7 +42,7 @@ public class MemberSplitAdapter extends RecyclerView.Adapter<MemberSplitAdapter.
     public void setSplitType(String type) {
         this.splitType = type;
         
-        // Reset custom values when switching split type
+        // Đặt lại giá trị tùy chỉnh khi chuyển kiểu chia
         if (type.equals("equal")) {
             for (Member member : members) {
                 member.setCustomValue(0);
@@ -112,7 +112,7 @@ public class MemberSplitAdapter extends RecyclerView.Adapter<MemberSplitAdapter.
     }
     
     /**
-     * Get per person amount for equal split display
+     * Lấy số tiền mỗi người cho hiển thị chia đều
      */
     public long getPerPersonAmount() {
         List<Member> selected = getSelectedMembers();
@@ -135,11 +135,11 @@ public class MemberSplitAdapter extends RecyclerView.Adapter<MemberSplitAdapter.
         holder.tvName.setText(member.getName());
         holder.tvRole.setText(member.getRole().equals("admin") ? "Admin" : "Thành viên");
         
-        // Remove listeners before setting state
+        // Xóa listener trước khi đặt trạng thái
         holder.cbSelect.setOnCheckedChangeListener(null);
         holder.cbSelect.setChecked(member.isSelected());
         
-        // Load avatar
+        // Tải ảnh đại diện
         if (member.getAvatarUrl() != null && !member.getAvatarUrl().isEmpty()) {
             Glide.with(holder.itemView.getContext())
                 .load(member.getAvatarUrl())
@@ -149,7 +149,7 @@ public class MemberSplitAdapter extends RecyclerView.Adapter<MemberSplitAdapter.
             holder.ivAvatar.setImageResource(R.drawable.ic_profile);
         }
         
-        // Show amount display for equal split
+        // Hiển thị số tiền cho chia đều
         if (splitType.equals("equal")) {
             holder.flCustomInput.setVisibility(View.GONE);
             holder.tvAmountDisplay.setVisibility(View.VISIBLE);
@@ -159,7 +159,7 @@ public class MemberSplitAdapter extends RecyclerView.Adapter<MemberSplitAdapter.
             holder.tvAmountDisplay.setVisibility(View.GONE);
             holder.flCustomInput.setVisibility(member.isSelected() ? View.VISIBLE : View.GONE);
             
-            // Set unit text
+            // Đặt đơn vị
             if (splitType.equals("percent")) {
                 holder.tvUnit.setText("%");
                 holder.etCustomAmount.setHint("0");
@@ -168,16 +168,16 @@ public class MemberSplitAdapter extends RecyclerView.Adapter<MemberSplitAdapter.
                 holder.etCustomAmount.setHint("0");
             }
             
-            // Set value
+            // Đặt giá trị
             int value = member.getCustomValue();
             holder.etCustomAmount.setText(value > 0 ? String.valueOf(value) : "");
             
-            // Remove existing TextWatcher to avoid loops
+            // Xóa TextWatcher cũ để tránh vòng lặp
             if (holder.textWatcher != null) {
                 holder.etCustomAmount.removeTextChangedListener(holder.textWatcher);
             }
             
-            // Create new TextWatcher
+            // Tạo TextWatcher mới
             holder.textWatcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -199,11 +199,11 @@ public class MemberSplitAdapter extends RecyclerView.Adapter<MemberSplitAdapter.
             holder.etCustomAmount.addTextChangedListener(holder.textWatcher);
         }
         
-        // Checkbox listener
+        // Sự kiện checkbox
         holder.cbSelect.setOnCheckedChangeListener((buttonView, isChecked) -> {
             member.setSelected(isChecked);
             
-            // Update custom input visibility
+            // Cập nhật hiển thị ô nhập tùy chỉnh
             if (!splitType.equals("equal")) {
                 holder.flCustomInput.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 if (!isChecked) {

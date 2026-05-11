@@ -1,9 +1,10 @@
-package com.chupchia.fragments;
+﻿package com.chupchia.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,9 +25,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chupchia.R;
 import com.chupchia.activities.CameraActivity;
+import com.chupchia.activities.EditBillActivity;
 import com.chupchia.activities.MainActivity;
 import com.chupchia.adapters.FeedAdapter;
+import com.chupchia.database.AppDatabase;
+import com.chupchia.dialogs.BillDetailDialog;
 import com.chupchia.models.Bill;
+import com.chupchia.utils.SharedPrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +73,20 @@ public class FeedFragment extends Fragment {
         setupSwipeRefresh();
         loadBills();
         
-        // Register receiver
-        requireContext().registerReceiver(newBillReceiver, new IntentFilter("com.chupchia.ACTION_NEW_BILL"));
+        // Đăng ký receiver với cờ Android 14+
+        IntentFilter filter = new IntentFilter("com.chupchia.ACTION_NEW_BILL");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireContext().registerReceiver(newBillReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            requireContext().registerReceiver(newBillReceiver, filter);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Làm mới khi quay lại từ EditBillActivity hoặc CameraActivity
+        refreshBills();
     }
     
     @Override
@@ -80,7 +98,7 @@ public class FeedFragment extends Fragment {
     }
     
     /**
-     * Khởi tạo views
+     * Khởi tạo giao diện
      */
     private void initViews(View view) {
         swipeRefresh = view.findViewById(R.id.swipe_refresh);
@@ -97,32 +115,28 @@ public class FeedFragment extends Fragment {
     }
     
     /**
-     * Setup RecyclerView
+     * Cấu hình RecyclerView
      */
     private void setupRecyclerView() {
         adapter = new FeedAdapter(requireContext());
         adapter.setOnBillClickListener(new FeedAdapter.OnBillClickListener() {
             @Override
             public void onBillClick(Bill bill) {
-                // TODO: Show bill detail dialog
-                Toast.makeText(requireContext(), "Click bill: " + bill.getProductName(), Toast.LENGTH_SHORT).show();
+                showBillDetail(bill);
             }
             
             @Override
             public void onActorClick(Bill bill) {
-                // TODO: Show user profile
-                Toast.makeText(requireContext(), "Click actor: " + bill.getActorName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), bill.getActorName(), Toast.LENGTH_SHORT).show();
             }
             
             @Override
             public void onImageClick(Bill bill) {
-                // TODO: Show fullscreen image
-                Toast.makeText(requireContext(), "Click image", Toast.LENGTH_SHORT).show();
+                showBillDetail(bill);
             }
         });
         
         adapter.setOnReactionClickListener((bill, reactionType, position) -> {
-            // TODO: Call API to update reaction
             updateReaction(bill, reactionType, position);
         });
         
@@ -132,69 +146,123 @@ public class FeedFragment extends Fragment {
     }
     
     /**
-     * Setup SwipeRefreshLayout
+     * Hiển thị BillDetailDialog
+     */
+    private void showBillDetail(Bill bill) {
+        String groupAdminId = SharedPrefManager.getInstance(requireContext()).getUserId();
+        
+        BillDetailDialog dialog = new BillDetailDialog(
+            requireContext(), bill, groupAdminId,
+            new BillDetailDialog.OnBillActionListener() {
+                @Override
+                public void onEditClick(Bill bill) {
+                    // Điều hướng đến EditBillActivity
+                    Intent intent = new Intent(requireContext(), EditBillActivity.class);
+                    intent.putExtra("bill", bill);
+                    startActivity(intent);
+                }
+                
+                @Override
+                public void onDeleteClick(Bill bill) {
+                    deleteBill(bill);
+                }
+            }
+        );
+        dialog.show();
+    }
+    
+    /**
+     * Xóa hóa đơn từ Room DB
+     */
+    private void deleteBill(Bill bill) {
+        Context ctx = getContext();
+        if (ctx == null) return;
+        final Context appCtx = ctx.getApplicationContext();
+        
+        new Thread(() -> {
+            AppDatabase.getInstance(appCtx).billDao().deleteBill(bill);
+            
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (isAdded()) {
+                    Toast.makeText(requireContext(), "Đã xóa hóa đơn", Toast.LENGTH_SHORT).show();
+                    refreshBills();
+                }
+            });
+        }).start();
+    }
+    
+    /**
+     * Cấu hình SwipeRefreshLayout
      */
     private void setupSwipeRefresh() {
-        swipeRefresh.setColorSchemeColors(getResources().getColor(R.color.primary));
+        swipeRefresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.primary));
         swipeRefresh.setOnRefreshListener(() -> {
             refreshBills();
         });
     }
     
     /**
-     * Load bills from API/Firebase
+     * Tải hóa đơn từ cơ sở dữ liệu Room
      */
     private void loadBills() {
         showLoading(true);
         
-        // Đọc dữ liệu từ Room Database thay vì data giả
+        Context context = getContext();
+        if (context == null) return;
+        
+        final Context appContext = context.getApplicationContext();
+        
         new Thread(() -> {
-            List<Bill> bills = com.chupchia.database.AppDatabase.getInstance(getContext())
+            List<Bill> loadedBills = AppDatabase.getInstance(appContext)
                     .billDao().getAllBills();
             
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                showLoading(false);
-                if (bills == null || bills.isEmpty()) {
-                    llEmptyState.setVisibility(View.VISIBLE);
-                    rvFeed.setVisibility(View.GONE);
-                } else {
-                    llEmptyState.setVisibility(View.GONE);
-                    rvFeed.setVisibility(View.VISIBLE);
-                    adapter.setBills(bills);
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (isAdded()) {
+                    this.bills = loadedBills != null ? loadedBills : new ArrayList<>();
+                    showLoading(false);
+                    if (this.bills.isEmpty()) {
+                        llEmptyState.setVisibility(View.VISIBLE);
+                        rvFeed.setVisibility(View.GONE);
+                    } else {
+                        llEmptyState.setVisibility(View.GONE);
+                        rvFeed.setVisibility(View.VISIBLE);
+                        adapter.setBills(this.bills);
+                    }
+                    swipeRefresh.setRefreshing(false);
                 }
-                swipeRefresh.setRefreshing(false);
-            }, 800);
+            });
         }).start();
     }
     
     /**
-     * Refresh bills
+     * Làm mới hóa đơn
      */
     private void refreshBills() {
-        // Clear local list and reload from DB (or API in the future)
         loadBills();
     }
     
     /**
-     * Update reaction on server
+     * Cập nhật cảm xúc và lưu vào Room DB
      */
     private void updateReaction(Bill bill, String reactionType, int position) {
-        // TODO: Call API to update reaction
-        // For demo, update locally
+        // Cập nhật cục bộ
         int currentCount = bill.getReactionCount(reactionType);
         bill.getReactions().put(reactionType, currentCount + 1);
         adapter.updateBill(bill, position);
+        
+        // Lưu context trước luồng nền để tránh crash nếu Fragment tách ra
+        Context ctx = getContext();
+        if (ctx == null) return;
+        final Context appCtx = ctx.getApplicationContext();
+        
+        // Lưu vào Room DB
+        new Thread(() -> {
+            AppDatabase.getInstance(appCtx).billDao().updateBill(bill);
+        }).start();
     }
     
     /**
-     * Create demo bills for testing (Deprecated - new accounts should be empty)
-     */
-    private List<Bill> createDemoBills() {
-        return new ArrayList<>();
-    }
-    
-    /**
-     * Show/hide loading indicator
+     * Hiện/ẩn chỉ báo loading
      */
     private void showLoading(boolean show) {
         isLoading = show;
@@ -209,7 +277,7 @@ public class FeedFragment extends Fragment {
     }
     
     /**
-     * Update empty state visibility
+     * Cập nhật hiển thị trạng thái trống
      */
     private void updateEmptyState() {
         if (!isLoading && bills.isEmpty()) {
@@ -222,7 +290,7 @@ public class FeedFragment extends Fragment {
     }
     
     /**
-     * Add new bill to feed
+     * Thêm hóa đơn mới vào bảng tin
      */
     public void addNewBill(Bill bill) {
         adapter.addBill(bill);

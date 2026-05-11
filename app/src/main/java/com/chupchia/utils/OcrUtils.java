@@ -41,30 +41,84 @@ public class OcrUtils {
     }
     
     /**
-     * Extract amount from text
+     * Trích xuất số tiền từ văn bản
      */
-    private static String extractAmount(String text) {
-        // Look for Vietnamese currency format: 35.000, 35000, 35,000
-        Pattern pattern1 = Pattern.compile("\\b(\\d{1,3}(?:\\.\\d{3})*)\\b");
-        Pattern pattern2 = Pattern.compile("\\b(\\d{5,7})\\b");
+    static String extractAmount(String text) {
+        if (text == null || text.isEmpty()) return null;
         
-        Matcher matcher1 = pattern1.matcher(text);
-        if (matcher1.find()) {
-            String amountStr = matcher1.group(1).replace(".", "");
-            return amountStr;
-        }
+        // Loại bỏ ký tự đặc biệt có thể gây nhiễu nhưng giữ lại chữ số và dấu phân cách
+        String cleanText = text.replace("đ", "").replace("VND", "").replace("VNĐ", "");
         
-        Matcher matcher2 = pattern2.matcher(text);
-        if (matcher2.find()) {
-            String amountStr = matcher2.group(1);
-            long amount = Long.parseLong(amountStr);
-            // If amount is too large (over 1 million), divide by 1000
-            if (amount > 1000000) {
-                amount = amount / 1000;
+        // Chiến lược 1: Tìm từ khóa thường đứng trước tổng tiền
+        String[] lines = cleanText.split("\n");
+        String[] keywords = {"TỔNG CỘNG", "THANH TOÁN", "TOTAL", "CỘNG", "TIỀN HÀNG", "SUM"};
+        
+        for (String line : lines) {
+            String upperLine = line.toUpperCase();
+            for (String keyword : keywords) {
+                if (upperLine.contains(keyword)) {
+                    // Tìm số lớn nhất trong dòng này hoặc dòng tiếp theo
+                    String amount = findLargestNumberInLine(line);
+                    if (amount != null) return amount;
+                }
             }
-            return String.valueOf(amount);
         }
         
-        return null;
+        // Chiến lược 2: Tìm định dạng tiền Việt Nam: 35.000, 35000, 35,000
+        // Ưu tiên số lớn hơn và số có từ 3 chữ số trở lên
+        Pattern pattern = Pattern.compile("\\b(\\d{1,3}(?:[.,]\\d{3})+|\\d{4,9})\\b");
+        Matcher matcher = pattern.matcher(cleanText);
+        
+        long maxAmount = 0;
+        String bestMatch = null;
+        
+        while (matcher.find()) {
+            String rawMatch = matcher.group(1);
+            // Bỏ qua nếu trông giống ngày tháng (chứa / hoặc -)
+            if (rawMatch.contains("/") || rawMatch.contains("-")) {
+                continue;
+            }
+            
+            String match = rawMatch.replace(".", "").replace(",", "");
+            try {
+                long val = Long.parseLong(match);
+                // Phương pháp hàm lợi: đa số hóa đơn từ 5k đến 10M
+                // Bỏ qua các năm thường gặp như 202x
+                if (val == 2024 || val == 2025 || val == 2026) continue;
+                
+                if (val > maxAmount && val >= 1000 && val <= 10000000) {
+                    maxAmount = val;
+                    bestMatch = match;
+                }
+            } catch (NumberFormatException ignored) {}
+        }
+        
+        return bestMatch;
+    }
+
+    private static String findLargestNumberInLine(String line) {
+        // Regex tìm các số có dấu phân cách hàng nghìn (tùy chọn)
+        Pattern pattern = Pattern.compile("\\b(\\d{1,3}(?:[.,]\\d{3})+|\\d{3,9})\\b");
+        Matcher matcher = pattern.matcher(line);
+        long maxVal = -1;
+        String bestMatch = null;
+        
+        while (matcher.find()) {
+            String rawMatch = matcher.group();
+            // Kiểm tra ngày cơ bản: nếu có nhiều hơn một dấu chấm/gạch chéo, có thể là ngày tháng
+            if (rawMatch.chars().filter(ch -> ch == '.' || ch == '/' || ch == '-').count() > 1) {
+                continue;
+            }
+            
+            String match = rawMatch.replace(".", "").replace(",", "");
+            try {
+                long val = Long.parseLong(match);
+                if (val > maxVal && val < 20000000) { // Giới hạn 20 triệu để an toàn
+                    maxVal = val;
+                    bestMatch = match;
+                }
+            } catch (NumberFormatException ignored) {}
+        }
+        return bestMatch;
     }
 }

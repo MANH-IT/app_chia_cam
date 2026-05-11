@@ -1,4 +1,4 @@
-package com.chupchia.network;
+﻿package com.chupchia.network;
 
 import android.content.Context;
 import com.chupchia.utils.SharedPrefManager;
@@ -15,7 +15,7 @@ public class ApiClient {
         if (retrofit == null) {
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
             
-            // Add Interceptor for Authentication
+            // Thêm Interceptor cho xác thực
             httpClient.addInterceptor(chain -> {
                 Request original = chain.request();
                 String token = SharedPrefManager.getInstance(context).getAuthToken();

@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -69,7 +69,7 @@ public class MemberChipAdapter extends RecyclerView.Adapter<MemberChipAdapter.Ch
         holder.chip.setText(member.getName());
         holder.chip.setChipIcon(ContextCompat.getDrawable(context, R.drawable.ic_person));
         
-        // Check if this is the current user (Admin)
+        // Kiểm tra nếu đây là người dùng hiện tại (Admin)
         if (member.getId() != null && member.getId().equals(currentUserId)) {
             holder.chip.setCloseIconVisible(false);
         } else {

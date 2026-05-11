@@ -10,12 +10,12 @@ import java.util.Map;
 public class DebtOptimizer {
 
     /**
-     * Optimize debt transactions using graph algorithm
-     * Reduces the number of transactions to settle all debts
+     * Tối ưu hóa giao dịch công nợ sử dụng thuật toán đồ thị
+     * Giảm số lượng giao dịch để thanh toán tất cả công nợ
      * 
-     * @param transactions List of original transactions (who owes whom)
-     * @param userIdToNameMap Map of user IDs to names for display
-     * @return List of optimized transactions
+     * @param transactions Danh sách giao dịch gốc (ai nợ ai)
+     * @param userIdToNameMap Bảng ánh xạ mã người dùng sang tên để hiển thị
+     * @return Danh sách giao dịch đã tối ưu
      */
     public static List<Transaction> optimize(List<Transaction> transactions, 
                                               Map<String, String> userIdToNameMap) {
@@ -23,19 +23,19 @@ public class DebtOptimizer {
             return new ArrayList<>();
         }
 
-        // Step 1: Calculate net balance for each person
+        // Bước 1: Tính số dư ròng cho từng người
         Map<String, Long> balance = new HashMap<>();
         
         for (Transaction t : transactions) {
-            // Debtor (from user) owes money -> negative balance
+            // Người nợ (từ người dùng) nợ tiền -> số dư âm
             balance.put(t.getFromUserId(), 
                 balance.getOrDefault(t.getFromUserId(), 0L) - t.getAmount());
-            // Creditor (to user) is owed money -> positive balance
+            // Chủ nợ (đến người dùng) được nợ tiền -> số dư dương
             balance.put(t.getToUserId(), 
                 balance.getOrDefault(t.getToUserId(), 0L) + t.getAmount());
         }
         
-        // Step 2: Separate into creditors (positive) and debtors (negative)
+        // Bước 2: Phân loại thành chủ nợ (dương) và người nợ (âm)
         List<Map.Entry<String, Long>> creditors = new ArrayList<>();
         List<Map.Entry<String, Long>> debtors = new ArrayList<>();
         
@@ -47,11 +47,11 @@ public class DebtOptimizer {
             }
         }
         
-        // Step 3: Greedy matching to minimize transactions
+        // Bước 3: Ghép tham lam để giảm thiểu giao dịch
         List<Transaction> optimized = new ArrayList<>();
         int i = 0, j = 0;
         
-        // Use a copy to avoid modifying original map entries if they are shared
+        // Dùng bản sao để tránh sửa đổi các entry gốc nếu chúng được chia sẻ
         List<Long> debtorBalances = new ArrayList<>();
         for (Map.Entry<String, Long> e : debtors) debtorBalances.add(e.getValue());
         
@@ -70,7 +70,7 @@ public class DebtOptimizer {
                     settleAmount
                 );
                 
-                // Add names if available
+                // Thêm tên nếu có
                 if (userIdToNameMap != null) {
                     if (userIdToNameMap.containsKey(debtors.get(i).getKey())) {
                         optimizedTx.setFromUserName(userIdToNameMap.get(debtors.get(i).getKey()));
@@ -83,7 +83,7 @@ public class DebtOptimizer {
                 optimized.add(optimizedTx);
             }
             
-            // Update balances
+            // Cập nhật số dư
             debtorBalances.set(i, debtorBalances.get(i) + settleAmount);
             creditorBalances.set(j, creditorBalances.get(j) - settleAmount);
             
@@ -95,7 +95,7 @@ public class DebtOptimizer {
     }
     
     /**
-     * Simplified optimization when we only have net balances
+     * Tối ưu hóa đơn giản khi chỉ có số dư ròng
      */
     public static List<Transaction> optimizeFromBalances(Map<String, Long> balances,
                                                           Map<String, String> userIdToNameMap) {

@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -46,7 +46,7 @@ public class SuggestedMemberAdapter extends RecyclerView.Adapter<SuggestedMember
         Member member = members.get(position);
         
         holder.tvName.setText(member.getName());
-        holder.tvPhone.setText(member.getId()); // Using ID as phone placeholder
+        holder.tvPhone.setText(member.getId()); // Dùng ID làm số điện thoại tạm
         holder.cbSelect.setChecked(member.isSelected());
         
         if (member.getAvatarUrl() != null && !member.getAvatarUrl().isEmpty()) {

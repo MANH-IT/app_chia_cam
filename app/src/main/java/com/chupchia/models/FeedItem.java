@@ -1,4 +1,4 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
 
 public class FeedItem {
     public static final int TYPE_ADD_PHOTO = 0;
@@ -10,12 +10,12 @@ public class FeedItem {
     private String userName;
     private String reaction;
 
-    // Constructor for "Add Photo" item
+    // Constructor cho mục "Thêm ảnh"
     public FeedItem() {
         this.type = TYPE_ADD_PHOTO;
     }
 
-    // Constructor for image items
+    // Hàm khởi tạo cho mục hình ảnh
     public FeedItem(String imageUrl, String amount, String userName, String reaction) {
         this.type = TYPE_IMAGE;
         this.imageUrl = imageUrl;

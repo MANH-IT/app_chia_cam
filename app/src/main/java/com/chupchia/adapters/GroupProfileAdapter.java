@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -57,7 +57,7 @@ public class GroupProfileAdapter extends RecyclerView.Adapter<GroupProfileAdapte
         holder.tvGroupName.setText(group.getName());
         holder.tvMemberCount.setText(group.getMemberCount() + " thành viên");
 
-        // Set role badge
+        // Đặt huy hiệu vai trò
         String currentUserId = com.chupchia.utils.SharedPrefManager.getInstance(context).getUserId();
         if (currentUserId != null && currentUserId.equals(group.getAdminId())) {
             holder.tvRole.setVisibility(View.VISIBLE);
@@ -66,7 +66,7 @@ public class GroupProfileAdapter extends RecyclerView.Adapter<GroupProfileAdapte
             holder.tvRole.setVisibility(View.GONE);
         }
 
-        // Load group avatar
+        // Tải ảnh đại diện nhóm
         if (group.getAvatarUrl() != null && !group.getAvatarUrl().isEmpty()) {
             Glide.with(context)
                     .load(group.getAvatarUrl())

@@ -1,12 +1,15 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,18 +20,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.chupchia.R;
 import com.chupchia.adapters.MainViewPagerAdapter;
+import com.chupchia.database.AppDatabase;
 import com.chupchia.utils.PermissionUtils;
 import com.chupchia.utils.SharedPrefManager;
 
 public class MainActivity extends AppCompatActivity {
 
-    // ===== VIEWS =====
+    // ===== GIAO DIỆN =====
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigation;
     private ViewPager2 viewPager;
     private FloatingActionButton fabCamera;
     
-    // ===== VARIABLES =====
+    // ===== BIẾN =====
     private MainViewPagerAdapter viewPagerAdapter;
     private int notificationCount = 0;
     
@@ -42,10 +46,21 @@ public class MainActivity extends AppCompatActivity {
         setupViewPager();
         setupBottomNavigation();
         setupListeners();
+        setupBackNavigation();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Tự động cập nhật huy hiệu thông báo từ Room DB
+        new Thread(() -> {
+            int unreadCount = AppDatabase.getInstance(this).notificationDao().getUnreadCount();
+            new Handler(Looper.getMainLooper()).post(() -> updateNotificationBadge(unreadCount));
+        }).start();
     }
     
     /**
-     * Khởi tạo views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
@@ -55,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup toolbar
+     * Cấu hình thanh công cụ
      */
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -65,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup ViewPager2 with 3 tabs
+     * Cấu hình ViewPager2 với 3 tab
      */
     private void setupViewPager() {
         viewPagerAdapter = new MainViewPagerAdapter(this);
@@ -73,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setOffscreenPageLimit(2);
         viewPager.setUserInputEnabled(true);
         
-        // Sync ViewPager2 → BottomNavigation
+        // Đồng bộ ViewPager2 → BottomNavigation
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -94,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup BottomNavigationView synced with ViewPager2
+     * Cấu hình BottomNavigationView đồng bộ với ViewPager2
      */
     private void setupBottomNavigation() {
         bottomNavigation.setOnItemSelectedListener(item -> {
@@ -104,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.nav_notification) {
                 viewPager.setCurrentItem(1, true);
-                // Clear notification badge when viewing
+                // Xóa huy hiệu thông báo khi xem
                 clearNotificationBadge();
                 return true;
             } else if (id == R.id.nav_profile) {
@@ -116,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup button listeners
+     * Cấu hình sự kiện nút bấm
      */
     private void setupListeners() {
         fabCamera.setOnClickListener(v -> {
@@ -149,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     /**
-     * Create options menu
+     * Tạo menu tùy chọn
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -158,14 +173,15 @@ public class MainActivity extends AppCompatActivity {
     }
     
     /**
-     * Handle menu item clicks
+     * Xử lý sự kiện nhấp mục menu
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         
         if (id == R.id.action_settings) {
-            // TODO: Open SettingsActivity
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
             return true;
         }
         
@@ -173,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     /**
-     * Update notification badge on bottom nav
+     * Cập nhật huy hiệu thông báo trên thanh điều hướng
      */
     public void updateNotificationBadge(int count) {
         notificationCount = count;
@@ -190,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     /**
-     * Clear notification badge
+     * Xóa huy hiệu thông báo
      */
     private void clearNotificationBadge() {
         notificationCount = 0;
@@ -200,20 +216,23 @@ public class MainActivity extends AppCompatActivity {
     }
     
     /**
-     * Handle back press - move to background instead of closing
+     * Xử lý nút back - chuyển vào nền thay vì đóng
      */
-    @Override
-    public void onBackPressed() {
-        // If not on feed tab, go to feed first
-        if (viewPager.getCurrentItem() != 0) {
-            viewPager.setCurrentItem(0, true);
-        } else {
-            moveTaskToBack(true);
-        }
+    private void setupBackNavigation() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (viewPager.getCurrentItem() != 0) {
+                    viewPager.setCurrentItem(0, true);
+                } else {
+                    moveTaskToBack(true);
+                }
+            }
+        });
     }
     
     /**
-     * Switch to Feed tab programmatically
+     * Chuyển sang tab Bảng tin theo chương trình
      */
     public void switchToFeed() {
         if (viewPager != null) {

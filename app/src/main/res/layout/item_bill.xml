@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,7 +9,7 @@
     android:layout_marginVertical="10dp"
     app:cardCornerRadius="24dp"
     app:cardElevation="6dp"
-    app:cardBackgroundColor="@color/white">
+    app:cardBackgroundColor="@color/color_card_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                     android:text="Mì tôm"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
+                    android:textColor="@color/color_text_primary"
                     android:maxLines="1"
                     android:ellipsize="end" />
 
@@ -128,15 +128,15 @@
                     android:layout_height="wrap_content"
                     android:text="Mạnh mua • chia 4 người"
                     android:textSize="13sp"
-                    android:textColor="@color/gray_medium" />
+                    android:textColor="@color/color_text_secondary" />
 
             </LinearLayout>
 
-            <!-- Divider -->
+            <!-- Đường phân cách -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray_lighter"
+                android:background="@color/color_divider"
                 android:layout_marginVertical="16dp" />
 
             <!-- Reactions Row -->

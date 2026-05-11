@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     
     /**
-     * Khởi tạo views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         ivLogo = findViewById(R.id.iv_logo);
@@ -98,17 +98,17 @@ public class RegisterActivity extends AppCompatActivity {
         tvTerms = findViewById(R.id.tv_terms);
         tvPrivacy = findViewById(R.id.tv_privacy);
         
-        // Setup Progress Dialog
+        // Cấu hình hộp thoại tiến trình
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang tạo tài khoản...");
         progressDialog.setCancelable(false);
     }
     
     /**
-     * Animation khi mở màn hình
+     * Hiệu ứng khi mở màn hình
      */
     private void startEnterAnimation() {
-        // Fade in cho logo
+        // Hiệu ứng mờ dần vào cho logo
         ivLogo.setAlpha(0f);
         ivLogo.animate()
             .alpha(1f)
@@ -116,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
             .setInterpolator(new AccelerateDecelerateInterpolator())
             .start();
         
-        // Slide up cho title
+        // Hiệu ứng trượt lên cho tiêu đề
         tvTitle.setTranslationY(30f);
         tvTitle.setAlpha(0f);
         tvTitle.animate()
@@ -126,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
             .setStartDelay(200)
             .start();
         
-        // Slide up cho subtitle
+        // Hiệu ứng trượt lên cho phụ đề
         tvSubtitle.setTranslationY(30f);
         tvSubtitle.setAlpha(0f);
         tvSubtitle.animate()
@@ -136,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
             .setStartDelay(300)
             .start();
         
-        // Fade in cho các input fields
+        // Hiệu ứng mờ dần vào cho các ô nhập liệu
         float startDelay = 400;
         View[] views = {tilFullname, tilPhone, tilEmail, tilPassword, tilConfirm, btnRegister};
         for (View view : views) {
@@ -184,7 +184,7 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword.addTextChangedListener(textWatcher);
         etConfirm.addTextChangedListener(textWatcher);
         
-        // Focus change listeners
+        // Lắng nghe thay đổi focus
         View.OnFocusChangeListener focusListener = (v, hasFocus) -> {
             if (hasFocus) {
                 clearErrorForFocusedField();
@@ -236,17 +236,17 @@ public class RegisterActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirm.getText().toString().trim();
         
-        // Validate all fields
+        // Xác thực tất cả trường
         if (!validateFullname(fullname)) return;
         if (!validatePhone(phone)) return;
         if (!validateEmail(email)) return; // Optional field, only validate if not empty
         if (!validatePassword(password)) return;
         if (!validateConfirmPassword(password, confirmPassword)) return;
         
-        // All validations passed
+        // Tất cả xác thực đã qua
         showLoading(true);
         
-        // TODO: Call actual registration API
+        // TODO: Gọi API đăng ký thực tế
         simulateRegistrationApi(fullname, phone, email, password);
     }
     
@@ -262,16 +262,16 @@ public class RegisterActivity extends AppCompatActivity {
             if (phone.equals("0987654321")) {
                 showError(getString(R.string.error_phone_exists));
             } else {
-                // Save temp user data
+                // Lưu dữ liệu tạm người dùng
                 saveTempUserData(fullname, phone, email, password);
-                // Navigate to OTP verification
+                // Điều hướng đến xác thực OTP
                 navigateToVerifyOtp(phone, fullname, email, password);
             }
         }, 1500);
     }
     
     /**
-     * Validate họ và tên
+     * Xác thực họ và tên
      */
     private boolean validateFullname(String fullname) {
         if (TextUtils.isEmpty(fullname)) {
@@ -297,7 +297,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     
     /**
-     * Validate số điện thoại
+     * Xác thực số điện thoại
      */
     private boolean validatePhone(String phone) {
         if (TextUtils.isEmpty(phone)) {
@@ -317,11 +317,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
     
     /**
-     * Validate email (không bắt buộc)
+     * Xác thực email (không bắt buộc)
      */
     private boolean validateEmail(String email) {
         if (TextUtils.isEmpty(email)) {
-            // Email is optional
+            // Email không bắt buộc
             tilEmail.setError(null);
             return true;
         }
@@ -336,7 +336,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     
     /**
-     * Validate mật khẩu
+     * Xác thực mật khẩu
      */
     private boolean validatePassword(String password) {
         if (TextUtils.isEmpty(password)) {
@@ -352,10 +352,10 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
         
-        // Warning for weak password (not blocking)
+        // Cảnh báo mật khẩu yếu (không chặn)
         if (!PASSWORD_STRONG_PATTERN.matcher(password).matches()) {
             tilPassword.setError(getString(R.string.error_password_weak));
-            // Don't return false, just warning
+            // Không return false, chỉ cảnh báo
         } else {
             tilPassword.setError(null);
         }
@@ -363,7 +363,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     
     /**
-     * Validate xác nhận mật khẩu
+     * Xác thực xác nhận mật khẩu
      */
     private boolean validateConfirmPassword(String password, String confirmPassword) {
         if (TextUtils.isEmpty(confirmPassword)) {
@@ -440,7 +440,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     
     /**
-     * Animation shake khi có lỗi
+     * Hiệu ứng rung khi có lỗi
      */
     private void shakeView(View view) {
         ObjectAnimator shakeX = ObjectAnimator.ofFloat(view, "translationX", 0f, 15f, -15f, 10f, -10f, 5f, -5f, 0f);

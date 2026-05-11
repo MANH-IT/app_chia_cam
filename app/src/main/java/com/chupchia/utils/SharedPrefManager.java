@@ -34,13 +34,13 @@ public class SharedPrefManager {
     }
     
     /**
-     * Static access to SharedPreferences for convenience
+     * Truy cập tĩnh vào SharedPreferences để thuận tiện
      */
     public static SharedPreferences getSharedPreferences() {
         return sharedPrefs;
     }
     
-    // Onboarding
+    // Onboarding (Đã xem hướng dẫn)
     public void setHasSeenOnboarding(boolean hasSeen) {
         editor.putBoolean(KEY_HAS_SEEN_ONBOARDING, hasSeen);
         editor.apply();
@@ -50,7 +50,7 @@ public class SharedPrefManager {
         return sharedPrefs.getBoolean(KEY_HAS_SEEN_ONBOARDING, false);
     }
     
-    // Auth Token
+    // Token xác thực
     public void setAuthToken(String token) {
         editor.putString(KEY_AUTH_TOKEN, token);
         editor.apply();
@@ -61,17 +61,17 @@ public class SharedPrefManager {
     }
     
     /**
-     * Alias for setAuthToken for backward compatibility
+     * Bí danh cho setAuthToken để tương thích ngược
      */
     public void saveToken(String token) {
         setAuthToken(token);
-        // Set token expiry to 30 days from now
+        // Đặt hạn token là 30 ngày kể từ bây giờ
         editor.putLong(KEY_TOKEN_EXPIRY, System.currentTimeMillis() + 30L * 24 * 60 * 60 * 1000);
         editor.apply();
     }
     
     /**
-     * Check if token has expired
+     * Kiểm tra token đã hết hạn chưa
      */
     public boolean isTokenExpired() {
         long expiry = sharedPrefs.getLong(KEY_TOKEN_EXPIRY, 0);
@@ -79,7 +79,7 @@ public class SharedPrefManager {
     }
     
     /**
-     * Set token expiry time
+     * Đặt thời gian hết hạn token
      */
     public void setTokenExpiry(long expiryTime) {
         editor.putLong(KEY_TOKEN_EXPIRY, expiryTime);
@@ -87,7 +87,7 @@ public class SharedPrefManager {
     }
     
     /**
-     * Clear auth data (token, login state)
+     * Xóa dữ liệu xác thực (token, trạng thái đăng nhập)
      */
     public void clearAuthData() {
         editor.remove(KEY_AUTH_TOKEN);
@@ -96,7 +96,7 @@ public class SharedPrefManager {
         editor.apply();
     }
     
-    // Login state
+    // Trạng thái đăng nhập
     public void setLoggedIn(boolean isLoggedIn) {
         editor.putBoolean(KEY_IS_LOGGED_IN, isLoggedIn);
         editor.apply();
@@ -106,27 +106,27 @@ public class SharedPrefManager {
         return sharedPrefs.getBoolean(KEY_IS_LOGGED_IN, false);
     }
     
-    // User ID
+    // Mã người dùng
     public void setUserId(String userId) {
         editor.putString(KEY_USER_ID, userId);
         editor.apply();
     }
     
     public String getUserId() {
-        return sharedPrefs.getString(KEY_USER_ID, "user_1");
+        return sharedPrefs.getString(KEY_USER_ID, null);
     }
     
-    // User Name
+    // Tên người dùng
     public void setUserName(String name) {
         editor.putString(KEY_USER_NAME, name);
         editor.apply();
     }
     
     public String getUserName() {
-        return sharedPrefs.getString(KEY_USER_NAME, "Mạnh Nguyễn");
+        return sharedPrefs.getString(KEY_USER_NAME, null);
     }
     
-    // User Phone
+    // Số điện thoại người dùng
     public void setUserPhone(String phone) {
         editor.putString(KEY_USER_PHONE, phone);
         editor.apply();
@@ -136,7 +136,7 @@ public class SharedPrefManager {
         return sharedPrefs.getString(KEY_USER_PHONE, null);
     }
     
-    // User Email
+    // Email người dùng
     public void setUserEmail(String email) {
         editor.putString(KEY_USER_EMAIL, email);
         editor.apply();
@@ -146,7 +146,7 @@ public class SharedPrefManager {
         return sharedPrefs.getString(KEY_USER_EMAIL, null);
     }
     
-    // User Avatar
+    // Ảnh đại diện người dùng
     public void setUserAvatar(String avatar) {
         editor.putString(KEY_USER_AVATAR, avatar);
         editor.apply();
@@ -157,7 +157,7 @@ public class SharedPrefManager {
     }
     
     /**
-     * Save user data in one call
+     * Lưu dữ liệu người dùng trong một lần gọi
      */
     public void saveUser(String userId, String name, String phone, String email, String avatarUrl) {
         editor.putString(KEY_USER_ID, userId);
@@ -170,7 +170,7 @@ public class SharedPrefManager {
         editor.apply();
     }
     
-    // Current Group
+    // Nhóm hiện tại
     public void setCurrentGroupId(String groupId) {
         editor.putString(KEY_CURRENT_GROUP_ID, groupId);
         editor.apply();
@@ -180,7 +180,7 @@ public class SharedPrefManager {
         return sharedPrefs.getString(KEY_CURRENT_GROUP_ID, null);
     }
     
-    // Pending Invite
+    // Lời mời đang chờ
     public void setPendingInviteCode(String inviteCode) {
         editor.putString(KEY_PENDING_INVITE_CODE, inviteCode);
         editor.apply();
@@ -200,7 +200,10 @@ public class SharedPrefManager {
     }
     
     public void logout() {
+        // Bảo toàn trạng thái onboarding, chỉ xóa dữ liệu xác thực và người dùng
+        boolean onboardingSeen = hasSeenOnboarding();
         editor.clear();
         editor.apply();
+        setHasSeenOnboarding(onboardingSeen);
     }
 }

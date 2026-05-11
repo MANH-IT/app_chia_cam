@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -64,7 +64,7 @@ public class ContactInviteAdapter extends RecyclerView.Adapter<ContactInviteAdap
         holder.tvName.setText(contact.getName());
         holder.tvPhone.setText(contact.getDisplayPhone());
 
-        // Load avatar if available
+        // Tải ảnh đại diện nếu có
         if (contact.getAvatarUri() != null && !contact.getAvatarUri().isEmpty()) {
             Glide.with(context)
                     .load(contact.getAvatarUri())
@@ -74,7 +74,7 @@ public class ContactInviteAdapter extends RecyclerView.Adapter<ContactInviteAdap
             holder.ivAvatar.setImageResource(R.drawable.ic_profile);
         }
 
-        // Update button state
+        // Cập nhật trạng thái nút
         if (contact.isMember()) {
             holder.btnInvite.setText("Thành viên");
             holder.btnInvite.setEnabled(false);

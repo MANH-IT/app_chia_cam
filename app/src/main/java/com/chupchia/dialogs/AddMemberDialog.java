@@ -1,4 +1,4 @@
-package com.chupchia.dialogs;
+﻿package com.chupchia.dialogs;
 
 import android.Manifest;
 import android.app.Activity;
@@ -98,7 +98,7 @@ public class AddMemberDialog extends BottomSheetDialog {
                 List<Member> members = new ArrayList<>();
                 for (Contact contact : selectedContacts) {
                     Member member = new Member();
-                    member.setId(contact.getPhoneNumber()); // Use phone as temp ID
+                    member.setId(contact.getPhoneNumber()); // Dùng số điện thoại làm ID tạm
                     member.setName(contact.getName());
                     member.setPhoneNumber(contact.getPhoneNumber());
                     member.setRole("member");
@@ -167,7 +167,7 @@ public class AddMemberDialog extends BottomSheetDialog {
                 String name = cursor.getString(nameIndex);
                 String phoneNumber = cursor.getString(numberIndex);
                 
-                // Clean phone number
+                // Làm sạch số điện thoại
                 phoneNumber = phoneNumber.replaceAll("[^0-9+]", "");
                 
                 Contact contact = new Contact(name, phoneNumber);

@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.Manifest;
 import android.content.ClipData;
@@ -83,7 +83,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Initialize views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
@@ -101,7 +101,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Setup toolbar
+     * Cấu hình thanh công cụ
      */
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -113,7 +113,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Load group data from intent
+     * Tải dữ liệu nhóm từ intent
      */
     private void loadGroupData() {
         groupId = getIntent().getStringExtra("group_id");
@@ -121,7 +121,7 @@ public class InviteMembersActivity extends AppCompatActivity {
         inviteCode = getIntent().getStringExtra("invite_code");
 
         if (groupId == null) {
-            // Demo data
+            // Dữ liệu demo
             groupId = "group_1";
             groupName = "Nhà mình";
             inviteCode = "ABC123";
@@ -136,14 +136,14 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Setup invite link display
+     * Cấu hình hiển thị liên kết mời
      */
     private void setupInviteLink() {
         tvInviteLink.setText(fullInviteLink);
     }
 
     /**
-     * Setup button listeners
+     * Cấu hình sự kiện nút bấm
      */
     private void setupListeners() {
         ivCopyLink.setOnClickListener(v -> copyInviteLink());
@@ -159,7 +159,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Copy invite link to clipboard
+     * Sao chép liên kết mời vào bộ nhớ tạm
      */
     private void copyInviteLink() {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -169,7 +169,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Get invite message text
+     * Lấy nội dung tin nhắn mời
      */
     private String getInviteMessage() {
         return String.format(getString(R.string.invite_message_template),
@@ -177,7 +177,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Share via Zalo
+     * Chia sẻ qua Zalo
      */
     private void shareViaZalo() {
         String message = getInviteMessage();
@@ -192,7 +192,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Share via Messenger
+     * Chia sẻ qua Messenger
      */
     private void shareViaMessenger() {
         String message = getInviteMessage();
@@ -209,7 +209,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Share via SMS
+     * Chia sẻ qua SMS
      */
     private void shareViaSms() {
         String message = getInviteMessage();
@@ -220,7 +220,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Share via Telegram
+     * Chia sẻ qua Telegram
      */
     private void shareViaTelegram() {
         String message = getInviteMessage();
@@ -237,7 +237,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Sync contacts from phone
+     * Đồng bộ danh bạ từ điện thoại
      */
     private void syncContacts() {
         if (isSyncing) return;
@@ -253,14 +253,14 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Perform actual contact syncing
+     * Thực hiện đồng bộ danh bạ thực tế
      */
     private void performSyncContacts() {
         isSyncing = true;
         btnSyncContacts.setText(R.string.invite_syncing);
         btnSyncContacts.setEnabled(false);
 
-        // Simulate loading delay
+        // Giả lập trễ tải
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             List<Contact> contacts = readContactsFromPhone();
             filterExistingUsers(contacts);
@@ -272,7 +272,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Read contacts from phone
+     * Đọc danh bạ từ điện thoại
      */
     private List<Contact> readContactsFromPhone() {
         List<Contact> contacts = new ArrayList<>();
@@ -294,9 +294,9 @@ public class InviteMembersActivity extends AppCompatActivity {
                 String phone = cursor.getString(phoneIndex);
 
                 if (!TextUtils.isEmpty(phone)) {
-                    // Clean phone number
+                    // Làm sạch số điện thoại
                     phone = phone.replaceAll("[^0-9]", "");
-                    // Only get Vietnamese phone numbers (starting with 0, length 10-11)
+                    // Chỉ lấy số điện thoại Việt Nam (bắt đầu bằng số 0, độ dài 10-11)
                     if (phone.startsWith("0") && (phone.length() == 10 || phone.length() == 11)) {
                         contacts.add(new Contact(name, phone, false));
                     }
@@ -309,13 +309,13 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Filter contacts to show only those not in group yet
+     * Lọc danh bạ để chỉ hiển thị những người chưa trong nhóm
      */
     private void filterExistingUsers(List<Contact> contacts) {
         contactList.clear();
         
-        // TODO: Call API to check which contacts are already members or using Chia Cam
-        // For demo, simulate with random status
+        // TODO: Gọi API để kiểm tra những liên hệ nào đã là thành viên hoặc đang sử dụng Chia Cam
+        // Đối với demo, giả lập với trạng thái ngẫu nhiên
         for (int i = 0; i < contacts.size() && i < 20; i++) {
             Contact contact = contacts.get(i);
             // Simulate: 70% are not members, 30% are already members
@@ -337,7 +337,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Setup contact adapter
+     * Cấu hình adapter danh bạ
      */
     private void setupContactAdapter() {
         contactAdapter = new ContactInviteAdapter(this);
@@ -351,7 +351,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Invite by phone number from manual input
+     * Mời bằng số điện thoại từ nhập thủ công
      */
     private void inviteByPhoneNumber() {
         String phoneNumber = etPhoneNumber.getText().toString().trim();
@@ -361,7 +361,7 @@ public class InviteMembersActivity extends AppCompatActivity {
             return;
         }
         
-        // Clean phone number
+        // Làm sạch số điện thoại
         phoneNumber = phoneNumber.replaceAll("[^0-9]", "");
         if (!phoneNumber.startsWith("0") || (phoneNumber.length() != 10 && phoneNumber.length() != 11)) {
             Toast.makeText(this, R.string.invite_phone_invalid, Toast.LENGTH_SHORT).show();
@@ -373,13 +373,13 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Invite by phone number
+     * Mời bằng số điện thoại
      */
     private void inviteByPhone(String phoneNumber, String name, int position) {
         String message = getInviteMessage();
         
         try {
-            // Try to send SMS directly
+            // Thử gửi SMS trực tiếp
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
                     == PackageManager.PERMISSION_GRANTED) {
                 SmsManager smsManager = SmsManager.getDefault();
@@ -390,11 +390,11 @@ public class InviteMembersActivity extends AppCompatActivity {
                     contactAdapter.updateInviteStatus(position, true);
                 }
             } else {
-                // Request permission or fallback to SMS app
+                // Yêu cầu quyền hoặc chuyển sang ứng dụng SMS
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_SEND_SMS);
                 } else {
-                    // Fallback: open SMS app
+                    // Dự phòng: mở ứng dụng SMS
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse("sms:" + phoneNumber));
                     intent.putExtra("sms_body", message);
@@ -402,7 +402,7 @@ public class InviteMembersActivity extends AppCompatActivity {
                 }
             }
         } catch (Exception e) {
-            // Fallback: open SMS app
+            // Dự phòng: mở ứng dụng SMS
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("sms:" + phoneNumber));
             intent.putExtra("sms_body", message);
@@ -423,7 +423,7 @@ public class InviteMembersActivity extends AppCompatActivity {
             }
         } else if (requestCode == PERMISSION_REQUEST_SEND_SMS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Retry sending SMS
+                // Thử lại gửi SMS
                 String phoneNumber = etPhoneNumber.getText().toString().trim();
                 if (!TextUtils.isEmpty(phoneNumber)) {
                     inviteByPhoneNumber();
@@ -435,7 +435,7 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     /**
-     * Show permission denied dialog
+     * Hiển thị hộp thoại từ chối quyền
      */
     private void showPermissionDeniedDialog() {
         new AlertDialog.Builder(this)

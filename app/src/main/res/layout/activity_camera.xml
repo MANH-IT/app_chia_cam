@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -132,8 +132,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxHeight="500dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -322,15 +321,65 @@
                         android:textColor="@color/gray_dark"
                         android:layout_marginBottom="8dp" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_members"
+                    <!-- Search Contacts -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_search_members"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false" />
+                        android:layout_marginBottom="8dp"
+                        app:hintEnabled="false"
+                        app:startIconDrawable="@android:drawable/ic_menu_search"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_search_members"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Tìm kiếm thành viên..."
+                            android:textSize="14sp"
+                            android:padding="12dp"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Loading and Empty States -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="100dp">
+
+                        <ProgressBar
+                            android:id="@+id/pb_members"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tv_empty_members"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Không tìm thấy thành viên phù hợp"
+                            android:textSize="13sp"
+                            android:textColor="@color/gray_medium"
+                            android:visibility="gone" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_members"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false" />
+
+                    </FrameLayout>
 
                 </LinearLayout>
 
-                <!-- Submit Button -->
+                <!-- Nút gửi/Xác nhận -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_submit"
                     android:layout_width="match_parent"

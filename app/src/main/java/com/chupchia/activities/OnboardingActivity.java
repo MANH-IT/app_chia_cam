@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -76,7 +76,7 @@ public class OnboardingActivity extends AppCompatActivity {
     }
     
     /**
-     * Khởi tạo views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         tvSkip = findViewById(R.id.tv_skip);
@@ -92,7 +92,7 @@ public class OnboardingActivity extends AppCompatActivity {
         adapter = new OnboardingAdapter(slides);
         viewPager.setAdapter(adapter);
         
-        // Page change callback
+        // Hàm gọi lại khi thay đổi trang
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -105,7 +105,7 @@ public class OnboardingActivity extends AppCompatActivity {
     }
     
     /**
-     * Animation scale cho button
+     * Hiệu ứng phóng to cho nút
      */
     private void animateButtonScale() {
         btnNext.animate()
@@ -128,7 +128,7 @@ public class OnboardingActivity extends AppCompatActivity {
     private void setupTabLayout() {
         new TabLayoutMediator(tabLayout, viewPager,
             (tab, position) -> {
-                // Dot indicator
+                // Chỉ báo dấu chấm
             }
         ).attach();
     }
@@ -176,7 +176,7 @@ public class OnboardingActivity extends AppCompatActivity {
         // Lưu trạng thái đã xem onboarding
         SharedPrefManager.getInstance(this).setHasSeenOnboarding(true);
         
-        // Animation fade out cho toàn bộ màn hình
+        // Hiệu ứng mờ dần ra cho toàn bộ màn hình
         View rootView = findViewById(android.R.id.content);
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(rootView, "alpha", 1f, 0f);
         fadeOut.setDuration(400);

@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.app.ProgressDialog;
 import android.content.ClipData;
@@ -90,7 +90,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Initialize views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
@@ -116,7 +116,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Setup toolbar
+     * Cấu hình thanh công cụ
      */
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -128,11 +128,11 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Load group data from intent or API
+     * Tải dữ liệu nhóm từ intent or API
      */
     private void loadGroupData() {
-        // TODO: Load actual group data from API
-        // For demo, create sample data
+        // TODO: Tải dữ liệu nhóm thực tế từ API
+        // Đối với demo, tạo dữ liệu mẫu
         currentGroup = (Group) getIntent().getSerializableExtra("group");
         if (currentGroup == null) {
             currentGroup = new Group();
@@ -145,19 +145,19 @@ public class GroupDetailActivity extends AppCompatActivity {
             currentGroup.setAvatarUrl(null);
         }
 
-        // Update UI
+        // Cập nhật giao diện người dùng
         tvGroupName.setText(currentGroup.getName());
         tvInviteCode.setText(String.format(getString(R.string.group_detail_invite_code), currentGroup.getInviteCode()));
 
-        // Load avatar
+        // Tải ảnh đại diện
         if (currentGroup.getAvatarUrl() != null && !currentGroup.getAvatarUrl().isEmpty()) {
             Glide.with(this).load(currentGroup.getAvatarUrl()).into(ivGroupAvatar);
         }
 
-        // Check if current user is admin
+        // Kiểm tra người dùng hiện tại có phải admin không
         isAdmin = currentUserId != null && currentUserId.equals(currentGroup.getAdminId());
 
-        // Show/hide admin controls
+        // Hiện/ẩn các nút quản lý của admin
         if (isAdmin) {
             flEditAvatar.setVisibility(View.VISIBLE);
             ivEditName.setVisibility(View.VISIBLE);
@@ -170,11 +170,11 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Load members list
+     * Tải danh sách thành viên
      */
     private void loadMembers() {
-        // TODO: Load actual members from API
-        // For demo, create sample members
+        // TODO: Tải danh sách thành viên thực tế từ API
+        // Đối với demo, tạo thành viên mẫu
         membersList.clear();
 
         Member admin = new Member("user_1", "Mạnh Nguyễn", "", "admin");
@@ -195,7 +195,7 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         tvMemberCount.setText(membersList.size() + " " + getString(R.string.group_detail_members));
 
-        // Setup adapter
+        // Thiết lập bộ điều hợp (adapter)
         memberAdapter = new GroupMemberAdapter(this, currentUserId, isAdmin);
         memberAdapter.setMembers(membersList);
         memberAdapter.setOnMemberActionListener(new GroupMemberAdapter.OnMemberActionListener() {
@@ -218,14 +218,14 @@ public class GroupDetailActivity extends AppCompatActivity {
         rvMembers.setLayoutManager(new LinearLayoutManager(this));
         rvMembers.setAdapter(memberAdapter);
 
-        // Load stats (demo data)
+        // Tải thống kê (dữ liệu demo)
         tvTotalSpent.setText(CurrencyUtils.formatVND(2450000));
         tvBillCount.setText("24");
         tvAvgPerPerson.setText(CurrencyUtils.formatVND(612500));
     }
 
     /**
-     * Setup button listeners
+     * Cấu hình sự kiện nút bấm
      */
     private void setupListeners() {
         flEditAvatar.setOnClickListener(v -> showImagePickerDialog());
@@ -239,7 +239,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Show image picker dialog
+     * Hiển thị hộp thoại chọn ảnh
      */
     private void showImagePickerDialog() {
         String[] options = {"Chụp ảnh mới", "Chọn từ thư viện"};
@@ -257,7 +257,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Open camera
+     * Mở camera
      */
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -269,7 +269,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Open gallery
+     * Mở thư viện ảnh
      */
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -277,7 +277,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Edit group name
+     * Chỉnh sửa tên nhóm
      */
     private void editGroupName() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -291,7 +291,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.save, (dialog, which) -> {
             String newName = input.getText().toString().trim();
             if (!TextUtils.isEmpty(newName)) {
-                // TODO: Call API to update group name
+                // TODO: Gọi API để cập nhật tên nhóm
                 currentGroup.setName(newName);
                 tvGroupName.setText(newName);
                 Toast.makeText(this, R.string.edit_group_name_success, Toast.LENGTH_SHORT).show();
@@ -302,7 +302,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Copy invite code to clipboard
+     * Sao chép mã mời vào bộ nhớ tạm
      */
     private void copyInviteCode() {
         String inviteText = String.format(getString(R.string.invite_message_body),
@@ -316,10 +316,10 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Show transfer admin dialog
+     * Hiển thị hộp thoại chuyển quyền quản trị
      */
     private void showTransferAdminDialog() {
-        // Get non-admin members
+        // Lấy các thành viên không phải là quản trị viên
         List<Member> potentialAdmins = new ArrayList<>();
         for (Member member : membersList) {
             if (!member.isAdmin() && member.getId() != null && !member.getId().equals(currentUserId)) {
@@ -346,7 +346,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Transfer admin to another member
+     * Chuyển quyền quản trị cho thành viên khác
      */
     private void transferAdmin(Member newAdmin) {
         new AlertDialog.Builder(this)
@@ -354,7 +354,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                 .setMessage(String.format(getString(R.string.transfer_admin_message), newAdmin.getName()))
                 .setPositiveButton(R.string.transfer_admin_title, (dialog, which) -> {
                     showLoading("Đang chuyển quyền...");
-                    // TODO: Call API to transfer admin
+                    // TODO: Gọi API để chuyển quyền quản trị
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
                         hideLoading();
                         Toast.makeText(this, String.format(getString(R.string.transfer_admin_success), newAdmin.getName()), Toast.LENGTH_SHORT).show();
@@ -366,7 +366,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Remove member from group
+     * Xóa thành viên khỏi nhóm
      */
     private void removeMember(Member member) {
         new AlertDialog.Builder(this)
@@ -374,7 +374,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                 .setMessage(String.format(getString(R.string.remove_member_message), member.getName()))
                 .setPositiveButton(R.string.remove, (dialog, which) -> {
                     showLoading("Đang xóa thành viên...");
-                    // TODO: Call API to remove member
+                    // TODO: Gọi API để xóa thành viên
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
                         membersList.remove(member);
                         memberAdapter.setMembers(membersList);
@@ -388,7 +388,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Leave group
+     * Rời nhóm
      */
     private void leaveGroup() {
         new AlertDialog.Builder(this)
@@ -396,7 +396,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                 .setMessage(String.format(getString(R.string.leave_group_message), currentGroup.getName()))
                 .setPositiveButton(R.string.leave, (dialog, which) -> {
                     showLoading("Đang rời nhóm...");
-                    // TODO: Call API to leave group
+                    // TODO: Gọi API để rời nhóm
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
                         hideLoading();
                         Toast.makeText(this, R.string.leave_group_success, Toast.LENGTH_SHORT).show();
@@ -408,7 +408,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Show delete group dialog
+     * Hiển thị hộp thoại xóa nhóm
      */
     private void showDeleteGroupDialog() {
         new AlertDialog.Builder(this)
@@ -416,7 +416,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                 .setMessage(String.format(getString(R.string.delete_group_message), currentGroup.getName()))
                 .setPositiveButton(R.string.delete_group_confirm, (dialog, which) -> {
                     showLoading("Đang xóa nhóm...");
-                    // TODO: Call API to delete group
+                    // TODO: Gọi API để xóa nhóm
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
                         hideLoading();
                         Toast.makeText(this, R.string.delete_group_success, Toast.LENGTH_SHORT).show();
@@ -428,7 +428,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Invite members (share invite code)
+     * Mời thành viên (chia sẻ mã mời)
      */
     private void inviteMembers() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -440,7 +440,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Show loading dialog
+     * Hiển thị hộp thoại loading
      */
     private void showLoading(String message) {
         progressDialog.setMessage(message);
@@ -448,7 +448,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Hide loading dialog
+     * Ẩn hộp thoại loading
      */
     private void hideLoading() {
         if (progressDialog.isShowing()) {
@@ -479,13 +479,13 @@ public class GroupDetailActivity extends AppCompatActivity {
             if (requestCode == REQUEST_IMAGE_PICK) {
                 selectedImageUri = data.getData();
                 Glide.with(this).load(selectedImageUri).into(ivGroupAvatar);
-                // TODO: Upload image to server
+                // TODO: Tải ảnh lên máy chủ
             } else if (requestCode == REQUEST_CAMERA) {
                 Bundle extras = data.getExtras();
                 if (extras != null) {
                     android.graphics.Bitmap imageBitmap = (android.graphics.Bitmap) extras.get("data");
                     ivGroupAvatar.setImageBitmap(imageBitmap);
-                    // TODO: Upload image to server
+                    // TODO: Tải ảnh lên máy chủ
                 }
             }
         }

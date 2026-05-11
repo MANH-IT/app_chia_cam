@@ -1,4 +1,4 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -28,9 +28,7 @@ public class Bill implements Serializable {
     private String splitType;
     private long timestamp;
     private String note;
-    @Ignore
     private List<EditHistory> editHistory;
-    @Ignore
     private Map<String, Integer> reactions;
     
     public Bill() {
@@ -67,7 +65,7 @@ public class Bill implements Serializable {
         reactions.put("❤️", 0);
     }
     
-    // Getters and Setters
+    // Getter và Setter
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     
@@ -148,7 +146,28 @@ public class Bill implements Serializable {
         return String.format("%,dđ", getPerPersonAmount()).replace(",", ".");
     }
     
-    // Clone method for editing
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bill bill = (Bill) o;
+        return amount == bill.amount &&
+                splitCount == bill.splitCount &&
+                timestamp == bill.timestamp &&
+                id.equals(bill.id) &&
+                java.util.Objects.equals(imageUrl, bill.imageUrl) &&
+                java.util.Objects.equals(productName, bill.productName) &&
+                java.util.Objects.equals(actorId, bill.actorId) &&
+                java.util.Objects.equals(splitType, bill.splitType) &&
+                java.util.Objects.equals(reactions, bill.reactions);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(id, imageUrl, productName, amount, actorId, splitCount, splitType, timestamp, reactions);
+    }
+
+    // Phương thức sao chép để chỉnh sửa
     public Bill clone() {
         Bill cloned = new Bill();
         cloned.id = this.id;

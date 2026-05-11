@@ -1,4 +1,4 @@
-package com.chupchia.dialogs;
+﻿package com.chupchia.dialogs;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -38,7 +38,7 @@ public class OptimizeDebtDialog extends BottomSheetDialog {
     private String currentUserId;
     private Map<String, String> userNameMap;
     
-    // Views
+    // Giao diện
     private ProgressBar progressBar;
     private LinearLayout contentContainer;
     private LinearLayout llNoDebt;
@@ -49,10 +49,10 @@ public class OptimizeDebtDialog extends BottomSheetDialog {
     private TextView tvSaved;
     private MaterialButton btnCopy;
     
-    // Adapters
+    // Adapter
     private OptimizedTransactionAdapter adapter;
     
-    // Data
+    // Dữ liệu
     private List<Transaction> originalTransactions;
     private List<Transaction> optimizedTransactions;
     
@@ -107,7 +107,7 @@ public class OptimizeDebtDialog extends BottomSheetDialog {
     private void processOptimization() {
         showLoading(true);
         
-        // Simulate processing delay
+        // Giả lập trễ xử lý
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             prepareTransactions();
             
@@ -116,7 +116,7 @@ public class OptimizeDebtDialog extends BottomSheetDialog {
                 return;
             }
             
-            // Run optimization
+            // Chạy tối ưu hóa
             optimizedTransactions = DebtOptimizer.optimize(originalTransactions, userNameMap);
             
             showOptimizedResult();
@@ -127,7 +127,7 @@ public class OptimizeDebtDialog extends BottomSheetDialog {
     private void prepareTransactions() {
         originalTransactions = new ArrayList<>();
         
-        // Add debts where current user owes others
+        // Thêm nợ mà người dùng hiện tại nợ người khác
         for (DebtPerson debt : oweList) {
             originalTransactions.add(new Transaction(
                 currentUserId,
@@ -136,7 +136,7 @@ public class OptimizeDebtDialog extends BottomSheetDialog {
             ));
         }
         
-        // Add debts where others owe current user
+        // Thêm nợ mà người khác nợ người dùng hiện tại
         for (DebtPerson debt : owedList) {
             originalTransactions.add(new Transaction(
                 debt.getId(),
@@ -151,13 +151,13 @@ public class OptimizeDebtDialog extends BottomSheetDialog {
         int optimizedCount = optimizedTransactions.size();
         int saved = originalCount - optimizedCount;
         
-        // Update explanation
+        // Cập nhật giải thích
         tvExplanation.setText(String.format(
             context.getString(R.string.optimize_debt_explanation),
             originalCount, optimizedCount
         ));
         
-        // Update stats
+        // Cập nhật thống kê
         tvOriginalCount.setText(String.valueOf(originalCount));
         tvOptimizedCount.setText(String.valueOf(optimizedCount));
         
@@ -168,7 +168,7 @@ public class OptimizeDebtDialog extends BottomSheetDialog {
             tvSaved.setVisibility(View.GONE);
         }
         
-        // Show optimized transactions
+        // Hiển thị giao dịch tối ưu
         adapter.setTransactions(optimizedTransactions);
         contentContainer.setVisibility(View.VISIBLE);
     }
@@ -205,7 +205,7 @@ public class OptimizeDebtDialog extends BottomSheetDialog {
         
         sb.append(context.getString(R.string.optimize_copy_title)).append("\n\n");
         
-        // Stats
+        // Thống kê
         int originalCount = originalTransactions != null ? originalTransactions.size() : 0;
         int optimizedCount = optimizedTransactions != null ? optimizedTransactions.size() : 0;
         int saved = originalCount - optimizedCount;
@@ -213,7 +213,7 @@ public class OptimizeDebtDialog extends BottomSheetDialog {
         sb.append(String.format(context.getString(R.string.optimize_copy_stats), 
                 originalCount, optimizedCount, saved)).append("\n\n");
         
-        // Transactions
+        // Giao dịch
         if (optimizedTransactions != null && !optimizedTransactions.isEmpty()) {
             sb.append(context.getString(R.string.optimize_copy_transactions_title)).append("\n");
             for (Transaction t : optimizedTransactions) {

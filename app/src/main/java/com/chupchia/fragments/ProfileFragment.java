@@ -1,4 +1,4 @@
-package com.chupchia.fragments;
+﻿package com.chupchia.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -90,6 +90,15 @@ public class ProfileFragment extends Fragment {
         progressDialog.setCancelable(false);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Làm mới dữ liệu khi quay lại từ EditProfile, CreateGroup, v.v.
+        loadUserData();
+        loadStatistics();
+        loadGroups();
+    }
+
     private void initViews(View view) {
         swipeRefresh = view.findViewById(R.id.swipe_refresh);
         ivAvatar = view.findViewById(R.id.iv_avatar);
@@ -108,13 +117,13 @@ public class ProfileFragment extends Fragment {
         llLogout = view.findViewById(R.id.ll_logout);
         tvVersion = view.findViewById(R.id.tv_version);
 
-        tvVersion.setText(String.format("Phiên bản %s", "1.0.0")); // Manual for now or BuildConfig.VERSION_NAME
+        tvVersion.setText(String.format("Phiên bản %s", "1.0.0")); // Tạm thời nhập tay hoặc dùng BuildConfig.VERSION_NAME
     }
 
     private void setupRecyclerView() {
         groupAdapter = new GroupProfileAdapter(getContext());
         groupAdapter.setOnGroupClickListener(group -> {
-            // Switch to feed of selected group
+            // Chuyển sang bảng tin của nhóm đã chọn
             SharedPrefManager.getInstance(getContext()).setCurrentGroupId(group.getId());
             if (getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).switchToFeed();
@@ -129,12 +138,16 @@ public class ProfileFragment extends Fragment {
         SharedPrefManager pref = SharedPrefManager.getInstance(getContext());
 
         String userName = pref.getUserName();
+        String userPhone = pref.getUserPhone();
         String userEmail = pref.getUserEmail();
         String userAvatar = pref.getUserAvatar();
 
         tvUserName.setText(TextUtils.isEmpty(userName) ? "Người dùng" : userName);
 
-        if (!TextUtils.isEmpty(userEmail)) {
+        // Hiển thị thông tin liên hệ: ưu tiên số điện thoại (người dùng Việt Nam đăng ký bằng số điện thoại)
+        if (!TextUtils.isEmpty(userPhone)) {
+            tvUserContact.setText(userPhone);
+        } else if (!TextUtils.isEmpty(userEmail)) {
             tvUserContact.setText(userEmail);
         } else {
             tvUserContact.setText("Chưa cập nhật");
@@ -152,16 +165,14 @@ public class ProfileFragment extends Fragment {
 
     private void loadStatistics() {
         new Thread(() -> {
-            com.chupchia.database.BillDao billDao = com.chupchia.database.AppDatabase.getInstance(getContext()).billDao();
-            long totalSpent = billDao.getTotalSpent();
-            int billCount = billDao.getBillCount();
-            
-            // For now, groups are not fully implemented in DB, so keep as 0 or 1
-            int groupCount = 0; 
+            com.chupchia.database.AppDatabase db = com.chupchia.database.AppDatabase.getInstance(getContext());
+            long totalSpent = db.billDao().getTotalSpent();
+            int billCount = db.billDao().getBillCount();
+            int groupCount = db.groupDao().getGroupCount();
             
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (isAdded()) {
-                    tvTotalSpent.setText(CurrencyUtils.formatVND(totalSpent));
+                    tvTotalSpent.setText(com.chupchia.utils.CurrencyUtils.formatVND(totalSpent));
                     tvGroupCount.setText(String.valueOf(groupCount));
                     tvBillCount.setText(String.valueOf(billCount));
                 }
@@ -170,11 +181,16 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadGroups() {
-        // Clear demo groups - new account should be empty
-        groupList.clear();
-        groupAdapter.setGroups(groupList);
-        
-        // TODO: Call API to get user's real groups from database/server
+        new Thread(() -> {
+            List<Group> realGroups = com.chupchia.database.AppDatabase.getInstance(getContext()).groupDao().getAllGroups();
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (isAdded()) {
+                    groupList.clear();
+                    groupList.addAll(realGroups);
+                    groupAdapter.setGroups(groupList);
+                }
+            });
+        }).start();
     }
 
     private void setupListeners() {
@@ -182,9 +198,21 @@ public class ProfileFragment extends Fragment {
         btnEditProfile.setOnClickListener(v -> navigateToEditProfile());
         llCreateGroup.setOnClickListener(v -> navigateToCreateGroup());
         llSettings.setOnClickListener(v -> navigateToSettings());
-        llNotificationSettings.setOnClickListener(v -> Toast.makeText(getContext(), "Chức năng đang phát triển", Toast.LENGTH_SHORT).show());
+        llNotificationSettings.setOnClickListener(v -> openNotificationSettings());
         llInviteFriends.setOnClickListener(v -> navigateToInviteFriends());
         llLogout.setOnClickListener(v -> showLogoutDialog());
+    }
+
+    private void openNotificationSettings() {
+        Intent intent = new Intent();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            intent.setAction(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            intent.putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
+        } else {
+            intent.setAction(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(android.net.Uri.fromParts("package", requireContext().getPackageName(), null));
+        }
+        startActivity(intent);
     }
 
     private void setupSwipeRefresh() {
@@ -241,10 +269,10 @@ public class ProfileFragment extends Fragment {
         progressDialog.setMessage("Đang đăng xuất...");
         progressDialog.show();
 
-        // Clear SharedPrefs
+        // Xóa SharedPrefs
         SharedPrefManager.getInstance(getContext()).logout();
         
-        // Clear Room Database
+        // Xóa cơ sở dữ liệu Room
         new Thread(() -> {
             com.chupchia.database.AppDatabase.getInstance(getContext()).clearAllTables();
             

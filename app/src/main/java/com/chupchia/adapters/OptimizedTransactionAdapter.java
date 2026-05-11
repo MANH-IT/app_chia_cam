@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -49,7 +49,7 @@ public class OptimizedTransactionAdapter extends RecyclerView.Adapter<OptimizedT
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
         Transaction transaction = transactions.get(position);
 
-        // Set sender (from)
+        // Đặt người gửi (từ)
         if (transaction.getFromUserId() != null && transaction.getFromUserId().equals(currentUserId)) {
             holder.tvFrom.setText("Bạn");
             holder.tvFrom.setTextColor(ContextCompat.getColor(context, R.color.error));
@@ -62,7 +62,7 @@ public class OptimizedTransactionAdapter extends RecyclerView.Adapter<OptimizedT
             holder.tvFrom.setTextColor(ContextCompat.getColor(context, R.color.gray_dark));
         }
 
-        // Set receiver (to)
+        // Đặt người nhận (đến)
         if (transaction.getToUserId() != null && transaction.getToUserId().equals(currentUserId)) {
             holder.tvTo.setText("Bạn");
             holder.tvTo.setTextColor(ContextCompat.getColor(context, R.color.success));
@@ -75,7 +75,7 @@ public class OptimizedTransactionAdapter extends RecyclerView.Adapter<OptimizedT
             holder.tvTo.setTextColor(ContextCompat.getColor(context, R.color.success));
         }
 
-        // Set amount
+        // Đặt số tiền
         holder.tvAmount.setText(CurrencyUtils.formatVND(transaction.getAmount()));
     }
 

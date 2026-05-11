@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray">
+    android:background="@color/color_background">
 
-    <!-- Toolbar -->
+    <!-- Thanh công cụ -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="2dp"
-        android:background="@color/white">
+        android:background="@color/color_surface">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/white"
+            android:background="@color/color_surface"
             app:menu="@menu/main_menu">
 
             <!-- Logo thay vì text title -->
@@ -51,7 +51,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- ViewPager2 for Tabs - giữa toolbar và bottom nav -->
+    <!-- ViewPager2 cho các Tab - giữa thanh công cụ và điều hướng dưới -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
@@ -59,20 +59,20 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_marginBottom="56dp" />
 
-    <!-- Bottom Navigation View -->
+    <!-- Thanh điều hướng phía dưới -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="bottom"
-        android:background="@color/white"
+        android:background="@color/color_surface"
         android:elevation="8dp"
         app:itemIconTint="@color/bottom_nav_color_selector"
         app:itemTextColor="@color/bottom_nav_color_selector"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
 
-    <!-- FAB Camera - nổi trên bottom nav -->
+    <!-- Nút FAB Camera - nổi trên thanh điều hướng dưới -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_camera"
         android:layout_width="wrap_content"

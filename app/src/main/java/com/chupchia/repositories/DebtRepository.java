@@ -1,4 +1,4 @@
-package com.chupchia.repositories;
+﻿package com.chupchia.repositories;
 
 import com.chupchia.models.Debt;
 import com.chupchia.models.Bill;
@@ -13,8 +13,8 @@ import java.util.Map;
 public class DebtRepository {
     
     /**
-     * Calculate debts from a list of bills for given member IDs.
-     * Uses Bill.getActorId() as the payer and splits equally among members.
+     * Tính công nợ từ danh sách hóa đơn cho các mã thành viên.
+     * Sử dụng Bill.getActorId() làm người trả và chia đều cho các thành viên.
      */
     public List<Debt> calculateDebts(List<Bill> bills, List<String> memberIds) {
         Map<String, Map<String, Long>> balanceMap = new HashMap<>();
@@ -61,7 +61,7 @@ public class DebtRepository {
     }
     
     /**
-     * Optimize debts by converting to Transactions and using the DebtOptimizer.
+     * Tối ưu hóa công nợ bằng cách chuyển đổi sang Transaction và sử dụng DebtOptimizer.
      */
     public List<Transaction> optimizeDebts(List<Debt> debts) {
         List<Transaction> transactions = new ArrayList<>();

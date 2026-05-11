@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,14 +20,14 @@ import com.chupchia.utils.SharedPrefManager;
 
 public class LoginActivity extends AppCompatActivity {
 
-    // UI Components
+    // Các thành phần giao diện người dùng
     private TextInputEditText etUsername, etPassword;
     private TextInputLayout tilUsername, tilPassword;
     private MaterialButton btnLogin;
     private TextView tvForgotPassword, tvGoToRegister;
     private CardView cvZalo, cvGoogle, cvFacebook;
 
-    // Loading dialog
+    // Hộp thoại đang tải
     private ProgressDialog progressDialog;
 
     @Override
@@ -40,55 +40,55 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Initialize all UI components
+     * Khởi tạo tất cả thành phần giao diện
      */
     private void initViews() {
-        // Input fields
+        // Các trường nhập liệu
         tilUsername = findViewById(R.id.til_username);
         tilPassword = findViewById(R.id.til_password);
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
 
-        // Buttons
+        // Các nút bấm
         btnLogin = findViewById(R.id.btn_login);
         tvForgotPassword = findViewById(R.id.tv_forgot_password);
         tvGoToRegister = findViewById(R.id.tv_go_to_register);
 
-        // Social login buttons
+        // Nút đăng nhập mạng xã hội
         cvZalo = findViewById(R.id.cv_zalo);
         cvGoogle = findViewById(R.id.cv_google);
         cvFacebook = findViewById(R.id.cv_facebook);
 
-        // Progress Dialog
+        // Hộp thoại tiến trình
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang đăng nhập...");
         progressDialog.setCancelable(false);
     }
 
     /**
-     * Setup all click listeners
+     * Cấu hình tất cả sự kiện nhấp
      */
     private void setupListeners() {
-        // Login button click
+        // Sự kiện nhấp nút đăng nhập
         btnLogin.setOnClickListener(v -> handleLogin());
 
-        // Forgot password click
+        // Sự kiện nhấp quên mật khẩu
         tvForgotPassword.setOnClickListener(v -> handleForgotPassword());
 
-        // Go to register click
+        // Sự kiện nhấp đi đến đăng ký
         tvGoToRegister.setOnClickListener(v -> navigateToRegister());
 
-        // Social login clicks
+        // Sự kiện nhấp đăng nhập mạng xã hội
         cvZalo.setOnClickListener(v -> handleZaloLogin());
         cvGoogle.setOnClickListener(v -> handleGoogleLogin());
         cvFacebook.setOnClickListener(v -> handleFacebookLogin());
 
-        // Clear errors when user starts typing
+        // Xóa lỗi khi người dùng bắt đầu nhập
         setupClearErrorOnType();
     }
 
     /**
-     * Clear error messages when user starts typing
+     * Xóa thông báo lỗi khi người dùng bắt đầu nhập
      */
     private void setupClearErrorOnType() {
         View.OnFocusChangeListener focusChangeListener = (v, hasFocus) -> {
@@ -110,20 +110,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Handle login with username/phone and password
+     * Xử lý đăng nhập với tên/số điện thoại và mật khẩu
      */
     private void handleLogin() {
         String username = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        // Validate inputs
+        // Kiểm tra tính hợp lệ của đầu vào
         if (!validateUsername(username)) return;
         if (!validatePassword(password)) return;
 
-        // Show loading
+        // Hiển thị đang tải
         showLoading();
 
-        // Simulate login
+        // Giả lập đăng nhập
         simulateLogin(username, password);
     }
 
@@ -173,12 +173,27 @@ public class LoginActivity extends AppCompatActivity {
         new android.os.Handler().postDelayed(() -> {
             hideLoading();
             Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-            SharedPrefManager.getInstance(LoginActivity.this).setLoggedIn(true);
-            SharedPrefManager.getInstance(LoginActivity.this).saveToken("demo_token_" + System.currentTimeMillis());
-            SharedPrefManager.getInstance(LoginActivity.this).saveUser(
-                    "user_123", "Người Dùng", username,
-                    username.contains("@") ? username : username + "@example.com", null
-            );
+            
+            SharedPrefManager pref = SharedPrefManager.getInstance(LoginActivity.this);
+            pref.setLoggedIn(true);
+            pref.saveToken("demo_token_" + System.currentTimeMillis());
+            
+            // Xác định tên đăng nhập là số điện thoại hay email
+            String userId = "user_" + System.currentTimeMillis();
+            String phone = null;
+            String email = null;
+            
+            if (username.contains("@")) {
+                email = username;
+            } else {
+                phone = username;
+            }
+            
+            // Lưu người dùng với dữ liệu nhập làm định danh
+            // Tên mặc định là số điện thoại/email vì không có trường tên trong đăng nhập
+            String displayName = phone != null ? phone : username.split("@")[0];
+            pref.saveUser(userId, displayName, phone, email, null);
+            
             navigateToMain();
         }, 1500);
     }
@@ -192,8 +207,16 @@ public class LoginActivity extends AppCompatActivity {
         new android.os.Handler().postDelayed(() -> {
             hideLoading();
             Toast.makeText(LoginActivity.this, "Đăng nhập Zalo thành công!", Toast.LENGTH_SHORT).show();
-            SharedPrefManager.getInstance(LoginActivity.this).setLoggedIn(true);
-            SharedPrefManager.getInstance(LoginActivity.this).saveToken("zalo_token_" + System.currentTimeMillis());
+            
+            SharedPrefManager pref = SharedPrefManager.getInstance(LoginActivity.this);
+            pref.setLoggedIn(true);
+            pref.saveToken("zalo_token_" + System.currentTimeMillis());
+            pref.saveUser(
+                "zalo_" + System.currentTimeMillis(),
+                "Người dùng Zalo",
+                null, null, null
+            );
+            
             navigateToMain();
         }, 1500);
     }
@@ -203,8 +226,16 @@ public class LoginActivity extends AppCompatActivity {
         new android.os.Handler().postDelayed(() -> {
             hideLoading();
             Toast.makeText(LoginActivity.this, "Đăng nhập Google thành công!", Toast.LENGTH_SHORT).show();
-            SharedPrefManager.getInstance(LoginActivity.this).setLoggedIn(true);
-            SharedPrefManager.getInstance(LoginActivity.this).saveToken("google_token_" + System.currentTimeMillis());
+            
+            SharedPrefManager pref = SharedPrefManager.getInstance(LoginActivity.this);
+            pref.setLoggedIn(true);
+            pref.saveToken("google_token_" + System.currentTimeMillis());
+            pref.saveUser(
+                "google_" + System.currentTimeMillis(),
+                "Người dùng Google",
+                null, null, null
+            );
+            
             navigateToMain();
         }, 1500);
     }
@@ -214,8 +245,16 @@ public class LoginActivity extends AppCompatActivity {
         new android.os.Handler().postDelayed(() -> {
             hideLoading();
             Toast.makeText(LoginActivity.this, "Đăng nhập Facebook thành công!", Toast.LENGTH_SHORT).show();
-            SharedPrefManager.getInstance(LoginActivity.this).setLoggedIn(true);
-            SharedPrefManager.getInstance(LoginActivity.this).saveToken("fb_token_" + System.currentTimeMillis());
+            
+            SharedPrefManager pref = SharedPrefManager.getInstance(LoginActivity.this);
+            pref.setLoggedIn(true);
+            pref.saveToken("fb_token_" + System.currentTimeMillis());
+            pref.saveUser(
+                "fb_" + System.currentTimeMillis(),
+                "Người dùng Facebook",
+                null, null, null
+            );
+            
             navigateToMain();
         }, 1500);
     }

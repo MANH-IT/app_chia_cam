@@ -1,4 +1,4 @@
-package com.chupchia.utils;
+﻿package com.chupchia.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,39 +8,43 @@ import java.util.concurrent.TimeUnit;
 
 public class DateTimeUtils {
     
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-    private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+    // ThreadLocal đảm bảo mỗi luồng có instance SimpleDateFormat riêng
+    private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT = 
+        ThreadLocal.withInitial(() -> new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()));
+    
+    private static final ThreadLocal<SimpleDateFormat> DATE_TIME_FORMAT = 
+        ThreadLocal.withInitial(() -> new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()));
     
     /**
-     * Format date to string (dd/MM/yyyy)
+     * Định dạng ngày thành chuỗi (dd/MM/yyyy)
      */
     public static String formatDate(Date date) {
-        return DATE_FORMAT.format(date);
+        return DATE_FORMAT.get().format(date);
     }
     
     /**
-     * Format date from timestamp
+     * Định dạng ngày từ timestamp
      */
     public static String formatDate(long timestamp) {
-        return DATE_FORMAT.format(new Date(timestamp));
+        return DATE_FORMAT.get().format(new Date(timestamp));
     }
     
     /**
-     * Format date time
+     * Định dạng ngày giờ
      */
     public static String formatDateTime(long timestamp) {
-        return DATE_TIME_FORMAT.format(new Date(timestamp));
+        return DATE_TIME_FORMAT.get().format(new Date(timestamp));
     }
     
     /**
-     * Get current date
+     * Lấy ngày hiện tại
      */
     public static Calendar getCurrentDate() {
         return Calendar.getInstance();
     }
     
     /**
-     * Get time ago string
+     * Lấy chuỗi thời gian trước đây
      */
     public static String getTimeAgo(long timestamp) {
         long now = System.currentTimeMillis();

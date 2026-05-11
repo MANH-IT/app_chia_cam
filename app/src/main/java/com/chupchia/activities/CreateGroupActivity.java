@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -86,7 +86,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Initialize views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
@@ -107,7 +107,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup toolbar
+     * Cấu hình thanh công cụ
      */
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -119,7 +119,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup RecyclerView for member chips
+     * Thiết lập RecyclerView cho các chip thành viên
      */
     private void setupRecyclerView() {
         memberAdapter = new MemberChipAdapter(this, currentUserId);
@@ -136,7 +136,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Load current user from SharedPreferences
+     * Tải người dùng hiện tại từ SharedPreferences
      */
     private void loadCurrentUser() {
         SharedPrefManager prefManager = SharedPrefManager.getInstance(this);
@@ -149,7 +149,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Add creator as first member (admin)
+     * Thêm người tạo làm thành viên đầu tiên (admin)
      */
     private void addCreatorAsMember() {
         Member creator = new Member(currentUserId, currentUserName, "", "admin");
@@ -160,14 +160,14 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Update member count display
+     * Cập nhật hiển thị số lượng thành viên
      */
     private void updateMemberCount() {
         tvMemberCount.setText(String.format("(%d thành viên)", membersList.size()));
     }
     
     /**
-     * Setup button listeners
+     * Cấu hình sự kiện nút bấm
      */
     private void setupListeners() {
         flCameraBadge.setOnClickListener(v -> showImagePickerDialog());
@@ -183,10 +183,10 @@ public class CreateGroupActivity extends AppCompatActivity {
         btnCreateGroup.setOnClickListener(v -> createGroup());
     }
     
-    // Using PermissionUtils instead
+    // Sử dụng PermissionUtils thay thế
     
     /**
-     * Show image picker dialog
+     * Hiển thị hộp thoại chọn ảnh
      */
     private void showImagePickerDialog() {
         String[] options = {"Chụp ảnh mới", "Chọn từ thư viện", "Xóa ảnh"};
@@ -207,7 +207,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Open camera to take photo
+     * Mở camera to take photo
      */
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -219,7 +219,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Open gallery to pick image
+     * Mở thư viện ảnh to pick image
      */
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -227,7 +227,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Show add member dialog
+     * Hiển thị hộp thoại thêm thành viên
      */
     private void showAddMemberDialog() {
         AddMemberDialog dialog = new AddMemberDialog(this, null, members -> {
@@ -244,7 +244,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Check if member already exists
+     * Kiểm tra thành viên đã tồn tại chưa
      */
     private boolean isMemberExists(String memberId) {
         for (Member member : membersList) {
@@ -256,7 +256,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Create new group
+     * Tạo nhóm mới
      */
     private void createGroup() {
         String groupName = etGroupName.getText().toString().trim();
@@ -276,8 +276,10 @@ public class CreateGroupActivity extends AppCompatActivity {
         progressDialog.setMessage(getString(R.string.create_group_creating));
         progressDialog.show();
         
-        // Create group object
+        // Tạo đối tượng nhóm
+        String groupId = "GROUP_" + System.currentTimeMillis();
         Group newGroup = new Group();
+        newGroup.setId(groupId);
         newGroup.setName(groupName);
         newGroup.setDescription(etDescription.getText().toString().trim());
         newGroup.setAdminId(currentUserId);
@@ -292,15 +294,27 @@ public class CreateGroupActivity extends AppCompatActivity {
         
         if (selectedImageUri != null) {
             newGroup.setAvatarUrl(selectedImageUri.toString());
-            // TODO: Upload image to server
         }
         
-        // TODO: Call API to create group
-        simulateCreateGroup(newGroup);
+        // Lưu vào cơ sở dữ liệu trên luồng nền
+        new Thread(() -> {
+            com.chupchia.database.AppDatabase.getInstance(this).groupDao().insert(newGroup);
+            
+            runOnUiThread(() -> {
+                progressDialog.dismiss();
+                Toast.makeText(this, R.string.create_group_success, Toast.LENGTH_SHORT).show();
+                
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("group_created", true);
+                resultIntent.putExtra("group", newGroup);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            });
+        }).start();
     }
     
     /**
-     * Generate random invite code
+     * Tạo mã mời ngẫu nhiên
      */
     private String generateInviteCode() {
         String chars = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
@@ -310,25 +324,6 @@ public class CreateGroupActivity extends AppCompatActivity {
             code.append(chars.charAt(random.nextInt(chars.length())));
         }
         return code.toString();
-    }
-    
-    /**
-     * Simulate API call to create group
-     */
-    private void simulateCreateGroup(Group group) {
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            if (!isFinishing()) {
-                progressDialog.dismiss();
-                
-                Toast.makeText(this, R.string.create_group_success, Toast.LENGTH_SHORT).show();
-                
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("group_created", true);
-                resultIntent.putExtra("group", group);
-                setResult(RESULT_OK, resultIntent);
-                finish();
-            }
-        }, 1500);
     }
     
     @Override
@@ -351,7 +346,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     
     /**
-     * Convert bitmap to Uri
+     * Chuyển đổi bitmap sang Uri
      */
     private Uri getImageUri(android.graphics.Bitmap bitmap) {
         String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "GroupAvatar", null);

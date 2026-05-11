@@ -1,4 +1,4 @@
-package com.chupchia.dialogs;
+﻿package com.chupchia.dialogs;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -68,7 +68,7 @@ public class ReactionPickerDialog extends BottomSheetDialog {
     private void setupReactionData() {
         reactionList = new ArrayList<>();
         
-        // Get reactions from resources
+        // Lấy cảm xúc từ tài nguyên
         String[] emojis = context.getResources().getStringArray(R.array.reaction_emojis);
         String[] names = context.getResources().getStringArray(R.array.reaction_names);
         
@@ -141,7 +141,7 @@ public class ReactionPickerDialog extends BottomSheetDialog {
     }
     
     /**
-     * Update the current reaction highlight without recreating dialog
+     * Cập nhật vùng sáng cảm xúc hiện tại mà không tạo lại hộp thoại
      */
     public void updateCurrentReaction(String newReaction) {
         this.currentReaction = newReaction;

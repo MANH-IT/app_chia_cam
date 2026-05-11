@@ -1,4 +1,4 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,14 +11,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.chupchia.R;
 import com.chupchia.utils.SharedPrefManager;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private EditText etName;
-    private EditText etPhone;
-    private EditText etEmail;
+    private TextInputEditText etName;
+    private TextInputEditText etPhone;
+    private TextInputEditText etEmail;
+    private TextInputLayout tilName;
     private MaterialButton btnSave;
     private Toolbar toolbar;
 
@@ -39,6 +42,9 @@ public class EditProfileActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.et_phone);
         etEmail = findViewById(R.id.et_email);
         btnSave = findViewById(R.id.btn_save);
+        
+        // Lấy TextInputLayout cha để xử lý lỗi
+        tilName = (TextInputLayout) etName.getParent().getParent();
     }
 
     private void setupToolbar() {
@@ -47,18 +53,31 @@ public class EditProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.edit_profile_title);
         }
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     private void loadUserData() {
         SharedPrefManager pref = SharedPrefManager.getInstance(this);
-        etName.setText(pref.getUserName());
-        etPhone.setText(pref.getUserEmail()); // Note: SharedPrefManager has getUserEmail, but used for display phone logic before
-        etEmail.setText(pref.getUserEmail());
+        
+        String name = pref.getUserName();
+        String phone = pref.getUserPhone();
+        String email = pref.getUserEmail();
+        
+        if (!TextUtils.isEmpty(name)) etName.setText(name);
+        if (!TextUtils.isEmpty(phone)) etPhone.setText(phone);
+        if (!TextUtils.isEmpty(email)) etEmail.setText(email);
     }
 
     private void setupListeners() {
         btnSave.setOnClickListener(v -> saveProfile());
+        
+        // Xóa lỗi khi nhập
+        etName.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && tilName != null) {
+                tilName.setError(null);
+                tilName.setErrorEnabled(false);
+            }
+        });
     }
 
     private void saveProfile() {
@@ -66,29 +85,50 @@ public class EditProfileActivity extends AppCompatActivity {
         String phone = etPhone.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
 
+        // Kiểm tra tính hợp lệ của tên
         if (TextUtils.isEmpty(name)) {
-            etName.setError("Vui lòng nhập họ tên");
+            if (tilName != null) {
+                tilName.setError("Vui lòng nhập họ tên");
+                tilName.setErrorEnabled(true);
+            }
+            etName.requestFocus();
             return;
         }
 
-        // TODO: Call API to update profile
+        // Xác thực định dạng email nếu có
+        if (!TextUtils.isEmpty(email) && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+            etEmail.requestFocus();
+            return;
+        }
+
+        // Xác thực định dạng số điện thoại nếu có
+        if (!TextUtils.isEmpty(phone) && phone.length() < 9) {
+            Toast.makeText(this, "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
+            etPhone.requestFocus();
+            return;
+        }
+
         showLoading(true);
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             showLoading(false);
 
-            // Save to SharedPreferences
+            // Lưu vào SharedPreferences
             SharedPrefManager pref = SharedPrefManager.getInstance(this);
             pref.setUserName(name);
+            if (!TextUtils.isEmpty(phone)) pref.setUserPhone(phone);
             if (!TextUtils.isEmpty(email)) pref.setUserEmail(email);
 
             Toast.makeText(this, R.string.edit_profile_save_success, Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK);
             finish();
-        }, 1000);
+        }, 500);
     }
 
     private void showLoading(boolean show) {
         btnSave.setEnabled(!show);
         btnSave.setText(show ? "Đang lưu..." : getString(R.string.save));
+        btnSave.setAlpha(show ? 0.6f : 1f);
     }
 }

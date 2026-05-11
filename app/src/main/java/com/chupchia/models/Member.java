@@ -1,4 +1,4 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
 
 import java.io.Serializable;
 
@@ -10,9 +10,9 @@ public class Member implements Serializable {
     private String email;
     private String role; // "admin" or "member"
     private boolean isSelected;
-    private int customValue; // For percent or custom split
+    private int customValue; // Cho chia phần trăm hoặc tùy chỉnh
     private long joinedAt;
-    private int balance; // Net balance in group (positive = owed to, negative = owes)
+    private int balance; // Số dư ròng trong nhóm (dương = được nợ, âm = nợ)
     
     public Member() {
         this.joinedAt = System.currentTimeMillis();
@@ -29,7 +29,7 @@ public class Member implements Serializable {
         this.joinedAt = System.currentTimeMillis();
     }
     
-    // Getters and Setters
+    // Getter và Setter
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     
@@ -54,7 +54,7 @@ public class Member implements Serializable {
     public int getCustomValue() { return customValue; }
     public void setCustomValue(int customValue) { this.customValue = customValue; }
     
-    // Alias for split adapters
+    // Bí danh cho adapter chia tiền
     public int getSplitValue() { return customValue; }
     public void setSplitValue(int value) { this.customValue = value; }
     

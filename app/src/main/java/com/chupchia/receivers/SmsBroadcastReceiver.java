@@ -1,4 +1,4 @@
-package com.chupchia.receivers;
+﻿package com.chupchia.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -29,7 +29,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
             Status status = (Status) extras.get(SmsRetriever.EXTRA_STATUS);
             
             if (status != null && status.getStatusCode() == CommonStatusCodes.SUCCESS) {
-                // Get SMS message
+                // Lấy tin nhắn SMS
                 String message = (String) extras.get(SmsRetriever.EXTRA_SMS_MESSAGE);
                 if (message != null && otpReceivedListener != null) {
                     String otp = extractOTP(message);
@@ -46,10 +46,10 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     }
     
     /**
-     * Extract 6-digit OTP from SMS message
+     * Trích xuất mã OTP 6 chữ số từ tin nhắn SMS
      */
     private String extractOTP(String message) {
-        // Look for 6 consecutive digits
+        // Tìm 6 chữ số liên tiếp
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\b\\d{6}\\b");
         java.util.regex.Matcher matcher = pattern.matcher(message);
         if (matcher.find()) {

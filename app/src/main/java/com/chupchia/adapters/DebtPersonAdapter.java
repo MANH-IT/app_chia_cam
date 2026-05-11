@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +57,7 @@ public class DebtPersonAdapter extends RecyclerView.Adapter<DebtPersonAdapter.De
         
         holder.tvName.setText(debt.getName());
         
-        // Format reasons
+        // Định dạng lý do
         if (debt.getReasons() != null && !debt.getReasons().isEmpty()) {
             StringBuilder reasons = new StringBuilder();
             for (int i = 0; i < Math.min(debt.getReasons().size(), 3); i++) {
@@ -72,7 +72,7 @@ public class DebtPersonAdapter extends RecyclerView.Adapter<DebtPersonAdapter.De
             holder.tvReason.setText(isOweType ? "Bạn nợ" : "Nợ bạn");
         }
         
-        // Set amount and color
+        // Đặt số tiền và màu
         holder.tvAmount.setText(CurrencyUtils.formatVND(debt.getAmount()));
         if (isOweType) {
             holder.tvAmount.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.error));
@@ -80,7 +80,7 @@ public class DebtPersonAdapter extends RecyclerView.Adapter<DebtPersonAdapter.De
             holder.tvAmount.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.success));
         }
         
-        // Load avatar
+        // Tải ảnh đại diện
         if (debt.getAvatarUrl() != null && !debt.getAvatarUrl().isEmpty()) {
             Glide.with(holder.itemView.getContext())
                 .load(debt.getAvatarUrl())
@@ -90,7 +90,7 @@ public class DebtPersonAdapter extends RecyclerView.Adapter<DebtPersonAdapter.De
             holder.ivAvatar.setImageResource(R.drawable.ic_profile);
         }
         
-        // Click listener
+        // Sự kiện nhấp
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onDebtClick(debt, isOweType);

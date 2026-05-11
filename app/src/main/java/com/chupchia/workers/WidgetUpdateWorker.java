@@ -1,4 +1,4 @@
-package com.chupchia.workers;
+﻿package com.chupchia.workers;
 
 import android.content.Context;
 
@@ -17,8 +17,8 @@ public class WidgetUpdateWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        // TODO: Fetch latest bill from API/Firebase if needed
-        // For now, we'll just trigger widget update with existing cached data
+        // TODO: Lấy hóa đơn mới nhất từ API/Firebase nếu cần
+        // Hiện tại, chỉ kích hoạt cập nhật widget với dữ liệu cache hiện có
         BillWidgetProvider.updateAllWidgets(getApplicationContext());
         return Result.success();
     }

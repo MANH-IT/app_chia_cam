@@ -1,8 +1,16 @@
-package com.chupchia.models;
+﻿package com.chupchia.models;
+
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
+@Entity(tableName = "payment_history")
 public class PaymentHistory implements Serializable {
+    @PrimaryKey
+    @NonNull
     private String id;
     private String fromUserId;
     private String fromUserName;
@@ -15,6 +23,7 @@ public class PaymentHistory implements Serializable {
     
     public PaymentHistory() {}
     
+    @Ignore
     public PaymentHistory(String id, String fromUserId, String fromUserName, 
                           String toUserId, String toUserName, long amount, 
                           long timestamp, String note, String paymentMethod) {
@@ -29,7 +38,7 @@ public class PaymentHistory implements Serializable {
         this.paymentMethod = paymentMethod;
     }
     
-    // Getters and Setters
+    // Getter và Setter
     public String getId() {
         return id;
     }

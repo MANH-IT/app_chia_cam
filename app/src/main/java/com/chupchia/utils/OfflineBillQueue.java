@@ -1,4 +1,4 @@
-package com.chupchia.utils;
+﻿package com.chupchia.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -51,7 +51,7 @@ public class OfflineBillQueue {
     }
     
     /**
-     * Add bill to offline queue
+     * Thêm hóa đơn vào hàng đợi ngoại tuyến
      */
     public void addBill(String imageUri, String productName, String amount, 
                         String splitType, List<String> memberIds) {
@@ -61,7 +61,7 @@ public class OfflineBillQueue {
     }
     
     /**
-     * Get all pending bills
+     * Lấy tất cả hóa đơn đang chờ
      */
     public List<PendingBill> getPendingBills() {
         String json = sharedPreferences.getString(KEY_BILLS, "[]");
@@ -70,7 +70,7 @@ public class OfflineBillQueue {
     }
     
     /**
-     * Remove bill from queue
+     * Xóa hóa đơn khỏi hàng đợi
      */
     public void removeBill(int index) {
         List<PendingBill> bills = getPendingBills();
@@ -81,14 +81,14 @@ public class OfflineBillQueue {
     }
     
     /**
-     * Clear all pending bills
+     * Xóa tất cả hóa đơn đang chờ
      */
     public void clearAll() {
         saveBills(new ArrayList<>());
     }
     
     /**
-     * Get pending bills count
+     * Lấy số lượng hóa đơn đang chờ
      */
     public int getPendingCount() {
         return getPendingBills().size();

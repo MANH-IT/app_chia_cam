@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,11 +43,11 @@ public class EditHistoryAdapter extends RecyclerView.Adapter<EditHistoryAdapter.
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         EditHistory history = historyList.get(position);
         
-        // Show/hide vertical line based on position
+        // Hiện/ẩn đường dọc dựa trên vị trí
         boolean isLast = position == historyList.size() - 1;
         holder.viewLine.setVisibility(isLast ? View.INVISIBLE : View.VISIBLE);
         
-        // Set content
+        // Đặt nội dung
         holder.tvAction.setText(history.getChanges());
         holder.tvUser.setText(history.getUserName());
         holder.tvTime.setText(DateTimeUtils.getTimeAgo(history.getTimestamp()));

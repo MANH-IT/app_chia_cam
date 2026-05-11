@@ -1,4 +1,4 @@
-package com.chupchia.adapters;
+﻿package com.chupchia.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -71,7 +71,7 @@ public class ReactionGridAdapter extends BaseAdapter {
         holder.tvEmoji.setText(reaction.getEmoji());
         holder.tvName.setText(reaction.getName());
 
-        // Highlight if this is the current reaction
+        // Làm nổi bật nếu đây là cảm xúc hiện tại
         if (reaction.getEmoji().equals(currentReaction)) {
             convertView.setBackgroundResource(R.drawable.bg_reaction_selected);
             holder.tvEmoji.setScaleX(1.1f);
@@ -82,10 +82,10 @@ public class ReactionGridAdapter extends BaseAdapter {
             holder.tvEmoji.setScaleY(1f);
         }
 
-        // Click listener with bounce animation
+        // Sự kiện nhấp with bounce animation
         View finalConvertView = convertView;
         convertView.setOnClickListener(v -> {
-            // Bounce animation
+            // Hiệu ứng nảy
             v.animate()
                 .scaleX(1.2f)
                 .scaleY(1.2f)

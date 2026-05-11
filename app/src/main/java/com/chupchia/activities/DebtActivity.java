@@ -1,8 +1,10 @@
-package com.chupchia.activities;
+﻿package com.chupchia.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +27,10 @@ import com.chupchia.R;
 import com.chupchia.adapters.DebtPersonAdapter;
 import com.chupchia.adapters.OptimizedTransactionAdapter;
 import com.chupchia.adapters.PaymentHistoryAdapter;
+import com.chupchia.database.AppDatabase;
 import com.chupchia.models.Bill;
 import com.chupchia.models.DebtPerson;
+import com.chupchia.models.Group;
 import com.chupchia.models.PaymentHistory;
 import com.chupchia.models.Transaction;
 import com.chupchia.utils.CurrencyUtils;
@@ -42,7 +46,7 @@ import java.util.Map;
 
 public class DebtActivity extends AppCompatActivity {
 
-    // ===== VIEWS =====
+    // ===== GIAO DIỆN =====
     private Toolbar toolbar;
     private Spinner spinnerGroup;
     private SwipeRefreshLayout swipeRefresh;
@@ -55,35 +59,39 @@ public class DebtActivity extends AppCompatActivity {
     private CardView cardPaymentHistory;
     private RecyclerView rvPaymentHistory;
     
-    // ===== VARIABLES =====
+    // ===== BIẾN =====
     private String currentUserId;
     private String currentGroupId;
-    private List<DebtPerson> oweList = new ArrayList<>();  // You owe others
-    private List<DebtPerson> owedList = new ArrayList<>(); // Others owe you
+    private List<DebtPerson> oweList = new ArrayList<>();  // Bạn nợ người khác
+    private List<DebtPerson> owedList = new ArrayList<>(); // Người khác nợ bạn
     private List<PaymentHistory> paymentHistoryList = new ArrayList<>();
     private DebtPersonAdapter oweAdapter;
     private DebtPersonAdapter owedAdapter;
     private PaymentHistoryAdapter paymentHistoryAdapter;
     private Map<String, String> userIdToNameMap = new HashMap<>();
     
+    // Danh sách nhóm tải từ Room DB
+    private List<Group> groupsList = new ArrayList<>();
+    private List<String> groupNames = new ArrayList<>();
+    private List<String> groupIds = new ArrayList<>();
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debt);
         
-        currentUserId = SharedPrefManager.getInstance(this).getUserId();
+        String userId = SharedPrefManager.getInstance(this).getUserId();
+        currentUserId = userId != null ? userId : "";
         
         initViews();
         setupToolbar();
         setupAdapters();
         setupListeners();
         loadGroups();
-        loadPaymentHistory();
-        calculateDebt();
     }
     
     /**
-     * Initialize views
+     * Khởi tạo giao diện
      */
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
@@ -100,7 +108,7 @@ public class DebtActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup toolbar
+     * Cấu hình thanh công cụ
      */
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -108,11 +116,11 @@ public class DebtActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.debt_title);
         }
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
     
     /**
-     * Setup adapters
+     * Cấu hình adapter
      */
     private void setupAdapters() {
         oweAdapter = new DebtPersonAdapter(true);
@@ -138,13 +146,14 @@ public class DebtActivity extends AppCompatActivity {
     }
     
     /**
-     * Setup listeners
+     * Cấu hình sự kiện
      */
     private void setupListeners() {
         swipeRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.primary));
         swipeRefresh.setOnRefreshListener(() -> {
             calculateDebt();
-            swipeRefresh.setRefreshing(false);
+            loadPaymentHistory();
+            // Lưu ý: setRefreshing(false) được gọi bên trong calculateDebt() sau khi hoàn thành bất đồng bộ
         });
         
         btnReminder.setOnClickListener(v -> showReminderDialog());
@@ -152,108 +161,179 @@ public class DebtActivity extends AppCompatActivity {
     }
     
     /**
-     * Load groups into spinner
+     * Tải danh sách nhóm từ Room DB vào spinner
      */
     private void loadGroups() {
-        // TODO: Load actual groups from API
-        List<String> groupNames = new ArrayList<>();
-        List<String> groupIds = new ArrayList<>();
-        
-        groupNames.add("Nhà mình");
-        groupIds.add("group_1");
-        groupNames.add("Bạn bè thân");
-        groupIds.add("group_2");
-        groupNames.add("Công ty");
-        groupIds.add("group_3");
-        
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, 
-                android.R.layout.simple_spinner_item, groupNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerGroup.setAdapter(adapter);
-        
-        currentGroupId = groupIds.get(0);
-        
-        spinnerGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currentGroupId = groupIds.get(position);
-                calculateDebt();
-            }
+        new Thread(() -> {
+            groupsList = AppDatabase.getInstance(this).groupDao().getAllGroups();
             
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+            new Handler(Looper.getMainLooper()).post(() -> {
+                groupNames.clear();
+                groupIds.clear();
+                
+                if (groupsList.isEmpty()) {
+                    // Nếu không có nhóm nào, hiển thị "Tất cả" để hiện tất cả hóa đơn
+                    groupNames.add("Tất cả hóa đơn");
+                    groupIds.add("__all__");
+                } else {
+                    // Thêm tùy chọn "Tất cả" đầu tiên
+                    groupNames.add("Tất cả hóa đơn");
+                    groupIds.add("__all__");
+                    
+                    for (Group group : groupsList) {
+                        groupNames.add(group.getName());
+                        groupIds.add(group.getId());
+                    }
+                }
+                
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                        android.R.layout.simple_spinner_item, groupNames);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerGroup.setAdapter(adapter);
+                
+                currentGroupId = groupIds.get(0);
+                
+                spinnerGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        currentGroupId = groupIds.get(position);
+                        calculateDebt();
+                        loadPaymentHistory();
+                    }
+                    
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
+                
+                // Tải lần đầu
+                calculateDebt();
+                loadPaymentHistory();
+            });
+        }).start();
     }
     
     /**
-     * Load payment history
+     * Tải lịch sử thanh toán từ Room DB
      */
     private void loadPaymentHistory() {
-        // TODO: Load actual payment history from API
-        paymentHistoryList.clear();
-        
-        // Demo data
-        PaymentHistory payment1 = new PaymentHistory("1", "user_1", "Mạnh", "user_2", "Lan", 
-                75000, System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000, 
-                "Trả tiền trà sữa", "momo");
-        PaymentHistory payment2 = new PaymentHistory("2", "user_3", "Bình", currentUserId, "Tôi", 
-                50000, System.currentTimeMillis() - 5 * 24 * 60 * 60 * 1000, 
-                "Trả tiền ăn sáng", "cash");
-        
-        paymentHistoryList.add(payment1);
-        paymentHistoryList.add(payment2);
-        
-        if (!paymentHistoryList.isEmpty()) {
-            cardPaymentHistory.setVisibility(View.VISIBLE);
-            paymentHistoryAdapter.setPaymentList(paymentHistoryList);
-        } else {
-            cardPaymentHistory.setVisibility(View.GONE);
-        }
+        new Thread(() -> {
+            List<PaymentHistory> history = AppDatabase.getInstance(this)
+                    .paymentHistoryDao().getByUser(currentUserId);
+            
+            new Handler(Looper.getMainLooper()).post(() -> {
+                paymentHistoryList.clear();
+                paymentHistoryList.addAll(history);
+                
+                if (!paymentHistoryList.isEmpty()) {
+                    cardPaymentHistory.setVisibility(View.VISIBLE);
+                    paymentHistoryAdapter.setPaymentList(paymentHistoryList);
+                } else {
+                    cardPaymentHistory.setVisibility(View.GONE);
+                }
+            });
+        }).start();
     }
     
     /**
-     * Calculate debt from bills
+     * Tính toán công nợ từ hóa đơn lưu trong Room DB
      */
     private void calculateDebt() {
-        // TODO: Load actual bills from API
-        List<Bill> bills = getDemoBills();
-        
-        if (bills.isEmpty()) {
+        new Thread(() -> {
+            // Tải hóa đơn từ Room DB
+            AppDatabase db = AppDatabase.getInstance(this);
+            List<Bill> bills;
+            
+            if ("__all__".equals(currentGroupId)) {
+                bills = db.billDao().getAllBills();
+            } else {
+                bills = db.billDao().getBillsByGroup(currentGroupId);
+            }
+            
+            // Tải thêm lịch sử thanh toán để trừ các khoản đã thanh toán
+            List<PaymentHistory> payments = db.paymentHistoryDao().getByUser(currentUserId);
+            
+            new Handler(Looper.getMainLooper()).post(() -> {
+                processDebtCalculation(bills, payments);
+            });
+        }).start();
+    }
+    
+    /**
+     * Xử lý tính toán công nợ từ dữ liệu hóa đơn thật
+     * 
+     * Logic: Mỗi bill, người tạo (creator) chi trả toàn bộ → balance += amount
+     * Tất cả thành viên (bao gồm cả creator) chia đều → balance -= perPerson
+     * Kết quả: Creator có balance dương (được trả lại), others có balance âm (nợ)
+     */
+    private void processDebtCalculation(List<Bill> bills, List<PaymentHistory> payments) {
+        if (bills == null || bills.isEmpty()) {
             showEmptyState(true);
+            tvTotalOwe.setText(CurrencyUtils.formatVND(0));
+            tvTotalOwed.setText(CurrencyUtils.formatVND(0));
             return;
         }
         
-        // Calculate net balance for each member
+        // Tính số dư ròng cho từng thành viên
+        // Số dư dương = đã trả nhiều hơn phần của mình (người khác nợ họ)
+        // Số dư âm = đã trả ít hơn phần của mình (họ nợ người khác)
         Map<String, Long> balances = new HashMap<>();
         userIdToNameMap.clear();
         
-        // Add current user to map
-        userIdToNameMap.put(currentUserId, "Tôi");
+        // Thêm người dùng hiện tại vào map
+        String currentUserName = SharedPrefManager.getInstance(this).getUserName();
+        userIdToNameMap.put(currentUserId, currentUserName != null ? currentUserName : "Tôi");
         
         for (Bill bill : bills) {
-            // Add user names to map
-            userIdToNameMap.put(bill.getActorId(), bill.getActorName());
-            userIdToNameMap.put(bill.getCreatorId(), bill.getActorName());
+            String creatorId = bill.getCreatorId();
             
-            // Person who paid gets positive balance
-            balances.put(bill.getCreatorId(), 
-                balances.getOrDefault(bill.getCreatorId(), 0L) + bill.getAmount());
+            // Thêm tên người dùng vào map
+            if (bill.getActorId() != null) {
+                userIdToNameMap.put(bill.getActorId(), bill.getActorName());
+            }
+            if (creatorId != null) {
+                userIdToNameMap.put(creatorId, bill.getActorName());
+            }
             
-            // Split among members (simplified - each split is equal amount)
             int splitCount = bill.getSplitCount();
             if (splitCount <= 0) splitCount = 1;
             long perPersonAmount = bill.getAmount() / splitCount;
             
-            // Simplified: subtract from current user if they are part of the split
-            // In real app, check if currentUserId is in bill's member list
-            // For demo, assume current user is always in the split if they didn't create it
-            if (!currentUserId.equals(bill.getCreatorId())) {
+            // Người tạo đã trả toàn bộ → được ghi có
+            balances.put(creatorId, 
+                balances.getOrDefault(creatorId, 0L) + bill.getAmount());
+            
+            // Tất cả mọi người (kể cả người tạo) trả phần của mình → ghi nợ
+            // Phần của người tạo cũng được trừ khỏi số dư của chính họ
+            balances.put(creatorId,
+                balances.getOrDefault(creatorId, 0L) - perPersonAmount);
+            
+            // Người dùng hiện tại trả phần của mình (nếu không phải người tạo)
+            if (!currentUserId.equals(creatorId)) {
                 balances.put(currentUserId, 
                     balances.getOrDefault(currentUserId, 0L) - perPersonAmount);
             }
         }
         
-        // Split into owe and owed lists
+        // Trừ các khoản đã thanh toán
+        if (payments != null) {
+            for (PaymentHistory payment : payments) {
+                if (currentUserId.equals(payment.getFromUserId())) {
+                    // Người dùng hiện tại đã trả ai đó → giảm khoản nợ
+                    balances.put(currentUserId,
+                        balances.getOrDefault(currentUserId, 0L) + payment.getAmount());
+                    balances.put(payment.getToUserId(),
+                        balances.getOrDefault(payment.getToUserId(), 0L) - payment.getAmount());
+                } else if (currentUserId.equals(payment.getToUserId())) {
+                    // Ai đó đã trả người dùng hiện tại → giảm khoản được nợ
+                    balances.put(payment.getFromUserId(),
+                        balances.getOrDefault(payment.getFromUserId(), 0L) + payment.getAmount());
+                    balances.put(currentUserId,
+                        balances.getOrDefault(currentUserId, 0L) - payment.getAmount());
+                }
+            }
+        }
+        
+        // Chia thành danh sách nợ và được nợ
         oweList.clear();
         owedList.clear();
         long totalOwe = 0;
@@ -263,37 +343,39 @@ public class DebtActivity extends AppCompatActivity {
             String userId = entry.getKey();
             long balance = entry.getValue();
             
+            // Bỏ qua người dùng hiện tại (chỉ hiển thị người khác)
             if (userId.equals(currentUserId)) continue;
             
             String userName = userIdToNameMap.getOrDefault(userId, "Thành viên");
             
             if (balance > 0) {
-                // Others owe you
+                // Người này đã trả nhiều hơn phần của họ → người dùng hiện tại nợ họ
                 DebtPerson debt = new DebtPerson(userId, userName, "", balance);
-                debt.addReason("Các khoản đã chi");
-                owedList.add(debt);
-                totalOwed += balance;
-            } else if (balance < 0) {
-                // You owe others
-                DebtPerson debt = new DebtPerson(userId, userName, "", -balance);
-                debt.addReason("Các khoản đã chia");
+                debt.addReason("Đã chi hộ bạn");
                 oweList.add(debt);
-                totalOwe += -balance;
+                totalOwe += balance;
+            } else if (balance < 0) {
+                // Người này đã trả ít hơn phần của họ → họ nợ người dùng hiện tại
+                DebtPerson debt = new DebtPerson(userId, userName, "", -balance);
+                debt.addReason("Nợ bạn từ các bill");
+                owedList.add(debt);
+                totalOwed += -balance;
             }
         }
         
-        // Update UI
+        // Cập nhật giao diện
         tvTotalOwe.setText(CurrencyUtils.formatVND(totalOwe));
         tvTotalOwed.setText(CurrencyUtils.formatVND(totalOwed));
         
         oweAdapter.setDebtList(oweList);
         owedAdapter.setDebtList(owedList);
         
-        showEmptyState(bills.isEmpty());
+        showEmptyState(oweList.isEmpty() && owedList.isEmpty());
+        swipeRefresh.setRefreshing(false);
     }
     
     /**
-     * Show empty state when no debts
+     * Hiển thị trạng thái trống khi không có công nợ
      */
     private void showEmptyState(boolean isEmpty) {
         if (isEmpty) {
@@ -308,49 +390,7 @@ public class DebtActivity extends AppCompatActivity {
     }
     
     /**
-     * Get demo bills for testing
-     */
-    private List<Bill> getDemoBills() {
-        List<Bill> demoBills = new ArrayList<>();
-        
-        Bill bill1 = new Bill();
-        bill1.setId("1");
-        bill1.setProductName("Trà sữa trân châu");
-        bill1.setAmount(150000);
-        bill1.setActorName("Mạnh");
-        bill1.setActorId("user_1");
-        bill1.setCreatorId("user_1");
-        bill1.setSplitCount(3);
-        bill1.setTimestamp(System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000);
-        demoBills.add(bill1);
-        
-        Bill bill2 = new Bill();
-        bill2.setId("2");
-        bill2.setProductName("Đi ăn buffet");
-        bill2.setAmount(800000);
-        bill2.setActorName("Lan");
-        bill2.setActorId("user_2");
-        bill2.setCreatorId("user_2");
-        bill2.setSplitCount(4);
-        bill2.setTimestamp(System.currentTimeMillis() - 5 * 24 * 60 * 60 * 1000);
-        demoBills.add(bill2);
-        
-        Bill bill3 = new Bill();
-        bill3.setId("3");
-        bill3.setProductName("Ăn sáng");
-        bill3.setAmount(60000);
-        bill3.setActorName(currentUserId.equals("user_1") ? "Mạnh" : "Bình");
-        bill3.setActorId(currentUserId);
-        bill3.setCreatorId(currentUserId);
-        bill3.setSplitCount(2);
-        bill3.setTimestamp(System.currentTimeMillis() - 1 * 24 * 60 * 60 * 1000);
-        demoBills.add(bill3);
-        
-        return demoBills;
-    }
-    
-    /**
-     * Show bill details dialog
+     * Hiển thị hộp thoại chi tiết hóa đơn
      */
     private void showBillDetailsDialog(DebtPerson debtPerson, boolean isOweType) {
         StringBuilder message = new StringBuilder();
@@ -363,23 +403,61 @@ public class DebtActivity extends AppCompatActivity {
                        .append(" (").append(DateTimeUtils.getTimeAgo(bill.getTimestamp())).append(")\n");
             }
         } else {
-            message.append("• Trà sữa - ").append(CurrencyUtils.formatVND(75000))
-                   .append(" (").append(DateTimeUtils.getTimeAgo(System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000)).append(")\n");
-            message.append("• Đi ăn - ").append(CurrencyUtils.formatVND(150000))
-                   .append(" (").append(DateTimeUtils.getTimeAgo(System.currentTimeMillis() - 5 * 24 * 60 * 60 * 1000)).append(")\n");
+            message.append("• Tổng nợ: ").append(CurrencyUtils.formatVND(debtPerson.getAmount())).append("\n");
         }
         
         String title = isOweType ? "Bạn nợ " + debtPerson.getName() : debtPerson.getName() + " nợ bạn";
         
-        new AlertDialog.Builder(this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
             .setTitle(title)
             .setMessage(message.toString())
-            .setPositiveButton(R.string.close, null)
+            .setNegativeButton(R.string.close, null);
+        
+        // Thêm nút "Đã thanh toán"
+        if (isOweType) {
+            builder.setPositiveButton("Đã thanh toán", (dialog, which) -> {
+                markAsPaid(debtPerson);
+            });
+        }
+        
+        builder.show();
+    }
+    
+    /**
+     * Đánh dấu khoản nợ đã thanh toán — tạo bản ghi PaymentHistory
+     */
+    private void markAsPaid(DebtPerson debtPerson) {
+        new AlertDialog.Builder(this)
+            .setTitle("Xác nhận thanh toán")
+            .setMessage("Bạn đã trả " + CurrencyUtils.formatVND(debtPerson.getAmount()) + " cho " + debtPerson.getName() + "?")
+            .setPositiveButton("Xác nhận", (dialog, which) -> {
+                new Thread(() -> {
+                    PaymentHistory payment = new PaymentHistory(
+                        "PAY_" + System.currentTimeMillis(),
+                        currentUserId,
+                        SharedPrefManager.getInstance(this).getUserName(),
+                        debtPerson.getId(),
+                        debtPerson.getName(),
+                        debtPerson.getAmount(),
+                        System.currentTimeMillis(),
+                        "Thanh toán nợ",
+                        "cash"
+                    );
+                    AppDatabase.getInstance(this).paymentHistoryDao().insert(payment);
+                    
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        Toast.makeText(this, "Đã ghi nhận thanh toán!", Toast.LENGTH_SHORT).show();
+                        calculateDebt();
+                        loadPaymentHistory();
+                    });
+                }).start();
+            })
+            .setNegativeButton(R.string.cancel, null)
             .show();
     }
     
     /**
-     * Show reminder dialog with copyable message
+     * Hiển thị hộp thoại nhắc nợ với tin nhắn có thể sao chép
      */
     private void showReminderDialog() {
         StringBuilder message = new StringBuilder();
@@ -423,10 +501,10 @@ public class DebtActivity extends AppCompatActivity {
     }
     
     /**
-     * Show optimize debt dialog
+     * Hiển thị hộp thoại tối ưu hóa công nợ
      */
     private void showOptimizeDialog() {
-        // Collect all debt transactions
+        // Thu thập tất cả giao dịch công nợ
         List<Transaction> originalTransactions = new ArrayList<>();
         
         for (DebtPerson debt : oweList) {
@@ -436,10 +514,15 @@ public class DebtActivity extends AppCompatActivity {
             originalTransactions.add(new Transaction(debt.getId(), currentUserId, debt.getAmount()));
         }
         
-        // Optimize using graph algorithm
+        if (originalTransactions.isEmpty()) {
+            Toast.makeText(this, "Không có khoản nợ nào để tối ưu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        // Tối ưu hóa sử dụng thuật toán đồ thị
         List<Transaction> optimized = DebtOptimizer.optimize(originalTransactions, userIdToNameMap);
         
-        // Inflate dialog view
+        // Tạo giao diện hộp thoại
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_optimize_debt, null);
         TextView tvOriginalCount = dialogView.findViewById(R.id.tv_original_count);
         TextView tvOptimizedCount = dialogView.findViewById(R.id.tv_optimized_count);
@@ -462,7 +545,7 @@ public class DebtActivity extends AppCompatActivity {
     }
     
     /**
-     * Copy optimized transactions to clipboard
+     * Sao chép giao dịch tối ưu vào bộ nhớ tạm
      */
     private void copyOptimizedResult(List<Transaction> transactions) {
         StringBuilder message = new StringBuilder();
